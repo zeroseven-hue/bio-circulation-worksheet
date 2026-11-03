@@ -1,0 +1,877 @@
+/**
+ * 國中生物 4-2 內分泌系統 數位互動學習單
+ * 主邏輯核心：雙模式、防呆驗證、人體圖互動、localStorage 暫存與 GAS 雙軌上傳
+ */
+
+// 後端 GAS Web App 接收 URL（預留換網址空間）
+const GAS_URL = "YOUR_GAS_EXEC_URL";
+
+// 本地存儲鍵名
+const STORAGE_KEY_INDIV = "BIO_4_2_INDIVIDUAL_DATA";
+const STORAGE_KEY_GROUP = "BIO_4_2_GROUP_DATA";
+
+// 當前狀態管理
+let currentMode = "individual"; // "individual" | "group"
+let currentStep = 1;
+let currentGland = "A";
+let autoSaveTimer = null;
+
+// ==================== 1. 初始化班級座號與事件掛載 ====================
+document.addEventListener("DOMContentLoaded", () => {
+  initDropdowns();
+  bindModeSwitching();
+  bindStepperEvents();
+  bindHumanViewerEvents();
+  bindInputListeners();
+  loadSavedData();
+  updateStepperCheckmarks();
+  updateGlandNodeStatus();
+  initExitGuard();
+});
+
+/** 初始化 701~710 與 01~35 純數字下拉選項 */
+function initDropdowns() {
+  const classSelects = [document.getElementById("studentClass"), document.getElementById("groupClass")];
+  classSelects.forEach(sel => {
+    if (!sel) return;
+    for (let c = 701; c <= 710; c++) {
+      const opt = document.createElement("option");
+      opt.value = String(c);
+      opt.textContent = `${c} 班`;
+      sel.appendChild(opt);
+    }
+  });
+
+  const studentSeat = document.getElementById("studentSeat");
+  if (studentSeat) {
+    for (let s = 1; s <= 35; s++) {
+      const val = s < 10 ? `0${s}` : String(s);
+      const opt = document.createElement("option");
+      opt.value = val;
+      opt.textContent = `${val} 號`;
+      studentSeat.appendChild(opt);
+    }
+  }
+
+  // 小組組別 1~8 組
+  const groupNum = document.getElementById("groupNum");
+  if (groupNum) {
+    for (let g = 1; g <= 8; g++) {
+      const opt = document.createElement("option");
+      opt.value = `第${g}組`;
+      opt.textContent = `第 ${g} 組`;
+      groupNum.appendChild(opt);
+    }
+  }
+
+  // 初始生成小組成員座號下拉選單
+  renderGroupMemberSlots(4);
+}
+
+/** 動態生成小組出席組員座號下拉 */
+function renderGroupMemberSlots(count) {
+  const grid = document.getElementById("memberSeatsGrid");
+  if (!grid) return;
+  
+  // 保存舊選擇
+  const oldSelections = [];
+  grid.querySelectorAll("select").forEach(sel => oldSelections.push(sel.value));
+
+  grid.innerHTML = "";
+  for (let i = 1; i <= count; i++) {
+    const slot = document.createElement("div");
+    slot.className = "member-seat-slot";
+
+    const tag = document.createElement("span");
+    tag.className = "slot-tag";
+    tag.textContent = `組員 ${i}:`;
+
+    const sel = document.createElement("select");
+    sel.className = "cyber-select member-seat-select";
+    sel.id = `memberSeat_${i}`;
+
+    const defOpt = document.createElement("option");
+    defOpt.value = "";
+    defOpt.textContent = "選擇座號";
+    sel.appendChild(defOpt);
+
+    for (let s = 1; s <= 35; s++) {
+      const val = s < 10 ? `0${s}` : String(s);
+      const opt = document.createElement("option");
+      opt.value = val;
+      opt.textContent = `${val} 號`;
+      sel.appendChild(opt);
+    }
+
+    if (oldSelections[i - 1]) {
+      sel.value = oldSelections[i - 1];
+    }
+
+    sel.addEventListener("change", () => {
+      syncAssigneeDropdowns();
+      triggerAutoSave();
+    });
+
+    slot.appendChild(tag);
+    slot.appendChild(sel);
+    grid.appendChild(slot);
+  }
+
+  syncAssigneeDropdowns();
+}
+
+/** 同步小組出席組員座號至所有任務卡與比較表的負責人選單 */
+function syncAssigneeDropdowns() {
+  const members = getSelectedGroupMembers();
+  const assigneeSelects = document.querySelectorAll(".gland-assignee");
+
+  assigneeSelects.forEach(sel => {
+    const curVal = sel.value;
+    sel.innerHTML = '<option value="" disabled selected>請認領</option>';
+
+    members.forEach(m => {
+      const opt = document.createElement("option");
+      opt.value = m;
+      opt.textContent = `${m} 號同學`;
+      sel.appendChild(opt);
+    });
+
+    if (members.includes(curVal)) {
+      sel.value = curVal;
+    }
+  });
+}
+
+/** 取得當前到齊組員座號清單 */
+function getSelectedGroupMembers() {
+  const selects = document.querySelectorAll(".member-seat-select");
+  const list = [];
+  selects.forEach(s => {
+    if (s.value && !list.includes(s.value)) {
+      list.push(s.value);
+    }
+  });
+  return list;
+}
+
+// ==================== 2. 雙模式切換與身分欄位連動 ====================
+function bindModeSwitching() {
+  const tabIndiv = document.getElementById("tabIndividual");
+  const tabGroup = document.getElementById("tabGroup");
+  const indivIdRow = document.getElementById("individualIdRow");
+  const groupIdRow = document.getElementById("groupIdRow");
+  const indivContainer = document.getElementById("individualModeContainer");
+  const groupContainer = document.getElementById("groupModeContainer");
+  const identityTitle = document.getElementById("identityTitle");
+
+  tabIndiv.addEventListener("click", () => {
+    if (currentMode === "individual") return;
+    currentMode = "individual";
+    tabIndiv.classList.add("active");
+    tabGroup.classList.remove("active");
+    indivIdRow.classList.remove("hidden");
+    groupIdRow.classList.add("hidden");
+    indivContainer.classList.remove("hidden");
+    groupContainer.classList.add("hidden");
+    identityTitle.textContent = "個人速記學習單 ｜ 基本資料設定";
+    showToast("已切換至【個人速記學習單】模式");
+  });
+
+  tabGroup.addEventListener("click", () => {
+    if (currentMode === "group") return;
+    currentMode = "group";
+    tabGroup.classList.add("active");
+    tabIndiv.classList.remove("active");
+    groupIdRow.classList.remove("hidden");
+    indivIdRow.classList.add("hidden");
+    groupContainer.classList.remove("hidden");
+    indivContainer.classList.add("hidden");
+    identityTitle.textContent = "小組統整學習單 ｜ 彈性分組與組員設定";
+    showToast("已切換至【小組統整學習單】模式");
+  });
+
+  // 小組人數下拉選單切換
+  const groupSize = document.getElementById("groupSize");
+  if (groupSize) {
+    groupSize.addEventListener("change", (e) => {
+      renderGroupMemberSlots(parseInt(e.target.value, 10));
+      triggerAutoSave();
+    });
+  }
+
+  // 學生姓名 2~5 字即時校驗（相容雙字單名，封殺純英數）
+  const studentNameInput = document.getElementById("studentName");
+  const nameFeedback = document.getElementById("nameFeedback");
+  if (studentNameInput) {
+    studentNameInput.addEventListener("input", (e) => {
+      const val = e.target.value.trim();
+      const validChineseRegex = /^[\u4e00-\u9fa5]{2,5}$/;
+      const isRepeated = /(.)\1{2,}/.test(val); // 封殺 哈哈哈 等玩笑
+
+      if (!val) {
+        nameFeedback.textContent = "";
+        nameFeedback.className = "valid-feedback";
+      } else if (validChineseRegex.test(val) && !isRepeated) {
+        nameFeedback.textContent = "✅ 姓名格式正確";
+        nameFeedback.className = "valid-feedback success";
+      } else {
+        nameFeedback.textContent = "⚠️ 請輸入 2~5 個繁體中文字（不含符號或純英數）";
+        nameFeedback.className = "valid-feedback error";
+      }
+      triggerAutoSave();
+    });
+  }
+}
+
+// ==================== 3. 個人速記 Stepper 關卡切換 ====================
+function bindStepperEvents() {
+  const stepButtons = document.querySelectorAll(".step-btn");
+  stepButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const step = parseInt(btn.dataset.step, 10);
+      goToStep(step);
+    });
+  });
+
+  // 下一步 / 上一步
+  document.querySelectorAll(".next-step-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const next = parseInt(btn.dataset.next, 10);
+      goToStep(next);
+    });
+  });
+
+  document.querySelectorAll(".prev-step-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const prev = parseInt(btn.dataset.prev, 10);
+      goToStep(prev);
+    });
+  });
+
+  // 素養寫作句型抽屜與字數統計
+  const essayHintBtn = document.getElementById("essayHintBtn");
+  const essayScaffold = document.getElementById("essayScaffold");
+  const essayInput = document.getElementById("q7_literacy_essay");
+  const charCount = document.getElementById("essayCharCount");
+
+  if (essayHintBtn && essayScaffold) {
+    essayHintBtn.addEventListener("click", () => {
+      essayScaffold.classList.toggle("hidden");
+    });
+  }
+
+  if (essayInput && charCount) {
+    essayInput.addEventListener("input", (e) => {
+      const len = e.target.value.trim().length;
+      charCount.textContent = `已輸入 ${len} 字`;
+      triggerAutoSave();
+    });
+  }
+
+  // 提交按鈕監聽
+  const btnSubmitIndividual = document.getElementById("btnSubmitIndividual");
+  if (btnSubmitIndividual) {
+    btnSubmitIndividual.addEventListener("click", handleSubmitIndividual);
+  }
+}
+
+function goToStep(step) {
+  currentStep = step;
+  // 切換 Stepper 按鈕樣式
+  document.querySelectorAll(".step-btn").forEach(btn => {
+    btn.classList.toggle("active", parseInt(btn.dataset.step, 10) === step);
+  });
+
+  // 切換卡片顯示
+  for (let s = 1; s <= 7; s++) {
+    const card = document.getElementById(`stepCard${s}`);
+    if (card) {
+      card.classList.toggle("hidden", s !== step);
+    }
+  }
+
+  // 平順滾動至卡片頂部
+  const stepper = document.querySelector(".stepper-nav");
+  if (stepper) {
+    stepper.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+
+  updateStepperCheckmarks();
+}
+
+/** 檢查各關卡是否已完成作答，即時打綠勾 */
+function updateStepperCheckmarks() {
+  const checks = {
+    1: () => !!document.getElementById("q1_height").value && !!document.getElementById("q1_hormone").value && !!document.getElementById("q1_gland").value,
+    2: () => document.querySelectorAll('input[name="q2_symptom"]:checked').length > 0,
+    3: () => !!document.getElementById("q3_age").value && !!document.getElementById("q3_hormone").value && document.querySelectorAll('input[name="q3_symptom"]:checked').length > 0,
+    4: () => !!document.getElementById("q4_location").value && !!document.getElementById("q4_function").value,
+    5: () => !!document.getElementById("q5_hormone").value && !!document.getElementById("q5_location").value && document.querySelectorAll('input[name="q5_func"]:checked').length > 0,
+    6: () => !!document.getElementById("q6_abnormal_hormone").value && !!document.getElementById("q6_lower_hormone").value && !!document.getElementById("q6_lower_convert").value && !!document.getElementById("q6_raise_hormone").value && !!document.getElementById("q6_raise_convert").value && document.querySelectorAll('input[name="q6_care"]:checked').length > 0,
+    7: () => !!document.getElementById("q7_hormone_change").value && document.getElementById("q7_literacy_essay").value.trim().length >= 5
+  };
+
+  for (let s = 1; s <= 7; s++) {
+    const btn = document.querySelector(`.step-btn[data-step="${s}"]`);
+    if (btn) {
+      const isDone = checks[s] ? checks[s]() : false;
+      btn.classList.toggle("completed", isDone);
+    }
+  }
+}
+
+// ==================== 4. 小組統整模式：人體圖與連動任務卡 ====================
+function bindHumanViewerEvents() {
+  const nodes = document.querySelectorAll(".gland-target-node");
+  nodes.forEach(node => {
+    node.addEventListener("click", () => {
+      const gland = node.dataset.gland;
+      switchGlandTask(gland);
+    });
+  });
+
+  const btnSubmitGroup = document.getElementById("btnSubmitGroup");
+  if (btnSubmitGroup) {
+    btnSubmitGroup.addEventListener("click", handleSubmitGroup);
+  }
+
+  // 監聽小組題目欄位變動更新節點狀態
+  document.querySelectorAll(".gland-answer, .gland-assignee, .table-select").forEach(el => {
+    el.addEventListener("change", () => {
+      updateGlandNodeStatus();
+      triggerAutoSave();
+    });
+  });
+}
+
+function switchGlandTask(gland) {
+  currentGland = gland;
+  // 節點高亮切換
+  document.querySelectorAll(".gland-target-node").forEach(n => {
+    n.classList.toggle("active-target", n.dataset.gland === gland);
+  });
+
+  // 卡片抽換切換
+  ["A", "B", "C", "D", "E", "F"].forEach(g => {
+    const card = document.getElementById(`cardGland${g}`);
+    if (card) {
+      card.classList.toggle("hidden", g !== gland);
+    }
+  });
+
+  // 平板觸控貼心提示
+  showToast(`已切換至【座標點 ${gland} 任務卡】`);
+}
+
+/** 檢查腺體 A~F 是否填寫完整，更新 SVG 光點綠色完成狀態 */
+function updateGlandNodeStatus() {
+  ["A", "B", "C", "D", "E", "F"].forEach(g => {
+    const node = document.getElementById(`node${g}`);
+    const assignee = document.getElementById(`assignee${g}`);
+    const name = document.getElementById(`glandName${g}`);
+    const hormone = document.getElementById(`hormone${g}`);
+    const disease = document.getElementById(`disease${g}`);
+
+    const isComplete = assignee && assignee.value && name && name.value && hormone && hormone.value && disease && disease.value;
+    if (node) {
+      node.classList.toggle("completed", !!isComplete);
+    }
+  });
+}
+
+// ==================== 5. 輸入監聽與 localStorage 本地自動暫存 ====================
+function bindInputListeners() {
+  // 所有 input / select / textarea 變更皆觸發微緩衝暫存
+  document.addEventListener("input", (e) => {
+    if (e.target.matches("input, select, textarea")) {
+      updateStepperCheckmarks();
+      updateGlandNodeStatus();
+      triggerAutoSave();
+    }
+  });
+
+  document.addEventListener("change", (e) => {
+    if (e.target.matches("input, select, textarea")) {
+      updateStepperCheckmarks();
+      updateGlandNodeStatus();
+      triggerAutoSave();
+    }
+  });
+
+  // Modal 關閉重置
+  const btnModalClose = document.getElementById("btnModalClose");
+  if (btnModalClose) {
+    btnModalClose.addEventListener("click", () => {
+      document.getElementById("resultModal").classList.add("hidden");
+      // 重置頁面回到頂端
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+}
+
+function triggerAutoSave() {
+  clearTimeout(autoSaveTimer);
+  autoSaveTimer = setTimeout(() => {
+    saveCurrentData();
+    const pill = document.getElementById("autoSaveBadge");
+    if (pill) {
+      pill.style.background = "#bbf7d0";
+      setTimeout(() => { pill.style.background = "#d1fae5"; }, 800);
+    }
+  }, 400);
+}
+
+function saveCurrentData() {
+  // 1. 個人資料
+  const indivPayload = {
+    class: document.getElementById("studentClass").value,
+    seat: document.getElementById("studentSeat").value,
+    name: document.getElementById("studentName").value,
+    q1_height: document.getElementById("q1_height").value,
+    q1_hormone: document.getElementById("q1_hormone").value,
+    q1_gland: document.getElementById("q1_gland").value,
+    q2_symptoms: Array.from(document.querySelectorAll('input[name="q2_symptom"]:checked')).map(cb => cb.value),
+    q3_age: document.getElementById("q3_age").value,
+    q3_hormone: document.getElementById("q3_hormone").value,
+    q3_symptoms: Array.from(document.querySelectorAll('input[name="q3_symptom"]:checked')).map(cb => cb.value),
+    q4_location: document.getElementById("q4_location").value,
+    q4_function: document.getElementById("q4_function").value,
+    q5_hormone: document.getElementById("q5_hormone").value,
+    q5_location: document.getElementById("q5_location").value,
+    q5_functions: Array.from(document.querySelectorAll('input[name="q5_func"]:checked')).map(cb => cb.value),
+    q6_abnormal_hormone: document.getElementById("q6_abnormal_hormone").value,
+    q6_lower_hormone: document.getElementById("q6_lower_hormone").value,
+    q6_lower_convert: document.getElementById("q6_lower_convert").value,
+    q6_raise_hormone: document.getElementById("q6_raise_hormone").value,
+    q6_raise_convert: document.getElementById("q6_raise_convert").value,
+    q6_cares: Array.from(document.querySelectorAll('input[name="q6_care"]:checked')).map(cb => cb.value),
+    q7_hormone_change: document.getElementById("q7_hormone_change").value,
+    q7_literacy_essay: document.getElementById("q7_literacy_essay").value
+  };
+  localStorage.setItem(STORAGE_KEY_INDIV, JSON.stringify(indivPayload));
+
+  // 2. 小組資料
+  const groupPayload = {
+    class: document.getElementById("groupClass").value,
+    groupNum: document.getElementById("groupNum").value,
+    groupSize: document.getElementById("groupSize").value,
+    members: getSelectedGroupMembers(),
+    glands: {
+      A: {
+        assignee: document.getElementById("assigneeA").value,
+        name: document.getElementById("glandNameA").value,
+        hormone: document.getElementById("hormoneA").value,
+        disease: document.getElementById("diseaseA").value
+      },
+      B: {
+        assignee: document.getElementById("assigneeB").value,
+        name: document.getElementById("glandNameB").value,
+        hormone: document.getElementById("hormoneB").value,
+        disease: document.getElementById("diseaseB").value
+      },
+      C: {
+        assignee: document.getElementById("assigneeC").value,
+        name: document.getElementById("glandNameC").value,
+        hormone: document.getElementById("hormoneC").value,
+        disease: document.getElementById("diseaseC").value
+      },
+      D: {
+        assignee: document.getElementById("assigneeD").value,
+        name: document.getElementById("glandNameD").value,
+        hormone: document.getElementById("hormoneD").value,
+        disease: document.getElementById("diseaseD").value
+      },
+      E: {
+        assignee: document.getElementById("assigneeE").value,
+        name: document.getElementById("glandNameE").value,
+        hormone: document.getElementById("hormoneE").value,
+        disease: document.getElementById("diseaseE").value
+      },
+      F: {
+        assignee: document.getElementById("assigneeF").value,
+        name: document.getElementById("glandNameF").value,
+        hormone: document.getElementById("hormoneF").value,
+        disease: document.getElementById("diseaseF").value
+      }
+    },
+    compare: {
+      assignee: document.getElementById("assigneeCompare").value,
+      trans_endo: document.getElementById("comp_trans_endo").value,
+      trans_nerv: document.getElementById("comp_trans_nerv").value,
+      speed_endo: document.getElementById("comp_speed_endo").value,
+      speed_nerv: document.getElementById("comp_speed_nerv").value,
+      scope_endo: document.getElementById("comp_scope_endo").value,
+      scope_nerv: document.getElementById("comp_scope_nerv").value,
+      time_endo: document.getElementById("comp_time_endo").value,
+      time_nerv: document.getElementById("comp_time_nerv").value
+    }
+  };
+  localStorage.setItem(STORAGE_KEY_GROUP, JSON.stringify(groupPayload));
+}
+
+function loadSavedData() {
+  // 還原個人資料
+  const indivRaw = localStorage.getItem(STORAGE_KEY_INDIV);
+  if (indivRaw) {
+    try {
+      const data = JSON.parse(indivRaw);
+      if (data.class) document.getElementById("studentClass").value = data.class;
+      if (data.seat) document.getElementById("studentSeat").value = data.seat;
+      if (data.name) {
+        document.getElementById("studentName").value = data.name;
+        document.getElementById("studentName").dispatchEvent(new Event("input"));
+      }
+      if (data.q1_height) document.getElementById("q1_height").value = data.q1_height;
+      if (data.q1_hormone) document.getElementById("q1_hormone").value = data.q1_hormone;
+      if (data.q1_gland) document.getElementById("q1_gland").value = data.q1_gland;
+
+      if (data.q2_symptoms) {
+        document.querySelectorAll('input[name="q2_symptom"]').forEach(cb => {
+          cb.checked = data.q2_symptoms.includes(cb.value);
+        });
+      }
+      if (data.q3_age) document.getElementById("q3_age").value = data.q3_age;
+      if (data.q3_hormone) document.getElementById("q3_hormone").value = data.q3_hormone;
+      if (data.q3_symptoms) {
+        document.querySelectorAll('input[name="q3_symptom"]').forEach(cb => {
+          cb.checked = data.q3_symptoms.includes(cb.value);
+        });
+      }
+      if (data.q4_location) document.getElementById("q4_location").value = data.q4_location;
+      if (data.q4_function) document.getElementById("q4_function").value = data.q4_function;
+
+      if (data.q5_hormone) document.getElementById("q5_hormone").value = data.q5_hormone;
+      if (data.q5_location) document.getElementById("q5_location").value = data.q5_location;
+      if (data.q5_functions) {
+        document.querySelectorAll('input[name="q5_func"]').forEach(cb => {
+          cb.checked = data.q5_functions.includes(cb.value);
+        });
+      }
+
+      if (data.q6_abnormal_hormone) document.getElementById("q6_abnormal_hormone").value = data.q6_abnormal_hormone;
+      if (data.q6_lower_hormone) document.getElementById("q6_lower_hormone").value = data.q6_lower_hormone;
+      if (data.q6_lower_convert) document.getElementById("q6_lower_convert").value = data.q6_lower_convert;
+      if (data.q6_raise_hormone) document.getElementById("q6_raise_hormone").value = data.q6_raise_hormone;
+      if (data.q6_raise_convert) document.getElementById("q6_raise_convert").value = data.q6_raise_convert;
+      if (data.q6_cares) {
+        document.querySelectorAll('input[name="q6_care"]').forEach(cb => {
+          cb.checked = data.q6_cares.includes(cb.value);
+        });
+      }
+
+      if (data.q7_hormone_change) document.getElementById("q7_hormone_change").value = data.q7_hormone_change;
+      if (data.q7_literacy_essay) {
+        document.getElementById("q7_literacy_essay").value = data.q7_literacy_essay;
+        document.getElementById("essayCharCount").textContent = `已輸入 ${data.q7_literacy_essay.length} 字`;
+      }
+    } catch (e) {
+      console.warn("還原個人暫存失敗", e);
+    }
+  }
+
+  // 還原小組資料
+  const groupRaw = localStorage.getItem(STORAGE_KEY_GROUP);
+  if (groupRaw) {
+    try {
+      const gData = JSON.parse(groupRaw);
+      if (gData.class) document.getElementById("groupClass").value = gData.class;
+      if (gData.groupNum) document.getElementById("groupNum").value = gData.groupNum;
+      if (gData.groupSize) {
+        document.getElementById("groupSize").value = gData.groupSize;
+        renderGroupMemberSlots(parseInt(gData.groupSize, 10));
+      }
+      if (gData.members && Array.isArray(gData.members)) {
+        const selects = document.querySelectorAll(".member-seat-select");
+        gData.members.forEach((m, idx) => {
+          if (selects[idx]) selects[idx].value = m;
+        });
+        syncAssigneeDropdowns();
+      }
+
+      if (gData.glands) {
+        ["A", "B", "C", "D", "E", "F"].forEach(g => {
+          const item = gData.glands[g];
+          if (!item) return;
+          if (item.assignee) document.getElementById(`assignee${g}`).value = item.assignee;
+          if (item.name) document.getElementById(`glandName${g}`).value = item.name;
+          if (item.hormone) document.getElementById(`hormone${g}`).value = item.hormone;
+          if (item.disease) document.getElementById(`disease${g}`).value = item.disease;
+        });
+      }
+
+      if (gData.compare) {
+        const c = gData.compare;
+        if (c.assignee) document.getElementById("assigneeCompare").value = c.assignee;
+        if (c.trans_endo) document.getElementById("comp_trans_endo").value = c.trans_endo;
+        if (c.trans_nerv) document.getElementById("comp_trans_nerv").value = c.trans_nerv;
+        if (c.speed_endo) document.getElementById("comp_speed_endo").value = c.speed_endo;
+        if (c.speed_nerv) document.getElementById("comp_speed_nerv").value = c.speed_nerv;
+        if (c.scope_endo) document.getElementById("comp_scope_endo").value = c.scope_endo;
+        if (c.scope_nerv) document.getElementById("comp_scope_nerv").value = c.scope_nerv;
+        if (c.time_endo) document.getElementById("comp_time_endo").value = c.time_endo;
+        if (c.time_nerv) document.getElementById("comp_time_nerv").value = c.time_nerv;
+      }
+    } catch (e) {
+      console.warn("還原小組暫存失敗", e);
+    }
+  }
+}
+
+// ==================== 6. 防手滑攔截與送出驗證 ====================
+function initExitGuard() {
+  window.addEventListener("beforeunload", (e) => {
+    // 若填寫有進度，防止手滑滑出上一頁
+    const name = document.getElementById("studentName").value;
+    if (name) {
+      e.preventDefault();
+      e.returnValue = "學習單作答中，確定要離開嗎？進度已為您自動暫存於本機。";
+    }
+  });
+}
+
+/** 個人模式提交與計分 */
+function handleSubmitIndividual() {
+  const cls = document.getElementById("studentClass").value;
+  const seat = document.getElementById("studentSeat").value;
+  const name = document.getElementById("studentName").value.trim();
+
+  // 1. 身分防呆
+  if (!cls || !seat || !name) {
+    alert("⚠️ 請先完整填寫頂部的【班級、座號與學生姓名】！");
+    document.getElementById("identityCard").scrollIntoView({ behavior: "smooth" });
+    return;
+  }
+
+  const validChineseRegex = /^[\u4e00-\u9fa5]{2,5}$/;
+  if (!validChineseRegex.test(name)) {
+    alert("⚠️ 姓名請輸入 2~5 字繁體中文真實姓名，以利成績登錄！");
+    return;
+  }
+
+  // 2. 未完成題目防呆檢查
+  const uncompleted = [];
+  for (let s = 1; s <= 7; s++) {
+    const btn = document.querySelector(`.step-btn[data-step="${s}"]`);
+    if (btn && !btn.classList.contains("completed")) {
+      uncompleted.push(`影片 ${s}`);
+    }
+  }
+
+  if (uncompleted.length > 0) {
+    const confirmSubmit = confirm(`⚠️ 提示：你還有以下關卡尚未完整填寫：\n【 ${uncompleted.join("、 ")} 】\n\n確定現在就要提早交卷嗎？（未完成題目將不計分）`);
+    if (!confirmSubmit) return;
+  }
+
+  // 3. 前端客觀題計分計算（總分 100 分，素養題不扣分列待閱）
+  let score = 0;
+  // 關卡 1 (15分)
+  if (document.getElementById("q1_hormone").value === "生長激素") score += 8;
+  if (document.getElementById("q1_gland").value === "腦垂腺") score += 7;
+
+  // 關卡 2 (15分): 體溫升高, 消瘦緊張, 眼球凸出, 心跳加快
+  const q2Checked = Array.from(document.querySelectorAll('input[name="q2_symptom"]:checked')).map(cb => cb.value);
+  const q2Correct = ["體溫升高", "消瘦緊張", "眼球凸出", "心跳加快"];
+  const q2IsPerfect = q2Checked.length === 4 && q2Correct.every(s => q2Checked.includes(s));
+  if (q2IsPerfect) score += 15;
+  else if (q2Checked.filter(s => q2Correct.includes(s)).length >= 3 && !q2Checked.includes("抽搐") && !q2Checked.includes("呆小症")) score += 10;
+
+  // 關卡 3 (15分): 甲狀腺素; 影響生長發育, 智力發展受限
+  if (document.getElementById("q3_hormone").value === "甲狀腺素") score += 7;
+  const q3Checked = Array.from(document.querySelectorAll('input[name="q3_symptom"]:checked')).map(cb => cb.value);
+  if (q3Checked.includes("影響生長發育") && q3Checked.includes("智力發展受限") && !q3Checked.includes("骨質疏鬆") && !q3Checked.includes("血糖過高")) {
+    score += 8;
+  }
+
+  // 關卡 4 (15分): 包埋於甲狀腺背側, 調節血鈣與磷的濃度
+  if (document.getElementById("q4_location").value === "包埋於甲狀腺背側") score += 7;
+  if (document.getElementById("q4_function").value === "調節血鈣與磷的濃度") score += 8;
+
+  // 關卡 5 (15分): 腎上腺素, 腎臟上方; 4 個反應皆有
+  if (document.getElementById("q5_hormone").value === "腎上腺素") score += 5;
+  if (document.getElementById("q5_location").value === "腎臟上方") score += 5;
+  const q5Checked = Array.from(document.querySelectorAll('input[name="q5_func"]:checked')).map(cb => cb.value);
+  if (q5Checked.length === 4) score += 5;
+
+  // 關卡 6 (15分): 胰島素; 配對 2 組; 照護
+  if (document.getElementById("q6_abnormal_hormone").value === "胰島素") score += 3;
+  if (document.getElementById("q6_lower_hormone").value === "胰島素" && document.getElementById("q6_lower_convert").value === "血糖→肝糖") score += 4;
+  if (document.getElementById("q6_raise_hormone").value === "升糖素" && document.getElementById("q6_raise_convert").value === "肝糖→血糖") score += 4;
+  const q6Care = Array.from(document.querySelectorAll('input[name="q6_care"]:checked')).map(cb => cb.value);
+  if (q6Care.includes("定時服藥/注射") && q6Care.includes("控制飲食") && q6Care.includes("規律運動") && !q6Care.includes("多吃高糖食物")) {
+    score += 4;
+  }
+
+  // 關卡 7 (10分): 雄性激素減少、雌性激素增加
+  if (document.getElementById("q7_hormone_change").value === "雄性激素減少、雌性激素增加") score += 10;
+
+  // 打包 Payload 送出
+  const payload = {
+    mode: "individual",
+    class: cls,
+    seatOrGroup: seat,
+    nameOrMembers: name,
+    score: score,
+    essay: document.getElementById("q7_literacy_essay").value.trim(),
+    detailData: JSON.parse(localStorage.getItem(STORAGE_KEY_INDIV) || "{}"),
+    timestamp: new Date().toISOString()
+  };
+
+  sendToGAS(payload, score);
+}
+
+/** 小組模式提交與防呆驗證 */
+function handleSubmitGroup() {
+  const cls = document.getElementById("groupClass").value;
+  const groupNum = document.getElementById("groupNum").value;
+  const members = getSelectedGroupMembers();
+
+  if (!cls || !groupNum) {
+    alert("⚠️ 請先選擇【班級與組別】！");
+    document.getElementById("identityCard").scrollIntoView({ behavior: "smooth" });
+    return;
+  }
+
+  if (members.length < 3) {
+    alert("⚠️ 請至少設定 3 位出席組員的座號！");
+    return;
+  }
+
+  // 關鍵防呆：驗證每位到齊組員皆至少認領並作答了 1 題
+  const claimedAssignees = [];
+  ["A", "B", "C", "D", "E", "F"].forEach(g => {
+    const val = document.getElementById(`assignee${g}`).value;
+    if (val && !claimedAssignees.includes(val)) claimedAssignees.push(val);
+  });
+  const compAssignee = document.getElementById("assigneeCompare").value;
+  if (compAssignee && !claimedAssignees.includes(compAssignee)) claimedAssignees.push(compAssignee);
+
+  const missingMembers = members.filter(m => !claimedAssignees.includes(m));
+  if (missingMembers.length > 0) {
+    alert(`⚠️ 小組責任分工防呆：\n座號【 ${missingMembers.map(m => m + "號").join("、 ")} 】同學尚未認領任何題目！\n\n請讓每位組員都認領至少 1 個腺體任務或系統比較表，共同參與作答。`);
+    return;
+  }
+
+  // 小組客觀題計分（人體腺體 60分 + 比較表 40分 = 100分）
+  let score = 0;
+  // A: 腦垂腺, 生長激素, 巨人症/侏儒症 (10分)
+  if (document.getElementById("glandNameA").value === "腦垂腺" && document.getElementById("hormoneA").value === "生長激素" && document.getElementById("diseaseA").value === "巨人症/侏儒症") score += 10;
+  // B: 甲狀腺, 甲狀腺素, 甲狀腺亢進/呆小症 (10分)
+  if (document.getElementById("glandNameB").value === "甲狀腺" && document.getElementById("hormoneB").value === "甲狀腺素" && document.getElementById("diseaseB").value === "甲狀腺亢進/呆小症") score += 10;
+  // C: 副甲狀腺, 副甲狀腺素, 抽搐/骨質疏鬆 (10分)
+  if (document.getElementById("glandNameC").value === "副甲狀腺" && document.getElementById("hormoneC").value === "副甲狀腺素" && document.getElementById("diseaseC").value === "抽搐/骨質疏鬆") score += 10;
+  // D: 腎上腺, 腎上腺素, 心搏加快/血壓上升 (10分)
+  if (document.getElementById("glandNameD").value === "腎上腺" && document.getElementById("hormoneD").value === "腎上腺素" && document.getElementById("diseaseD").value === "心搏加快/血壓上升") score += 10;
+  // E: 胰島, 胰島素與升糖素, 糖尿病 (10分)
+  if (document.getElementById("glandNameE").value === "胰島" && document.getElementById("hormoneE").value === "胰島素與升糖素" && document.getElementById("diseaseE").value === "糖尿病") score += 10;
+  // F: 性腺, 雄性/雌性激素, 第二性徵表現 (10分)
+  if (document.getElementById("glandNameF").value === "性腺" && document.getElementById("hormoneF").value === "雄性/雌性激素" && document.getElementById("diseaseF").value === "第二性徵表現") score += 10;
+
+  // 比較表 4 題各 10 分
+  if (document.getElementById("comp_trans_endo").value === "血液" && document.getElementById("comp_trans_nerv").value === "神經元") score += 10;
+  if (document.getElementById("comp_speed_endo").value === "較慢" && document.getElementById("comp_speed_nerv").value === "迅速") score += 10;
+  if (document.getElementById("comp_scope_endo").value === "廣泛" && document.getElementById("comp_scope_nerv").value === "局部") score += 10;
+  if (document.getElementById("comp_time_endo").value === "持久" && document.getElementById("comp_time_nerv").value === "短暫") score += 10;
+
+  const payload = {
+    mode: "group",
+    class: cls,
+    seatOrGroup: groupNum,
+    nameOrMembers: members.join(", "),
+    score: score,
+    essay: "小組統整模型完成",
+    detailData: JSON.parse(localStorage.getItem(STORAGE_KEY_GROUP) || "{}"),
+    timestamp: new Date().toISOString()
+  };
+
+  sendToGAS(payload, score);
+}
+
+// ==================== 7. 後端 GAS 傳送 ＋ 8 秒降級機制 ====================
+function sendToGAS(payload, score) {
+  // 顯示彈窗
+  const modal = document.getElementById("resultModal");
+  const scoreVal = document.getElementById("scoreVal");
+  const scoreStatus = document.getElementById("scoreStatus");
+  const detailsBox = document.getElementById("resultDetailsBox");
+
+  scoreVal.textContent = score;
+  modal.classList.remove("hidden");
+
+  scoreStatus.textContent = "📡 正在向課堂伺服器同步成績，請稍候...";
+  detailsBox.innerHTML = `
+    <div><strong>作答模式：</strong>${payload.mode === "individual" ? "個人速記學習單" : "小組統整學習單"}</div>
+    <div><strong>身分：</strong>${payload.class} 班 ${payload.seatOrGroup} ｜ ${payload.nameOrMembers}</div>
+    <div style="margin-top:6px; color:#0284c7;">正在建立加密通道送出作答數據...</div>
+  `;
+
+  // 8 秒逾時防塞車降級機制
+  let isHandled = false;
+  const timeoutId = setTimeout(() => {
+    if (!isHandled) {
+      isHandled = true;
+      scoreStatus.textContent = "⚠️ 學校 Wi-Fi 塞車延遲，成績已為您快照備份！";
+      detailsBox.innerHTML += `
+        <div style="margin-top:8px; padding:8px; background:#fef3c7; border-radius:6px; color:#92400e;">
+          <strong>備援通報：</strong>校園網路稍有雍塞，您的成績 (${score}分) 已安全快照留存於此平板中。<br>
+          請直接向任課生物老師出示本畫面進行手動核對登記即可！
+        </div>
+      `;
+    }
+  }, 8000);
+
+  // 若尚未設定真實 GAS URL 則提供優雅展示
+  if (!GAS_URL || GAS_URL === "YOUR_GAS_EXEC_URL") {
+    setTimeout(() => {
+      clearTimeout(timeoutId);
+      isHandled = true;
+      scoreStatus.textContent = "✅ 本地批改完成（尚未配置 GAS_URL）";
+      detailsBox.innerHTML += `
+        <div style="margin-top:8px; color:#059669;">
+          🎉 成績批改完成！若要上傳 Google 試算表，請在 <code>game.js</code> 第 7 行填入您的 GAS Web App 部署網址。
+        </div>
+      `;
+    }, 1000);
+    return;
+  }
+
+  fetch(GAS_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(payload)
+  })
+    .then(res => res.json())
+    .then(data => {
+      clearTimeout(timeoutId);
+      if (isHandled) return;
+      isHandled = true;
+      scoreStatus.textContent = "🎉 成績已成功登錄至任課教師雲端試算表！";
+      detailsBox.innerHTML += `
+        <div style="margin-top:8px; color:#059669;">
+          <strong>雲端回執：</strong>${data.message || "成績上傳成功"} (更新時間: ${new Date().toLocaleTimeString()})
+        </div>
+      `;
+    })
+    .catch(err => {
+      clearTimeout(timeoutId);
+      if (isHandled) return;
+      isHandled = true;
+      console.warn("GAS 送出略過或離線", err);
+      scoreStatus.textContent = "⚠️ 已快照存於本機離線緩存";
+      detailsBox.innerHTML += `
+        <div style="margin-top:8px; color:#b45309;">
+          數據已完整妥善存於瀏覽器 LocalStorage，請向老師出示本畫面。
+        </div>
+      `;
+    });
+}
+
+/** 提示小泡泡 */
+function showToast(msg) {
+  const toast = document.getElementById("cyberToast");
+  if (!toast) return;
+  toast.textContent = msg;
+  toast.classList.add("show");
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2200);
+}

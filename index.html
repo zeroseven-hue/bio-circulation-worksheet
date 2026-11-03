@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>國中生物 4-2 內分泌系統數位互動學習單</title>
+  <link rel="stylesheet" href="style.css?v=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Orbitron:wght@600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- 背景科技光網 -->
+  <div class="tech-bg-grid"></div>
+
+  <!-- 頂部導航列 -->
+  <header class="cyber-header">
+    <div class="header-container">
+      <div class="brand-zone">
+        <div class="brand-badge">BIO-HUB 4-2</div>
+        <div class="brand-title-wrap">
+          <h1 class="brand-title">4-2 內分泌系統 數位互動學習單</h1>
+          <p class="brand-sub">7年級自然與生活科技 ｜ 生物恆定性探索系統</p>
+        </div>
+      </div>
+
+      <!-- 模式切換 Switcher -->
+      <div class="mode-switcher-wrap">
+        <button type="button" class="mode-tab active" id="tabIndividual" data-mode="individual">
+          <span class="mode-icon">👤</span>
+          <span class="mode-text">個人速記學習單</span>
+          <span class="status-indicator"></span>
+        </button>
+        <button type="button" class="mode-tab" id="tabGroup" data-mode="group">
+          <span class="mode-icon">👥</span>
+          <span class="mode-text">小組統整學習單</span>
+          <span class="status-indicator"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主容器 -->
+  <main class="app-main">
+    <!-- 頂部身分登錄卡片 -->
+    <section class="identity-card glass-panel" id="identityCard">
+      <div class="panel-header">
+        <div class="panel-title">
+          <span class="glow-dot"></span>
+          <span id="identityTitle">基本資料設定</span>
+        </div>
+        <div class="auto-save-pill" id="autoSaveBadge">
+          <span class="save-icon">💾</span> 本地已自動暫存
+        </div>
+      </div>
+
+      <!-- 個人模式身分欄位 -->
+      <div class="id-row" id="individualIdRow">
+        <div class="form-group flex-1">
+          <label for="studentClass"><span class="req">*</span> 班級</label>
+          <div class="select-wrapper">
+            <select id="studentClass" class="cyber-select">
+              <option value="" disabled selected>請選擇班級</option>
+              <!-- 701 - 710 -->
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group flex-1">
+          <label for="studentSeat"><span class="req">*</span> 座號</label>
+          <div class="select-wrapper">
+            <select id="studentSeat" class="cyber-select">
+              <option value="" disabled selected>請選擇座號</option>
+              <!-- 01 - 35 -->
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group flex-2">
+          <label for="studentName"><span class="req">*</span> 學生真實姓名</label>
+          <div class="input-wrapper">
+            <input type="text" id="studentName" class="cyber-input" placeholder="請輸入 2~5 字中文全名（如：陳立、王小明）" maxlength="5" autocomplete="off">
+            <span class="valid-feedback" id="nameFeedback"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 小組模式身分欄位 -->
+      <div class="id-row group-id-row hidden" id="groupIdRow">
+        <div class="form-group flex-1">
+          <label for="groupClass"><span class="req">*</span> 班級</label>
+          <div class="select-wrapper">
+            <select id="groupClass" class="cyber-select">
+              <option value="" disabled selected>請選擇班級</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group flex-1">
+          <label for="groupNum"><span class="req">*</span> 組別</label>
+          <div class="select-wrapper">
+            <select id="groupNum" class="cyber-select">
+              <option value="" disabled selected>請選擇組別</option>
+              <!-- 第1組 - 第8組 -->
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group flex-1">
+          <label for="groupSize"><span class="req">*</span> 本組出席人數</label>
+          <div class="select-wrapper">
+            <select id="groupSize" class="cyber-select">
+              <option value="3">3 人組</option>
+              <option value="4" selected>4 人組</option>
+              <option value="5">5 人組</option>
+              <option value="6">6 人組</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="group-members-container flex-full" id="groupMembersContainer">
+          <div class="member-seats-label">
+            <span>組員座號設定（點名到齊座號，後續每題須由組員認領）：</span>
+          </div>
+          <div class="member-seats-grid" id="memberSeatsGrid">
+            <!-- 動態生成組員下拉 -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 1. 個人速記模式 ==================== -->
+    <section class="mode-container" id="individualModeContainer">
+      <!-- 關卡 Stepper 導航條 -->
+      <nav class="stepper-nav glass-panel">
+        <div class="stepper-track" id="stepperTrack">
+          <button type="button" class="step-btn active" data-step="1">
+            <span class="step-num">01</span>
+            <span class="step-label">巨人的眼淚</span>
+            <span class="check-mark">✓</span>
+          </button>
+          <button type="button" class="step-btn" data-step="2">
+            <span class="step-num">02</span>
+            <span class="step-label">甲狀腺亢進</span>
+            <span class="check-mark">✓</span>
+          </button>
+          <button type="button" class="step-btn" data-step="3">
+            <span class="step-num">03</span>
+            <span class="step-label">不老女嬰</span>
+            <span class="check-mark">✓</span>
+          </button>
+          <button type="button" class="step-btn" data-step="4">
+            <span class="step-num">04</span>
+            <span class="step-label">骨折與副甲</span>
+            <span class="check-mark">✓</span>
+          </button>
+          <button type="button" class="step-btn" data-step="5">
+            <span class="step-num">05</span>
+            <span class="step-label">超越極限</span>
+            <span class="check-mark">✓</span>
+          </button>
+          <button type="button" class="step-btn" data-step="6">
+            <span class="step-num">06</span>
+            <span class="step-label">糖尿病原理</span>
+            <span class="check-mark">✓</span>
+          </button>
+          <button type="button" class="step-btn" data-step="7">
+            <span class="step-num">07</span>
+            <span class="step-label">性別素養探討</span>
+            <span class="check-mark">✓</span>
+          </button>
+        </div>
+      </nav>
+
+      <!-- 題目內容卡片區 -->
+      <div class="step-card-slider">
+        <!-- 關卡 1 -->
+        <article class="question-card glass-panel" id="stepCard1">
+          <div class="card-title-bar">
+            <span class="card-badge">影片一</span>
+            <h2>巨人的眼淚 ｜ 體重與身高急速增長的背後</h2>
+          </div>
+          <div class="card-prompt">
+            <p class="intro-desc">觀察影片中主角的身高與生長狀態，結合課本內分泌概念回答下列問題：</p>
+          </div>
+          
+          <div class="q-block">
+            <label class="q-label"><span class="q-seq">Q1.</span> 影片中的主角身高約為多少？</label>
+            <div class="input-with-unit">
+              <input type="number" id="q1_height" class="cyber-input num-input" placeholder="請填數字 (例: 236)" min="100" max="300">
+              <span class="input-unit">公分 (cm)</span>
+            </div>
+            <div class="hint-text">💡 提示：根據影片紀錄，請填寫公分數。</div>
+          </div>
+
+          <div class="q-block">
+            <label class="q-label"><span class="q-seq">Q2.</span> 造成身高異常不斷長高的關鍵原因是什麼？</label>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label for="q1_hormone">分泌過多的【激素】：</label>
+                <div class="select-wrapper">
+                  <select id="q1_hormone" class="cyber-select">
+                    <option value="" disabled selected>請選擇激素</option>
+                    <option value="生長激素">生長激素</option>
+                    <option value="甲狀腺素">甲狀腺素</option>
+                    <option value="腎上腺素">腎上腺素</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="q1_gland">負責分泌的【腺體】：</label>
+                <div class="select-wrapper">
+                  <select id="q1_gland" class="cyber-select">
+                    <option value="" disabled selected>請選擇腺體</option>
+                    <option value="腦垂腺">腦垂腺</option>
+                    <option value="甲狀腺">甲狀腺</option>
+                    <option value="腎上腺">腎上腺</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-footer-nav">
+            <button type="button" class="cyber-btn secondary-btn" disabled>⏮ 首關</button>
+            <button type="button" class="cyber-btn primary-btn next-step-btn" data-next="2">下一關：甲狀腺亢進 ⏭</button>
+          </div>
+        </article>
+
+        <!-- 關卡 2 -->
+        <article class="question-card glass-panel hidden" id="stepCard2">
+          <div class="card-title-bar">
+            <span class="card-badge">影片二</span>
+            <h2>甲狀腺機能亢進 ｜ 代謝過旺的警訊</h2>
+          </div>
+          <div class="card-prompt">
+            <p class="intro-desc">甲狀腺素負責調節身體的新陳代謝速率，當分泌過多時會造成代謝過旺。</p>
+          </div>
+
+          <div class="q-block">
+            <label class="q-label"><span class="q-seq">Q1.</span> 請勾選出屬於「甲狀腺機能亢進」的特徵症狀？<span class="multi-tag">多選題（請勾選所有正確項）</span></label>
+            <div class="cyber-checkbox-grid" id="q2_symptoms">
+              <label class="checkbox-pill">
+                <input type="checkbox" name="q2_symptom" value="體溫升高">
+                <span class="pill-box"></span>
+                <span class="pill-text">體溫升高 / 怕熱多汗</span>
+              </label>
+              <label class="checkbox-pill">
+                <input type="checkbox" name="q2_symptom" value="消瘦緊張">
+                <span class="pill-box"></span>
+                <span class="pill-text">身體消瘦 / 情緒緊張</span>
+              </label>
+              <label class="checkbox-pill">
+                <input type="checkbox" name="q2_symptom" value="眼球凸出">
+                <span class="pill-box"></span>
+                <span class="pill-text">眼球明顯凸出</span>
+              </label>
+              <label class="checkbox-pill">
+                <input type="checkbox" name="q2_symptom" value="心跳加快">
+                <span class="pill-box"></span>
+                <span class="pill-text">心跳搏動加快</span>
+              </label>
+              <label class="checkbox-pill">
+                <input type="checkbox" name="q2_symptom" value="抽搐">
+                <span class="pill-box"></span>
+                <span class="pill-text">肌肉抽搐痙攣</span>
+              </label>
+              <label class="checkbox-pill">
+                <input type="checkbox" name="q2_symptom" value="呆小症">
+                <span class="pill-box"></span>
+                <span class="pill-text">罹患呆小症</span>
+              </label>
+            </div>
+            <div class="hint-text">💡 提示：仔細分辨哪些是「代謝過旺」，哪些是副甲狀腺或幼年分泌不足所引起。</div>
+          </div>
+
+          <div class="card-footer-nav">
+            <button type="button" class="cyber-btn secondary-btn prev-step-btn" data-prev="1">⏮ 上一關</button>
+            <button type="button" class="cyber-btn primary-btn next-step-btn" data-next="3">下一關：不老女嬰 ⏭</button>
+          </div>
+        </article>
+
+        <!-- 關卡 3 -->
+        <article class="question-card glass-panel hidden" id="stepCard3">
+          <div class="card-title-bar">
+            <span class="card-badge">影片三</span>
+            <h2>不老女嬰 ｜ 瑪麗亞的成長時鐘</h2>
+          </div>
+          <div class="card-prompt">
+            <p class="intro-desc">探討幼年時期激素分泌不足對人體骨骼生長與腦神經發育的深遠影響：</p>
+          </div>
+
+          <div class="q-block">
+            <label class="q-label"><span class="q-seq">Q1.</span> 影片中的瑪麗亞，當時的實際年齡大約幾歲？</label>
+            <div class="input-with-unit">
+              <input type="number" id="q3_age" class="cyber-input num-input" placeholder="請填寫歲數" min="0" max="100">
+              <span class="input-unit">歲</span>
+            </div>
+          </div>
+
+          <div class="q-block">
+            <label class="q-label"><span class="q-seq">Q2.</span> 瑪麗亞是因為幼年時期缺乏哪一種激素，而造成呆小症？</label>
+            <div class="select-wrapper">
+              <select id="q3_hormone" class="cyber-select">
+                <option value="" disabled selected>請選擇缺乏激素</option>
+                <option value="甲狀腺素">甲狀腺素</option>
+                <option value="生長激素">生長激素</option>
+                <option value="副甲狀腺素">副甲狀腺素</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="q-block">
+            <label class="q-label"><span class="q-seq">Q3.</span> 呆小症有哪些典型特徵？<span class="multi-tag">多選題</span></label>
+            <div class="cyber-checkbox-grid" id="q3_symptoms">
+              <label class="checkbox-pill">
+                <input type="checkbox" name="q3_symptom" value="影響生長發育">
+                <span class="pill-box"></span>
+                <span class="pill-text">身材矮小 / 生長發育受阻</span>
+              </label>
+              <label class="checkbox-pill">
+                <input type="checkbox" name="q3_symptom" value="智力發展受限">
+                <span class="pill-box"></span>
+                <span class="pill-text">智力發展顯著受限</span>
+              </label>
+              <label class="checkbox-pill">
+                <input type="checkbox" name="q3_symptom" value="骨質疏鬆">
+                <span class="pill-box"></span>
+                <span class="pill-text">骨質嚴重疏鬆</span>
+              </label>
+              <label class="checkbox-pill">
+                <input type="checkbox" name="q3_symptom" value="血糖過高">
+                <span class="pill-box"></span>
+                <span class="pill-text">血糖濃度持續過高</span>
+              </label>
+            </div>
+            <div class="hint-text">💡 生物小補帖：侏儒症僅身材矮小但智力正常；呆小症則同時影響身材與智力。</div>
+          </div>
+
+          <div class="card-footer-nav">
+            <button type="button" class="cyber-btn secondary-btn prev-step-btn" data-prev="2">⏮ 上一關</button>
+            <button type="button" class="cyber-btn primary-btn next-step-btn" data-next="4">下一關：副甲狀腺 ⏭</button>
+          </div>
+        </article>
+
+        <!-- 關卡 4 -->
+        <article class="question-card glass-panel hidden" id="stepCard4">
+          <div class="card-title-bar">
+            <span class="card-badge">影片四</span>
+            <h2>骨折與副甲狀腺 ｜ 人體的血鈣微調專家</h2>
+          </div>
+          <div class="card-prompt">
+            <p class="intro-desc">體型小巧卻至關重要的副甲狀腺，嚴格掌管血液中鈣離子的恆定。</p>
+          </div>
+
+          <div class="q-block">
+            <label class="q-label"><span class="q-seq">Q1.</span> 人體的「副甲狀腺」解剖位置在哪裡？</label>
+            <div class="select-wrapper">
+              <select id="q4_location" class="cyber-select">
+                <option value="" disabled selected>請選擇解剖位置</option>
+                <option value="包埋於甲狀腺背側">包埋於甲狀腺背側（共有四顆）</option>
+                <option value="氣管兩側">氣管兩側前方</option>
+                <option value="腦下">腦下垂體下方</option>
+                <option value="腎臟上方">位於左右腎臟的頂端</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="q-block">
+            <label class="q-label"><span class="q-seq">Q2.</span> 「副甲狀腺素」的核心生理功能為何？</label>
+            <div class="select-wrapper">
+              <select id="q4_function" class="cyber-select">
+                <option value="" disabled selected>請選擇生理功能</option>
+                <option value="調節血鈣與磷的濃度">調節血液中鈣與磷的濃度（維持神經肌肉正常）</option>
+                <option value="促進細胞代謝">促進全身細胞的氧化分解代謝</option>
+                <option value="提高血糖">迅速提高血液中的葡萄糖濃度</option>
+              </select>
+            </div>
+            <div class="hint-text">💡 記憶口訣：副甲狀腺素分泌過少會導致血液血鈣過低，引發肌肉抽搐。</div>
+          </div>
+
+          <div class="card-footer-nav">
+            <button type="button" class="cyber-btn secondary-btn prev-step-btn" data-prev="3">⏮ 上一關</button>
+            <button type="button" class="cyber-btn primary-btn next-step-btn" data-next="5">下一關：腎上腺素 ⏭</button>
+          </div>
+        </article>
+
+        <!-- 關卡 5 -->
+        <article class="question-card glass-panel hidden" id="stepCard5">
+          <div class="card-title-bar">
+            <span class="card-badge">影片五</span>
+            <h2>超越極限？ ｜ 緊急應變的腎上腺素</h2>
+          </div>
+          <div class="card-prompt">
+            <p class="intro-desc">面對猛獸襲擊、火災或劇烈運動應急時，身體如何激發戰鬥或逃跑（Fight or Flight）潛能？</p>
+          </div>
+
+          <div class="q-block">
+            <label class="q-label"><span class="q-seq">Q1.</span> 處於運動、情緒激動、壓力或緊急危難時，人體會大量分泌哪種激素？</label>
+            <div class="select-wrapper">
+              <select id="q5_hormone" class="cyber-select">
+                <option value="" disabled selected>請選擇緊急激素</option>
+                <option value="腎上腺素">腎上腺素</option>
+                <option value="生長激素">生長激素</option>
+                <option value="甲狀腺素">甲狀腺素</option>
+                <option value="胰島素">胰島素</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="q-block">
+            <label class="q-label"><span class="q-seq">Q2.</span> 此分泌腺體在人體中位於何處？</label>
+            <div class="select-wrapper">
+              <select id="q5_location" class="cyber-select">
+                <option value="" disabled selected>請選擇腺體位置</option>
+                <option value="腎臟上方">位於左右腎臟上方（像一頂小帽子）</option>
+                <option value="甲狀腺背面">甲狀腺背面組織中</option>
+                <option value="胰臟內部">胰臟內部的細胞團</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="q-block">
+            <label class="q-label"><span class="q-seq">Q3.</span> 腎上腺素大量分泌時，會引發哪些生理反應以應對危機？<span class="multi-tag">多選題</span></label>
+            <div class="cyber-checkbox-grid" id="q5_functions">
+              <label class="checkbox-pill">
+                <input type="checkbox" name="q5_func" value="心搏加快">
+                <span class="pill-box"></span>
+                <span class="pill-text">心搏加快 / 呼吸急促</span>
+              </label>
+              <label class="checkbox-pill">
+                <input type="checkbox" name="q5_func" value="血壓上升">
+                <span class="pill-box"></span>
+                <span class="pill-text">血管收縮 / 血壓顯著上升</span>
+              </label>
+              <label class="checkbox-pill">
+                <input type="checkbox" name="q5_func" value="腸胃蠕動減慢">
+                <span class="pill-box"></span>
+                <span class="pill-text">消化道腸胃蠕動減慢</span>
+              </label>
+              <label class="checkbox-pill">
+                <input type="checkbox" name="q5_func" value="血糖升高">
+                <span class="pill-box"></span>
+                <span class="pill-text">分解肝糖 / 血糖迅速升高</span>
+              </label>
+            </div>
+            <div class="hint-text">💡 概念驗證：緊急逃命時，消化吸收暫時不重要，因此腸胃蠕動會「減慢」以節約血液供給肌肉！</div>
+          </div>
+
+          <div class="card-footer-nav">
+            <button type="button" class="cyber-btn secondary-btn prev-step-btn" data-prev="4">⏮ 上一關</button>
+            <button type="button" class="cyber-btn primary-btn next-step-btn" data-next="6">下一關：糖尿病原理 ⏭</button>
+          </div>
+        </article>
+
+        <!-- 關卡 6 -->
+        <article class="question-card glass-panel hidden" id="stepCard6">
+          <div class="card-title-bar">
+            <span class="card-badge">影片六</span>
+            <h2>糖尿病原理 ｜ 胰島的血糖雙向拔河</h2>
+          </div>
+          <div class="card-prompt">
+            <p class="intro-desc">人體血糖濃度的恆定，是胰島所分泌兩種激素相互拮抗調控的精密成果：</p>
+          </div>
+
+          <div class="q-block">
+            <label class="q-label"><span class="q-seq">Q1.</span> 糖尿病患者，主要是哪一種激素分泌不足或功能受損所致？</label>
+            <div class="select-wrapper">
+              <select id="q6_abnormal_hormone" class="cyber-select">
+                <option value="" disabled selected>請選擇異常激素</option>
+                <option value="胰島素">胰島素</option>
+                <option value="升糖素">升糖素</option>
+                <option value="腎上腺素">腎上腺素</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="q-block">
+            <label class="q-label"><span class="q-seq">Q2.</span> 胰島雙向調節血糖配對機制：</label>
+            <div class="match-pair-grid">
+              <div class="match-card">
+                <div class="match-header">① 降低血糖機制（飯後血糖高）</div>
+                <div class="match-body">
+                  <div class="match-row">
+                    <span class="match-tag">作用激素：</span>
+                    <select id="q6_lower_hormone" class="cyber-select inline-select">
+                      <option value="" disabled selected>選激素</option>
+                      <option value="胰島素">胰島素</option>
+                      <option value="升糖素">升糖素</option>
+                    </select>
+                  </div>
+                  <div class="match-row">
+                    <span class="match-tag">物質轉換：</span>
+                    <select id="q6_lower_convert" class="cyber-select inline-select">
+                      <option value="" disabled selected>選方向</option>
+                      <option value="血糖→肝糖">血糖 ➜ 轉換成肝糖（儲存於肝臟/肌肉）</option>
+                      <option value="肝糖→血糖">肝糖 ➜ 分解成血糖</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="match-card">
+                <div class="match-header">② 提高血糖機制（飢餓運動時）</div>
+                <div class="match-body">
+                  <div class="match-row">
+                    <span class="match-tag">作用激素：</span>
+                    <select id="q6_raise_hormone" class="cyber-select inline-select">
+                      <option value="" disabled selected>選激素</option>
+                      <option value="升糖素">升糖素</option>
+                      <option value="胰島素">胰島素</option>
+                    </select>
+                  </div>
+                  <div class="match-row">
+                    <span class="match-tag">物質轉換：</span>
+                    <select id="q6_raise_convert" class="cyber-select inline-select">
+                      <option value="" disabled selected>選方向</option>
+                      <option value="肝糖→血糖">肝糖 ➜ 分解成血糖釋入血液</option>
+                      <option value="血糖→肝糖">血糖 ➜ 轉換成肝糖</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="q-block">
+            <label class="q-label"><span class="q-seq">Q3.</span> 糖尿病患者在日常照護與健康管理中，應注意哪些原則？<span class="multi-tag">多選題</span></label>
+            <div class="cyber-checkbox-grid" id="q6_cares">
+              <label class="checkbox-pill">
+                <input type="checkbox" name="q6_care" value="定時服藥/注射">
+                <span class="pill-box"></span>
+                <span class="pill-text">遵循醫囑定時服藥或注射胰島素</span>
+              </label>
+              <label class="checkbox-pill">
+                <input type="checkbox" name="q6_care" value="控制飲食">
+                <span class="pill-box"></span>
+                <span class="pill-text">少油少糖、定時定量飲食控制</span>
+              </label>
+              <label class="checkbox-pill">
+                <input type="checkbox" name="q6_care" value="規律運動">
+                <span class="pill-box"></span>
+                <span class="pill-text">維持規律運動以助血糖利用</span>
+              </label>
+              <label class="checkbox-pill">
+                <input type="checkbox" name="q6_care" value="多吃高糖食物">
+                <span class="pill-box"></span>
+                <span class="pill-text">多吃精緻高糖甜點補充熱量</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="card-footer-nav">
+            <button type="button" class="cyber-btn secondary-btn prev-step-btn" data-prev="5">⏮ 上一關</button>
+            <button type="button" class="cyber-btn primary-btn next-step-btn" data-next="7">下一關：素養探討 ⏭</button>
+          </div>
+        </article>
+
+        <!-- 關卡 7 -->
+        <article class="question-card glass-panel hidden" id="stepCard7">
+          <div class="card-title-bar">
+            <span class="card-badge">影片七</span>
+            <h2>蜜蜂變性人與素養探討 ｜ 生理性別與生命同理</h2>
+          </div>
+          <div class="card-prompt">
+            <div class="bio-concept-box">
+              <span class="concept-icon">🧬</span>
+              <div class="concept-content">
+                <strong>概念導讀：</strong><br>
+                • <strong>生理性別</strong>：生物學上以性染色體與解剖構造判定。<br>
+                • <strong>性別認同</strong>：心理、文化與自我感受交互作用認同的性別。<br>
+                • <strong>社會性別</strong>：社會文化所期待的角色行為。
+              </div>
+            </div>
+          </div>
+
+          <div class="q-block">
+            <label class="q-label"><span class="q-seq">Q1.</span> 影片中展現女性第二性徵的變化，主要是體內哪些激素的改變？</label>
+            <div class="select-wrapper">
+              <select id="q7_hormone_change" class="cyber-select">
+                <option value="" disabled selected>請選擇激素消長情況</option>
+                <option value="雄性激素減少、雌性激素增加">雄性激素減少 ＋ 雌性激素增加</option>
+                <option value="生長激素增加、甲狀腺素減少">生長激素增加 ＋ 甲狀腺素減少</option>
+                <option value="胰島素分泌過多">胰島素分泌過多</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="q-block">
+            <label class="q-label"><span class="q-seq">Q2.</span> 【素養簡答】如果身邊有性別認同感到掙扎、或是因內分泌先天疾病而受苦的朋友，你會想對他們說什麼？你會如何以同理心支持他們？</label>
+            <div class="textarea-wrapper">
+              <textarea id="q7_literacy_essay" class="cyber-textarea" rows="4" placeholder="請用真誠溫暖的文字表達你的同理心（建議 20 字以上，例如：我可以專注傾聽、不給予標籤批判，並在他們需要時給予陪伴...）"></textarea>
+              <div class="textarea-meta">
+                <button type="button" class="text-hint-btn" id="essayHintBtn">💡 寫作提示句型</button>
+                <span class="char-count" id="essayCharCount">已輸入 0 字</span>
+              </div>
+            </div>
+            <!-- 句型提示抽屜 -->
+            <div class="essay-scaffold hidden" id="essayScaffold">
+              <div class="scaffold-title">💡 同理句型思考架構（可參考發揮）：</div>
+              <ul class="scaffold-list">
+                <li>「每個人都是獨一無二的，你的感受值得被尊重。」</li>
+                <li>「我願意當你的傾聽者，陪伴你度過迷茫的時刻。」</li>
+                <li>「生病不是任何人的錯，我們可以一起尋求專業醫療與師長協助。」</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- 提交與結算觸發按鈕區 -->
+          <div class="submit-action-box">
+            <div class="submit-warning" id="indivSubmitWarning">
+              ⚠️ 請確認上方所有題目已作答完畢，即可點擊下方按鈕結算成績並上傳！
+            </div>
+            <div class="action-buttons">
+              <button type="button" class="cyber-btn secondary-btn prev-step-btn" data-prev="6">⏮ 上一關</button>
+              <button type="button" class="cyber-btn glow-submit-btn" id="btnSubmitIndividual">
+                <span class="btn-icon">🚀</span>
+                <span class="btn-text">完成作答 ｜ 結算成績並送出</span>
+              </button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ==================== 2. 小組統整模式 ==================== -->
+    <section class="mode-container hidden" id="groupModeContainer">
+      <div class="group-work-grid">
+        <!-- 左側：人體腺體圖互動視角 (SVG 科技藍調) -->
+        <div class="glands-viewer-card glass-panel">
+          <div class="viewer-header">
+            <div class="viewer-title">
+              <span class="viewer-icon">🧬</span>
+              <span>人體內分泌腺體座標定位圖</span>
+            </div>
+            <div class="viewer-legend">
+              <span class="legend-item"><span class="dot pulse"></span> 待填寫</span>
+              <span class="legend-item"><span class="dot done"></span> 已認領完成</span>
+            </div>
+          </div>
+
+          <div class="human-svg-stage">
+            <svg viewBox="0 0 400 580" class="human-silhouette-svg" xmlns="http://www.w3.org/2000/svg">
+              <!-- 人體剪影外框 -->
+              <path class="body-outline" d="M200,30 C220,30 230,45 230,65 C230,80 222,95 212,102 C230,108 255,118 280,140 C305,162 315,190 310,240 C308,260 295,300 285,340 C280,360 270,365 260,355 C255,350 255,330 258,290 C260,260 255,220 245,210 C242,230 240,280 240,340 C240,370 245,410 248,460 C250,500 248,540 238,550 C228,560 215,550 215,520 C215,480 210,410 205,370 C202,370 198,370 195,370 C190,410 185,480 185,520 C185,550 172,560 162,550 C152,540 150,500 152,460 C155,410 160,370 160,340 C160,280 158,230 155,210 C145,220 140,260 142,290 C145,330 145,350 140,355 C130,365 120,360 115,340 C105,300 92,260 90,240 C85,190 95,162 120,140 C145,118 170,108 188,102 C178,95 170,80 170,65 C170,45 180,30 200,30 Z" />
+
+              <!-- 裝飾性 HUD 座標掃描線 -->
+              <line x1="40" y1="65" x2="160" y2="65" class="hud-target-line" />
+              <line x1="40" y1="120" x2="165" y2="120" class="hud-target-line" />
+              <line x1="360" y1="135" x2="235" y2="135" class="hud-target-line" />
+              <line x1="40" y1="230" x2="175" y2="230" class="hud-target-line" />
+              <line x1="360" y1="265" x2="225" y2="265" class="hud-target-line" />
+              <line x1="40" y1="330" x2="185" y2="330" class="hud-target-line" />
+
+              <!-- 腺體光點 A~F -->
+              <!-- A: 腦部 (腦垂腺) -->
+              <g class="gland-target-node active-target" id="nodeA" data-gland="A">
+                <circle cx="200" cy="65" r="18" class="node-halo" />
+                <circle cx="200" cy="65" r="9" class="node-core" />
+                <text x="200" y="69" class="node-text">A</text>
+              </g>
+
+              <!-- B: 頸部前方 (甲狀腺) -->
+              <g class="gland-target-node" id="nodeB" data-gland="B">
+                <circle cx="200" cy="118" r="18" class="node-halo" />
+                <circle cx="200" cy="118" r="9" class="node-core" />
+                <text x="200" y="122" class="node-text">B</text>
+              </g>
+
+              <!-- C: 頸部背側 (副甲狀腺) -->
+              <g class="gland-target-node" id="nodeC" data-gland="C">
+                <circle cx="225" cy="130" r="16" class="node-halo" />
+                <circle cx="225" cy="130" r="8" class="node-core" />
+                <text x="225" y="134" class="node-text">C</text>
+              </g>
+
+              <!-- D: 腎臟上方 (腎上腺) -->
+              <g class="gland-target-node" id="nodeD" data-gland="D">
+                <circle cx="180" cy="235" r="18" class="node-halo" />
+                <circle cx="180" cy="235" r="9" class="node-core" />
+                <text x="180" y="239" class="node-text">D</text>
+              </g>
+
+              <!-- E: 胰臟 (胰島) -->
+              <g class="gland-target-node" id="nodeE" data-gland="E">
+                <circle cx="215" cy="265" r="18" class="node-halo" />
+                <circle cx="215" cy="265" r="9" class="node-core" />
+                <text x="215" y="269" class="node-text">E</text>
+              </g>
+
+              <!-- F: 生殖器官 (性腺) -->
+              <g class="gland-target-node" id="nodeF" data-gland="F">
+                <circle cx="200" cy="335" r="18" class="node-halo" />
+                <circle cx="200" cy="335" r="9" class="node-core" />
+                <text x="200" y="339" class="node-text">F</text>
+              </g>
+            </svg>
+          </div>
+          <div class="viewer-tip">👆 點擊左側光點 A~F，即可在右側切換對應腺體之小組整合任務卡</div>
+        </div>
+
+        <!-- 右側：連動腺體任務卡 ＋ 系統比較表 -->
+        <div class="glands-tasks-col">
+          <!-- 任務卡抽換槽 -->
+          <div class="dynamic-gland-cards" id="dynamicGlandCards">
+            <!-- 任務卡 A -->
+            <div class="gland-task-card glass-panel" id="cardGlandA">
+              <div class="task-card-header">
+                <div class="task-badge">座標點 A 任務（腦部）</div>
+                <div class="assignee-select-wrap">
+                  <span class="assignee-tag">📌 負責組員：</span>
+                  <select class="cyber-select gland-assignee" id="assigneeA">
+                    <option value="" disabled selected>請認領</option>
+                  </select>
+                </div>
+              </div>
+              <div class="task-card-body">
+                <div class="form-grid-3">
+                  <div class="form-group">
+                    <label>腺體名稱：</label>
+                    <select class="cyber-select gland-answer" id="glandNameA">
+                      <option value="" disabled selected>選擇腺體</option>
+                      <option value="腦垂腺">腦垂腺</option>
+                      <option value="甲狀腺">甲狀腺</option>
+                      <option value="腎上腺">腎上腺</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>主要分泌激素：</label>
+                    <select class="cyber-select gland-answer" id="hormoneA">
+                      <option value="" disabled selected>選擇激素</option>
+                      <option value="生長激素">生長激素（兼具綜合指揮）</option>
+                      <option value="甲狀腺素">甲狀腺素</option>
+                      <option value="副甲狀腺素">副甲狀腺素</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>關聯異常症狀：</label>
+                    <select class="cyber-select gland-answer" id="diseaseA">
+                      <option value="" disabled selected>選擇疾病</option>
+                      <option value="巨人症/侏儒症">幼年分泌異常：巨人症 / 侏儒症</option>
+                      <option value="甲狀腺亢進">代謝異常：甲狀腺機能亢進</option>
+                      <option value="糖尿病">血糖異常：糖尿病</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 任務卡 B -->
+            <div class="gland-task-card glass-panel hidden" id="cardGlandB">
+              <div class="task-card-header">
+                <div class="task-badge">座標點 B 任務（頸部前方）</div>
+                <div class="assignee-select-wrap">
+                  <span class="assignee-tag">📌 負責組員：</span>
+                  <select class="cyber-select gland-assignee" id="assigneeB">
+                    <option value="" disabled selected>請認領</option>
+                  </select>
+                </div>
+              </div>
+              <div class="task-card-body">
+                <div class="form-grid-3">
+                  <div class="form-group">
+                    <label>腺體名稱：</label>
+                    <select class="cyber-select gland-answer" id="glandNameB">
+                      <option value="" disabled selected>選擇腺體</option>
+                      <option value="甲狀腺">甲狀腺</option>
+                      <option value="副甲狀腺">副甲狀腺</option>
+                      <option value="胸腺">胸腺</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>主要分泌激素：</label>
+                    <select class="cyber-select gland-answer" id="hormoneB">
+                      <option value="" disabled selected>選擇激素</option>
+                      <option value="甲狀腺素">甲狀腺素</option>
+                      <option value="生長激素">生長激素</option>
+                      <option value="腎上腺素">腎上腺素</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>關聯異常症狀：</label>
+                    <select class="cyber-select gland-answer" id="diseaseB">
+                      <option value="" disabled selected>選擇疾病</option>
+                      <option value="甲狀腺亢進/呆小症">甲狀腺亢進（過多）/ 呆小症（幼年過少）</option>
+                      <option value="骨質疏鬆">骨質疏鬆症</option>
+                      <option value="巨人症">巨人症</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 任務卡 C -->
+            <div class="gland-task-card glass-panel hidden" id="cardGlandC">
+              <div class="task-card-header">
+                <div class="task-badge">座標點 C 任務（甲狀腺背側）</div>
+                <div class="assignee-select-wrap">
+                  <span class="assignee-tag">📌 負責組員：</span>
+                  <select class="cyber-select gland-assignee" id="assigneeC">
+                    <option value="" disabled selected>請認領</option>
+                  </select>
+                </div>
+              </div>
+              <div class="task-card-body">
+                <div class="form-grid-3">
+                  <div class="form-group">
+                    <label>腺體名稱：</label>
+                    <select class="cyber-select gland-answer" id="glandNameC">
+                      <option value="" disabled selected>選擇腺體</option>
+                      <option value="副甲狀腺">副甲狀腺（共四顆）</option>
+                      <option value="甲狀腺">甲狀腺</option>
+                      <option value="淋巴結">淋巴結</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>主要分泌激素：</label>
+                    <select class="cyber-select gland-answer" id="hormoneC">
+                      <option value="" disabled selected>選擇激素</option>
+                      <option value="副甲狀腺素">副甲狀腺素</option>
+                      <option value="降鈣素">降鈣素</option>
+                      <option value="甲狀腺素">甲狀腺素</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>關聯生理/疾病：</label>
+                    <select class="cyber-select gland-answer" id="diseaseC">
+                      <option value="" disabled selected>選擇症狀</option>
+                      <option value="抽搐/骨質疏鬆">過少致肌肉抽搐 / 過多致骨質疏鬆</option>
+                      <option value="心搏過慢">心搏過慢</option>
+                      <option value="侏儒症">侏儒症</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 任務卡 D -->
+            <div class="gland-task-card glass-panel hidden" id="cardGlandD">
+              <div class="task-card-header">
+                <div class="task-badge">座標點 D 任務（腎臟上方）</div>
+                <div class="assignee-select-wrap">
+                  <span class="assignee-tag">📌 負責組員：</span>
+                  <select class="cyber-select gland-assignee" id="assigneeD">
+                    <option value="" disabled selected>請認領</option>
+                  </select>
+                </div>
+              </div>
+              <div class="task-card-body">
+                <div class="form-grid-3">
+                  <div class="form-group">
+                    <label>腺體名稱：</label>
+                    <select class="cyber-select gland-answer" id="glandNameD">
+                      <option value="" disabled selected>選擇腺體</option>
+                      <option value="腎上腺">腎上腺</option>
+                      <option value="腎臟">腎臟</option>
+                      <option value="輸尿管">輸尿管</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>主要分泌激素：</label>
+                    <select class="cyber-select gland-answer" id="hormoneD">
+                      <option value="" disabled selected>選擇激素</option>
+                      <option value="腎上腺素">腎上腺素</option>
+                      <option value="生長激素">生長激素</option>
+                      <option value="抗利尿激素">抗利尿激素</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>應急生理反應：</label>
+                    <select class="cyber-select gland-answer" id="diseaseD">
+                      <option value="" disabled selected>選擇生理</option>
+                      <option value="心搏加快/血壓上升">心搏加快、血壓上升、血糖升高</option>
+                      <option value="體溫下降昏睡">體溫下降、昏昏欲睡</option>
+                      <option value="腸胃蠕動加速">胃腸蠕動加快</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 任務卡 E -->
+            <div class="gland-task-card glass-panel hidden" id="cardGlandE">
+              <div class="task-card-header">
+                <div class="task-badge">座標點 E 任務（胰臟中）</div>
+                <div class="assignee-select-wrap">
+                  <span class="assignee-tag">📌 負責組員：</span>
+                  <select class="cyber-select gland-assignee" id="assigneeE">
+                    <option value="" disabled selected>請認領</option>
+                  </select>
+                </div>
+              </div>
+              <div class="task-card-body">
+                <div class="form-grid-3">
+                  <div class="form-group">
+                    <label>腺體名稱：</label>
+                    <select class="cyber-select gland-answer" id="glandNameE">
+                      <option value="" disabled selected>選擇腺體</option>
+                      <option value="胰島">胰島（胰臟內的內分泌組織）</option>
+                      <option value="脾臟">脾臟</option>
+                      <option value="膽囊">膽囊</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>分泌雙向激素：</label>
+                    <select class="cyber-select gland-answer" id="hormoneE">
+                      <option value="" disabled selected>選擇激素組合</option>
+                      <option value="胰島素與升糖素">胰島素 ＆ 升糖素</option>
+                      <option value="生長激素與甲狀腺素">生長激素 ＆ 甲狀腺素</option>
+                      <option value="腎上腺素與性激素">腎上腺素 ＆ 性激素</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>關聯代謝疾病：</label>
+                    <select class="cyber-select gland-answer" id="diseaseE">
+                      <option value="" disabled selected>選擇疾病</option>
+                      <option value="糖尿病">糖尿病（胰島素不足或抗性）</option>
+                      <option value="尿毒症">尿毒症</option>
+                      <option value="痛風">痛風</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 任務卡 F -->
+            <div class="gland-task-card glass-panel hidden" id="cardGlandF">
+              <div class="task-card-header">
+                <div class="task-badge">座標點 F 任務（生殖器官）</div>
+                <div class="assignee-select-wrap">
+                  <span class="assignee-tag">📌 負責組員：</span>
+                  <select class="cyber-select gland-assignee" id="assigneeF">
+                    <option value="" disabled selected>請認領</option>
+                  </select>
+                </div>
+              </div>
+              <div class="task-card-body">
+                <div class="form-grid-3">
+                  <div class="form-group">
+                    <label>腺體名稱：</label>
+                    <select class="cyber-select gland-answer" id="glandNameF">
+                      <option value="" disabled selected>選擇腺體</option>
+                      <option value="性腺">性腺（卵巢 / 睪丸）</option>
+                      <option value="子宮">子宮</option>
+                      <option value="攝護腺">攝護腺</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>分泌關鍵激素：</label>
+                    <select class="cyber-select gland-answer" id="hormoneF">
+                      <option value="" disabled selected>選擇激素</option>
+                      <option value="雄性/雌性激素">雄性激素 / 雌性激素</option>
+                      <option value="生長激素">生長激素</option>
+                      <option value="催產素">催產素</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>關聯生理調控：</label>
+                    <select class="cyber-select gland-answer" id="diseaseF">
+                      <option value="" disabled selected>選擇生理</option>
+                      <option value="第二性徵表現">第二性徵表現與生殖細胞成熟</option>
+                      <option value="骨骼鈣化調節">調節骨骼血鈣平衡</option>
+                      <option value="智力發展激發">激發腦神經智力發展</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 系統整合比較表：內分泌 vs 神經系統 -->
+          <div class="system-compare-card glass-panel">
+            <div class="compare-header">
+              <div class="compare-title">
+                <span class="comp-icon">⚖️</span>
+                <span>系統整合統整表：內分泌系統 vs 神經系統</span>
+              </div>
+              <div class="assignee-select-wrap">
+                <span class="assignee-tag">📌 本表負責組員：</span>
+                <select class="cyber-select gland-assignee" id="assigneeCompare">
+                  <option value="" disabled selected>請認領</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="cyber-compare-table">
+                <thead>
+                  <tr>
+                    <th>比較向度</th>
+                    <th>內分泌系統 (Endocrine)</th>
+                    <th>神經系統 (Nervous)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="dim-label">① 傳遞訊息方式</td>
+                    <td>
+                      <select id="comp_trans_endo" class="cyber-select table-select">
+                        <option value="" disabled selected>選擇傳遞方式</option>
+                        <option value="血液">經由血液循環運送</option>
+                        <option value="神經元">由神經元電化學傳遞</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select id="comp_trans_nerv" class="cyber-select table-select">
+                        <option value="" disabled selected>選擇傳遞方式</option>
+                        <option value="神經元">由神經元（神經纖維）傳導</option>
+                        <option value="血液">經由血液循環運送</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="dim-label">② 反應作用速度</td>
+                    <td>
+                      <select id="comp_speed_endo" class="cyber-select table-select">
+                        <option value="" disabled selected>選擇速度</option>
+                        <option value="較慢">通常較慢（數分鐘至數天）</option>
+                        <option value="迅速">極迅速（瞬間反射毫秒級）</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select id="comp_speed_nerv" class="cyber-select table-select">
+                        <option value="" disabled selected>選擇速度</option>
+                        <option value="迅速">極迅速（眨眼縮手瞬間反應）</option>
+                        <option value="較慢">較慢</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="dim-label">③ 影響作用範圍</td>
+                    <td>
+                      <select id="comp_scope_endo" class="cyber-select table-select">
+                        <option value="" disabled selected>選擇範圍</option>
+                        <option value="廣泛">廣泛（全身多處目標器官細胞）</option>
+                        <option value="局部">局部（特定肌肉或單一腺體）</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select id="comp_scope_nerv" class="cyber-select table-select">
+                        <option value="" disabled selected>選擇範圍</option>
+                        <option value="局部">較局部（支配特定受器或動器）</option>
+                        <option value="廣泛">廣泛全身</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="dim-label">④ 效應維持時間</td>
+                    <td>
+                      <select id="comp_time_endo" class="cyber-select table-select">
+                        <option value="" disabled selected>選擇維持時間</option>
+                        <option value="持久">較持久（持續分解發揮效用）</option>
+                        <option value="短暫">短暫（訊號消失即停止）</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select id="comp_time_nerv" class="cyber-select table-select">
+                        <option value="" disabled selected>選擇維持時間</option>
+                        <option value="短暫">短暫（神經衝動一過即結束）</option>
+                        <option value="持久">持久</option>
+                      </select>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- 小組提交按鈕區 -->
+            <div class="submit-action-box">
+              <div class="submit-warning" id="groupSubmitWarning">
+                ⚠️ 小組送出防呆：請確保每一位出席組員皆至少認領並作答了 1 項任務！
+              </div>
+              <div class="action-buttons">
+                <button type="button" class="cyber-btn glow-submit-btn" id="btnSubmitGroup">
+                  <span class="btn-icon">🤝</span>
+                  <span class="btn-text">小組全員到齊 ｜ 提交統整報告</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 結算成果彈窗 Modal -->
+  <div class="cyber-modal-overlay hidden" id="resultModal">
+    <div class="cyber-modal glass-panel">
+      <div class="modal-header">
+        <div class="modal-badge" id="modalBadge">🎉 任務達成</div>
+        <h3 class="modal-title" id="modalTitle">學習單成果結算</h3>
+      </div>
+      <div class="modal-body">
+        <div class="score-display-box">
+          <div class="score-label">客觀題得分（100分滿分）</div>
+          <div class="score-number"><span id="scoreVal">--</span><span class="score-total">/ 100</span></div>
+          <div class="score-status" id="scoreStatus">批改統計中...</div>
+        </div>
+
+        <div class="result-details-box" id="resultDetailsBox">
+          <!-- 成績傳送狀態與明細 -->
+        </div>
+
+        <!-- 平板交回 4 大自我檢核清單（課堂收尾守則） -->
+        <div class="device-checklist-box">
+          <div class="checklist-title">📱 平板交回充電車 4 大自我檢核：</div>
+          <div class="checklist-items">
+            <label class="check-item"><input type="checkbox" id="chk1" checked disabled> 🔕 確認關閉計時器與鬧鐘，維持靜音</label>
+            <label class="check-item"><input type="checkbox" id="chk2" checked disabled> 📸 檢查相簿，清理任何課堂自拍照</label>
+            <label class="check-item"><input type="checkbox" id="chk3" checked disabled> ❌ 關閉 Safari 網頁分頁，不留背景</label>
+            <label class="check-item"><input type="checkbox" id="chk4" checked disabled> 🔌 雙手放回充電車對應座號槽並插電</label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="cyber-btn primary-btn" id="btnModalClose">完成並重置畫面（交回平板）</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast 訊息提示 -->
+  <div class="cyber-toast" id="cyberToast"></div>
+
+  <!-- 引入主腳本 -->
+  <script src="game.js?v=1.0"></script>
+</body>
+</html>
