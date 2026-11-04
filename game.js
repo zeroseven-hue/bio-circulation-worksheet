@@ -706,14 +706,18 @@ function handleSubmitIndividual() {
 
   // 打包 Payload 送出
   const payload = {
+    sheetId: "4-2",
     mode: "individual",
     class: cls,
+    studentClass: cls,
     seatOrGroup: seat,
+    studentSeat: seat,
     nameOrMembers: name,
+    studentName: name,
     score: score,
     essay: document.getElementById("q7_literacy_essay").value.trim(),
     detailData: JSON.parse(localStorage.getItem(STORAGE_KEY_INDIV) || "{}"),
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })
   };
 
   sendToGAS(payload, score);
@@ -773,14 +777,18 @@ function handleSubmitGroup() {
   if (document.getElementById("comp_time_endo").value === "持久" && document.getElementById("comp_time_nerv").value === "短暫") score += 10;
 
   const payload = {
+    sheetId: "4-2",
     mode: "group",
     class: cls,
+    studentClass: cls,
     seatOrGroup: groupNum,
+    studentSeat: groupNum,
     nameOrMembers: members.join(", "),
+    studentName: members.map(m => m + "號").join("、"),
     score: score,
     essay: "小組統整模型完成",
     detailData: JSON.parse(localStorage.getItem(STORAGE_KEY_GROUP) || "{}"),
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })
   };
 
   sendToGAS(payload, score);

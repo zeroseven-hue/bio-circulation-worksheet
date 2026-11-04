@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>國中生物 數位互動學習單 派發與總覽大廳</title>
-  <link rel="stylesheet" href="assets/css/hub.css?v=1.0">
+  <link rel="stylesheet" href="assets/css/hub.css?v=2.0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -13,14 +13,15 @@
 </head>
 <body>
 
-  <!-- 頂部導覽列 -->
+  <!-- 頂部導覽列 (整合教師即時儀表板一鍵入口) -->
   <header class="navbar">
     <a href="index.html" class="navbar-brand">
       <span>🧬 國中生物數位學習單平台</span>
       <span class="navbar-badge">7年級自然領域</span>
     </a>
     <div class="nav-actions">
-      <span style="font-size: 0.9rem; color: #94a3b8;">智慧電子白板派卷系統</span>
+      <a href="dashboard.html" class="btn-nav" style="background: #10b981; border-color: #34d399; color: #ffffff;">📊 教師即時繳交儀表板</a>
+      <span style="font-size: 0.9rem; color: #cbd5e1;">智慧白板派卷系統</span>
     </div>
   </header>
 
@@ -28,10 +29,10 @@
     
     <!-- Hero Banner -->
     <div class="hero-banner">
-      <h1>國中生物 數位互動學習單 派發與總覽大廳</h1>
+      <h1>【國中生物】數位學習單互動平台</h1>
       <p>
-        專為國中七年級生物課堂設計：結合單元影片導引、平板觸控速記、小組人體器官座標協作與雲端防呆自動評量！<br>
-        教師可於白板一鍵投影派卷 QR Code，全班 iPad / 手機直接掃碼作答。
+        生物課堂數位化：結合單元影片導引、平板速記、人體腺體器官座標互動、雙向雲端防洗板評量！<br>
+        教師可在白板一鍵投影派卷 QR Code，全班 iPad / 手機直接掃碼作答；亦可切換至【即時儀表板】即時監看 35 人繳交進度。
       </p>
     </div>
 
@@ -50,8 +51,9 @@
       <div class="dispatch-controls">
         <select id="selectDispatchSheet" class="form-control" style="font-weight: 700; font-size: 1.05rem;">
           <option value="4-2-endocrine.html" data-title="【單元 4-2】內分泌系統 數位互動學習單" selected>【單元 4-2】內分泌系統 數位互動學習單 (個人速記 + 小組人體模型)</option>
-          <option value="4-1-nervous.html" data-title="【單元 4-1】神經系統 數位互動學習單 (規劃中)" disabled>【單元 4-1】神經系統 數位互動學習單 (即將上線)</option>
-          <option value="4-3-homeostasis.html" data-title="【單元 4-3】恆定性與體溫 數位互動學習單 (規劃中)" disabled>【單元 4-3】恆定性與體溫 數位互動學習單 (即將上線)</option>
+          <option value="4-1-nervous.html" data-title="【單元 4-1】神經系統 數位互動學習單" disabled>【單元 4-1】神經系統 數位互動學習單 (即將上線)</option>
+          <option value="4-3-homeostasis.html" data-title="【單元 4-3】恆定性與體溫 數位互動學習單" disabled>【單元 4-3】恆定性與體溫 數位互動學習單 (即將上線)</option>
+          <option value="5-1-reproduction.html" data-title="【單元 5-1】生物的生殖 數位互動學習單" disabled>【單元 5-1】生物的生殖 數位互動學習單 (即將上線)</option>
         </select>
 
         <button type="button" class="btn-dispatch" onclick="handleGenerateDispatchQR()">
@@ -110,7 +112,7 @@
         <div>
           <span class="sheet-badge">單元 4-2（已上線）</span>
           <h3 class="sheet-card-title">4-2 內分泌系統 數位互動學習單</h3>
-          <p class="sheet-card-desc">結合 7 部生物教學影片、巨人症/呆小症/甲亢症狀多選、糖尿病拮抗配對、SVG 人體腺體圖小組責任認領與同理心素養簡答。</p>
+          <p class="sheet-card-desc">結合 7 部教學影片、巨人症/呆小症/甲亢症狀多選、糖尿病拮抗配對、SVG 人體腺體圖小組責任認領與同理心素養簡答。</p>
           <div class="sheet-meta-tags">
             <span class="meta-pill">👤 個人速記 Stepper</span>
             <span class="meta-pill">👥 小組 SVG 互動卡</span>
@@ -173,8 +175,8 @@
 
   </div>
 
-  <!-- 引入共用控制腳本 -->
-  <script src="assets/js/hub.js?v=1.0"></script>
+  <!-- 引入共用設定與工具函式 -->
+  <script src="assets/js/common.js?v=2.0"></script>
   <script>
     let currentDispatchTargetUrl = "";
     let currentDispatchTitle = "";
