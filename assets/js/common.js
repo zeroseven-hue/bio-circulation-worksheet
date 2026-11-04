@@ -49,8 +49,8 @@ const COURSE_CONFIG = {
     }
   ],
 
-  // Google Apps Script 部署 URL (後續換上您的 /exec 網址)
-  gasEndpoint: "YOUR_GAS_EXEC_URL"
+  // Google Apps Script 部署 URL (老師專屬試算表 API)
+  gasEndpoint: "https://script.google.com/macros/s/AKfycby2-Pj2Nz1NFonB11rtsHXMMGU2qxLxvbjV0KCu4pi4oNXv2QLp0tK8m1XNYWvlCRJoEA/exec"
 };
 
 /**

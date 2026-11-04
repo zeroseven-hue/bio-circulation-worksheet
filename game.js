@@ -3,8 +3,8 @@
  * 主邏輯核心：雙模式、防呆驗證、人體圖互動、localStorage 暫存與 GAS 雙軌上傳
  */
 
-// 後端 GAS Web App 接收 URL（預留換網址空間）
-const GAS_URL = "YOUR_GAS_EXEC_URL";
+// 後端 GAS Web App 接收 URL（已設定為老師專屬試算表 API）
+const GAS_URL = "https://script.google.com/macros/s/AKfycby2-Pj2Nz1NFonB11rtsHXMMGU2qxLxvbjV0KCu4pi4oNXv2QLp0tK8m1XNYWvlCRJoEA/exec";
 
 // 本地存儲鍵名
 const STORAGE_KEY_INDIV = "BIO_4_2_INDIVIDUAL_DATA";
