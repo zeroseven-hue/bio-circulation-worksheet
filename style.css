@@ -537,8 +537,9 @@ body {
   gap: 12px;
 }
 
+/* trap-pill 外觀與一般選項完全一致，絕不以虛線透漏答案 */
 .checkbox-pill.trap-pill {
-  border-style: dashed;
+  border-style: solid;
 }
 
 .checkbox-pill {

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>國中生物 4-2 內分泌系統數位互動學習單</title>
-  <link rel="stylesheet" href="style.css?v=2.8">
+  <link rel="stylesheet" href="style.css?v=2.9">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Orbitron:wght@600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -357,26 +357,27 @@
                 <span class="pill-box"></span>
                 <span class="pill-text">身材矮小 / 生長發育受阻</span>
               </label>
+              <!-- 混淆誘答項隨機穿插 -->
+              <label class="checkbox-pill">
+                <input type="checkbox" name="q3_symptom" value="骨質疏鬆">
+                <span class="pill-box"></span>
+                <span class="pill-text">骨質嚴重疏鬆容易骨折</span>
+              </label>
               <label class="checkbox-pill">
                 <input type="checkbox" name="q3_symptom" value="智力發展受限">
                 <span class="pill-box"></span>
                 <span class="pill-text">智力發展顯著受限 / 智力不足</span>
               </label>
+              <!-- 混淆誘答項隨機穿插 -->
+              <label class="checkbox-pill">
+                <input type="checkbox" name="q3_symptom" value="血糖過高">
+                <span class="pill-box"></span>
+                <span class="pill-text">血糖濃度持續過高有糖尿</span>
+              </label>
               <label class="checkbox-pill">
                 <input type="checkbox" name="q3_symptom" value="心智年齡與行為能力受限">
                 <span class="pill-box"></span>
                 <span class="pill-text">心智年齡幼小 / 語言與行為能力受限</span>
-              </label>
-              <!-- 誘答項 -->
-              <label class="checkbox-pill trap-pill">
-                <input type="checkbox" name="q3_symptom" value="骨質疏鬆">
-                <span class="pill-box"></span>
-                <span class="pill-text">骨質嚴重疏鬆容易骨折</span>
-              </label>
-              <label class="checkbox-pill trap-pill">
-                <input type="checkbox" name="q3_symptom" value="血糖過高">
-                <span class="pill-box"></span>
-                <span class="pill-text">血糖濃度持續過高有糖尿</span>
               </label>
             </div>
             <div class="hint-text">💡 生物小補帖：侏儒症僅身材矮小但智力正常；呆小症則身材與智力皆受到顯著影響！</div>
@@ -471,11 +472,16 @@
           <div class="q-block">
             <label class="q-label"><span class="q-seq">Q3.</span> 腎上腺素大量分泌時，會引發哪些雙重生理機制以應付危機？<span class="multi-tag">多選題（含循環消化與能量雙機制）</span></label>
             <div class="cyber-checkbox-grid" id="q5_functions">
-              <!-- 機制一：循環與消化 -->
               <label class="checkbox-pill">
                 <input type="checkbox" name="q5_func" value="心搏加快呼吸急促">
                 <span class="pill-box"></span>
                 <span class="pill-text">心搏加快 / 呼吸急促</span>
+              </label>
+              <!-- 混淆誘答項隨機穿插於中間 -->
+              <label class="checkbox-pill">
+                <input type="checkbox" name="q5_func" value="腸胃消化吸收加速">
+                <span class="pill-box"></span>
+                <span class="pill-text">促進胃腸消化吸收儲存養分</span>
               </label>
               <label class="checkbox-pill">
                 <input type="checkbox" name="q5_func" value="血壓上升">
@@ -483,26 +489,19 @@
                 <span class="pill-text">血管收縮 / 血壓顯著上升</span>
               </label>
               <label class="checkbox-pill">
-                <input type="checkbox" name="q5_func" value="腸胃蠕動減慢">
-                <span class="pill-box"></span>
-                <span class="pill-text">消化道腸胃蠕動顯著減慢</span>
-              </label>
-              <!-- 機制二：能量與血糖 -->
-              <label class="checkbox-pill">
                 <input type="checkbox" name="q5_func" value="血糖升高">
                 <span class="pill-box"></span>
                 <span class="pill-text">促使肝糖分解 / 提高血糖濃度</span>
               </label>
               <label class="checkbox-pill">
+                <input type="checkbox" name="q5_func" value="腸胃蠕動減慢">
+                <span class="pill-box"></span>
+                <span class="pill-text">消化道腸胃蠕動顯著減慢</span>
+              </label>
+              <label class="checkbox-pill">
                 <input type="checkbox" name="q5_func" value="提供更多氧氣與養分">
                 <span class="pill-box"></span>
                 <span class="pill-text">提供骨骼肌更多氧氣與養分應急</span>
-              </label>
-              <!-- 誘答項 -->
-              <label class="checkbox-pill trap-pill">
-                <input type="checkbox" name="q5_func" value="腸胃消化吸收加速">
-                <span class="pill-box"></span>
-                <span class="pill-text">促進胃腸消化吸收儲存養分</span>
               </label>
             </div>
             <div class="hint-text">💡 概念驗證：緊急逃命時，血液優先供應心臟與骨骼肌，因此腸胃蠕動會「減慢」！</div>
@@ -1291,10 +1290,13 @@
                 <label class="movie-q-title">Q1. 甲狀腺素分泌不足（低下）時，會引發哪些生理症狀？<span class="multi-tag">多選</span></label>
                 <div class="cyber-checkbox-grid" id="m2_symptoms">
                   <label class="checkbox-pill"><input type="checkbox" name="m2_sym" value="嗜睡疲倦"><span class="pill-box"></span><span class="pill-text">嗜睡 / 疲倦無力</span></label>
+                  <!-- 混淆誘答項打散於第二位，且去除劇透括號 -->
+                  <label class="checkbox-pill"><input type="checkbox" name="m2_sym" value="眼球凸出吃不胖"><span class="pill-box"></span><span class="pill-text">眼球明顯凸出 / 食慾大增卻體重暴跌消瘦</span></label>
                   <label class="checkbox-pill"><input type="checkbox" name="m2_sym" value="體重難下降"><span class="pill-box"></span><span class="pill-text">代謝過慢 / 體重上升難下降</span></label>
-                  <label class="checkbox-pill"><input type="checkbox" name="m2_sym" value="心臟肥大"><span class="pill-box"></span><span class="pill-text">水腫 / 甚至心臟肥大</span></label>
                   <label class="checkbox-pill"><input type="checkbox" name="m2_sym" value="注意力不集中"><span class="pill-box"></span><span class="pill-text">注意力不集中 / 畏寒怕冷</span></label>
-                  <label class="checkbox-pill trap-pill"><input type="checkbox" name="m2_sym" value="眼球凸出吃不胖"><span class="pill-box"></span><span class="pill-text">眼球凸出吃不胖（亢進特徵）</span></label>
+                  <!-- 另增混淆項：血鈣異常抽搐（副甲狀腺特徵，打散於選項中） -->
+                  <label class="checkbox-pill"><input type="checkbox" name="m2_sym" value="血鈣過低抽搐"><span class="pill-box"></span><span class="pill-text">血鈣過低引起肌肉抽搐痙攣</span></label>
+                  <label class="checkbox-pill"><input type="checkbox" name="m2_sym" value="心臟肥大"><span class="pill-box"></span><span class="pill-text">水腫 / 甚至心臟肥大</span></label>
                 </div>
               </div>
               <div class="form-group" style="margin-top: 12px;">
@@ -1380,9 +1382,10 @@
                 <label class="movie-q-title">Q3. 生理反應上有何具體表現？（超越極限的機制）<span class="multi-tag">多選</span></label>
                 <div class="cyber-checkbox-grid" id="m4_responses">
                   <label class="checkbox-pill"><input type="checkbox" name="m4_resp" value="心搏加快呼吸急促"><span class="pill-box"></span><span class="pill-text">心搏加快 / 呼吸急促</span></label>
-                  <label class="checkbox-pill"><input type="checkbox" name="m4_resp" value="腸胃蠕動減慢"><span class="pill-box"></span><span class="pill-text">腸胃蠕動減慢（血液優先供給肌肉）</span></label>
-                  <label class="checkbox-pill"><input type="checkbox" name="m4_resp" value="血壓上升血糖升高"><span class="pill-box"></span><span class="pill-text">血壓上升 / 提高血糖濃度應急</span></label>
-                  <label class="checkbox-pill trap-pill"><input type="checkbox" name="m4_resp" value="胃液大量分泌幫助消化"><span class="pill-box"></span><span class="pill-text">胃液大量分泌加速消化儲存</span></label>
+                  <!-- 混淆誘答項打散於第二位 -->
+                  <label class="checkbox-pill"><input type="checkbox" name="m4_resp" value="胃液大量分泌幫助消化"><span class="pill-box"></span><span class="pill-text">促進胃腸蠕動與消化液大量分泌</span></label>
+                  <label class="checkbox-pill"><input type="checkbox" name="m4_resp" value="血壓上升血糖升高"><span class="pill-box"></span><span class="pill-text">血管收縮血壓上升 / 肝糖分解提高血糖</span></label>
+                  <label class="checkbox-pill"><input type="checkbox" name="m4_resp" value="腸胃蠕動減慢"><span class="pill-box"></span><span class="pill-text">消化道腸胃蠕動顯著減慢</span></label>
                 </div>
               </div>
             </div>
@@ -1536,6 +1539,6 @@
   <div class="cyber-toast" id="cyberToast"></div>
 
   <!-- 引入主腳本 (附帶版本號強制作廢舊快取) -->
-  <script src="game.js?v=2.8"></script>
+  <script src="game.js?v=2.9"></script>
 </body>
 </html>

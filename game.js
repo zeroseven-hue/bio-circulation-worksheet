@@ -1071,7 +1071,9 @@ function handleSubmitGroup() {
 
   // M2: 甲狀腺低下與亢進區分 (5分)
   const m2Syms = Array.from(document.querySelectorAll('input[name="m2_sym"]:checked')).map(cb => cb.value);
-  if (m2Syms.includes("嗜睡疲倦") && m2Syms.includes("體重難下降") && !m2Syms.includes("眼球凸出吃不胖")) {
+  const m2Traps = ["眼球凸出吃不胖", "血鈣過低抽搐"];
+  const hasM2Traps = m2Syms.some(s => m2Traps.includes(s));
+  if (m2Syms.includes("嗜睡疲倦") && m2Syms.includes("體重難下降") && !hasM2Traps) {
     score += 3;
   }
   if (document.getElementById("m2_diff") && document.getElementById("m2_diff").value === "亢進消瘦低下肥胖") {
