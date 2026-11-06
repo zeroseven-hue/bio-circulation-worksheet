@@ -324,6 +324,38 @@ function updateStepperCheckmarks() {
 
 // ==================== 4. 小組統整模式：人體圖與連動任務卡 ====================
 function bindHumanViewerEvents() {
+  // 小組模式三大核心 Tab 頁籤切換
+  const tabBtns = document.querySelectorAll(".group-tab-btn");
+  tabBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const targetTab = btn.dataset.gtab;
+      tabBtns.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      document.querySelectorAll(".group-tab-pane").forEach(pane => {
+        pane.classList.add("hidden");
+      });
+
+      if (targetTab === "tabGlands") {
+        document.getElementById("paneGlands").classList.remove("hidden");
+      } else if (targetTab === "tabCompare") {
+        document.getElementById("paneCompare").classList.remove("hidden");
+      } else if (targetTab === "tabMovies") {
+        document.getElementById("paneMovies").classList.remove("hidden");
+      }
+    });
+  });
+
+  // 課本標準解剖圖科技熱點按鈕點擊
+  const hotspots = document.querySelectorAll(".img-hotspot");
+  hotspots.forEach(spot => {
+    spot.addEventListener("click", () => {
+      const gland = spot.dataset.gland;
+      switchGlandTask(gland);
+    });
+  });
+
+  // 兼容舊版 SVG 節點點擊
   const nodes = document.querySelectorAll(".gland-target-node");
   nodes.forEach(node => {
     node.addEventListener("click", () => {
@@ -348,7 +380,11 @@ function bindHumanViewerEvents() {
 
 function switchGlandTask(gland) {
   currentGland = gland;
-  // 節點高亮切換
+  // 熱點高亮切換
+  document.querySelectorAll(".img-hotspot").forEach(s => {
+    s.classList.toggle("active-target", s.dataset.gland === gland);
+  });
+  // SVG 節點高亮切換 (如存在)
   document.querySelectorAll(".gland-target-node").forEach(n => {
     n.classList.toggle("active-target", n.dataset.gland === gland);
   });
@@ -365,9 +401,10 @@ function switchGlandTask(gland) {
   showToast(`已切換至【座標點 ${gland} 任務卡】`);
 }
 
-/** 檢查腺體 A~F 是否填寫完整，更新 SVG 光點綠色完成狀態 */
+/** 檢查腺體 A~F 是否填寫完整，更新熱點與 SVG 光點綠色完成狀態 */
 function updateGlandNodeStatus() {
   ["A", "B", "C", "D", "E", "F"].forEach(g => {
+    const spot = document.getElementById(`hotspot${g}`);
     const node = document.getElementById(`node${g}`);
     const assignee = document.getElementById(`assignee${g}`);
     const name = document.getElementById(`glandName${g}`);
@@ -375,6 +412,9 @@ function updateGlandNodeStatus() {
     const disease = document.getElementById(`disease${g}`);
 
     const isComplete = assignee && assignee.value && name && name.value && hormone && hormone.value && disease && disease.value;
+    if (spot) {
+      spot.classList.toggle("completed", !!isComplete);
+    }
     if (node) {
       node.classList.toggle("completed", !!isComplete);
     }
@@ -496,7 +536,17 @@ function saveCurrentData() {
         disease: document.getElementById("diseaseF").value
       }
     },
-    compare: {
+    compareEnzyme: {
+      assignee: document.getElementById("assigneeEnzymeCompare") ? document.getElementById("assigneeEnzymeCompare").value : "",
+      same: document.getElementById("comp_enz_same") ? document.getElementById("comp_enz_same").value : "",
+      enz_duct: document.getElementById("comp_enz_duct") ? document.getElementById("comp_enz_duct").value : "",
+      hor_duct: document.getElementById("comp_hor_duct") ? document.getElementById("comp_hor_duct").value : "",
+      enz_transport: document.getElementById("comp_enz_transport") ? document.getElementById("comp_enz_transport").value : "",
+      hor_transport: document.getElementById("comp_hor_transport") ? document.getElementById("comp_hor_transport").value : "",
+      enz_func: document.getElementById("comp_enz_func") ? document.getElementById("comp_enz_func").value : "",
+      hor_func: document.getElementById("comp_hor_func") ? document.getElementById("comp_hor_func").value : ""
+    },
+    compareNervous: {
       assignee: document.getElementById("assigneeCompare").value,
       trans_endo: document.getElementById("comp_trans_endo").value,
       trans_nerv: document.getElementById("comp_trans_nerv").value,
@@ -506,6 +556,29 @@ function saveCurrentData() {
       scope_nerv: document.getElementById("comp_scope_nerv").value,
       time_endo: document.getElementById("comp_time_endo").value,
       time_nerv: document.getElementById("comp_time_nerv").value
+    },
+    movies: {
+      m1_assignee: document.getElementById("assigneeMovie1") ? document.getElementById("assigneeMovie1").value : "",
+      m1_disease: document.getElementById("m1_disease") ? document.getElementById("m1_disease").value : "",
+      m1_cause: document.getElementById("m1_cause") ? document.getElementById("m1_cause").value : "",
+      m1_reason: document.getElementById("m1_reason") ? document.getElementById("m1_reason").value : "",
+      m2_assignee: document.getElementById("assigneeMovie2") ? document.getElementById("assigneeMovie2").value : "",
+      m2_symptoms: Array.from(document.querySelectorAll('input[name="m2_sym"]:checked')).map(cb => cb.value),
+      m2_diff: document.getElementById("m2_diff") ? document.getElementById("m2_diff").value : "",
+      m3_assignee: document.getElementById("assigneeMovie3") ? document.getElementById("assigneeMovie3").value : "",
+      m3_symptom: document.getElementById("m3_symptom") ? document.getElementById("m3_symptom").value : "",
+      m3_calcium_reason: document.getElementById("m3_calcium_reason") ? document.getElementById("m3_calcium_reason").value : "",
+      m4_assignee: document.getElementById("assigneeMovie4") ? document.getElementById("assigneeMovie4").value : "",
+      m4_hormone: document.getElementById("m4_hormone") ? document.getElementById("m4_hormone").value : "",
+      m4_location: document.getElementById("m4_location") ? document.getElementById("m4_location").value : "",
+      m4_responses: Array.from(document.querySelectorAll('input[name="m4_resp"]:checked')).map(cb => cb.value),
+      m5_assignee: document.getElementById("assigneeMovie5") ? document.getElementById("assigneeMovie5").value : "",
+      m5_disease: document.getElementById("m5_disease") ? document.getElementById("m5_disease").value : "",
+      m5_reason: document.getElementById("m5_reason") ? document.getElementById("m5_reason").value : "",
+      m6_assignee: document.getElementById("assigneeMovie6") ? document.getElementById("assigneeMovie6").value : "",
+      m6_reason_select: document.getElementById("m6_reason_select") ? document.getElementById("m6_reason_select").value : "",
+      m6_drug: document.getElementById("m6_drug") ? document.getElementById("m6_drug").value : "",
+      group_empathy_essay: document.getElementById("group_empathy_essay") ? document.getElementById("group_empathy_essay").value : ""
     }
   };
   localStorage.setItem(STORAGE_KEY_GROUP, JSON.stringify(groupPayload));
@@ -603,15 +676,68 @@ function loadSavedData() {
 
       if (gData.compare) {
         const c = gData.compare;
-        if (c.assignee) document.getElementById("assigneeCompare").value = c.assignee;
-        if (c.trans_endo) document.getElementById("comp_trans_endo").value = c.trans_endo;
-        if (c.trans_nerv) document.getElementById("comp_trans_nerv").value = c.trans_nerv;
-        if (c.speed_endo) document.getElementById("comp_speed_endo").value = c.speed_endo;
-        if (c.speed_nerv) document.getElementById("comp_speed_nerv").value = c.speed_nerv;
-        if (c.scope_endo) document.getElementById("comp_scope_endo").value = c.scope_endo;
-        if (c.scope_nerv) document.getElementById("comp_scope_nerv").value = c.scope_nerv;
-        if (c.time_endo) document.getElementById("comp_time_endo").value = c.time_endo;
-        if (c.time_nerv) document.getElementById("comp_time_nerv").value = c.time_nerv;
+        if (c.assignee && document.getElementById("assigneeCompare")) document.getElementById("assigneeCompare").value = c.assignee;
+        if (c.trans_endo && document.getElementById("comp_trans_endo")) document.getElementById("comp_trans_endo").value = c.trans_endo;
+        if (c.trans_nerv && document.getElementById("comp_trans_nerv")) document.getElementById("comp_trans_nerv").value = c.trans_nerv;
+        if (c.speed_endo && document.getElementById("comp_speed_endo")) document.getElementById("comp_speed_endo").value = c.speed_endo;
+        if (c.speed_nerv && document.getElementById("comp_speed_nerv")) document.getElementById("comp_speed_nerv").value = c.speed_nerv;
+        if (c.scope_endo && document.getElementById("comp_scope_endo")) document.getElementById("comp_scope_endo").value = c.scope_endo;
+        if (c.scope_nerv && document.getElementById("comp_scope_nerv")) document.getElementById("comp_scope_nerv").value = c.scope_nerv;
+        if (c.time_endo && document.getElementById("comp_time_endo")) document.getElementById("comp_time_endo").value = c.time_endo;
+        if (c.time_nerv && document.getElementById("comp_time_nerv")) document.getElementById("comp_time_nerv").value = c.time_nerv;
+      }
+
+      if (gData.compareEnzyme) {
+        const ce = gData.compareEnzyme;
+        if (ce.assignee && document.getElementById("assigneeEnzymeCompare")) document.getElementById("assigneeEnzymeCompare").value = ce.assignee;
+        if (ce.same && document.getElementById("comp_enz_same")) document.getElementById("comp_enz_same").value = ce.same;
+        if (ce.enz_duct && document.getElementById("comp_enz_duct")) document.getElementById("comp_enz_duct").value = ce.enz_duct;
+        if (ce.hor_duct && document.getElementById("comp_hor_duct")) document.getElementById("comp_hor_duct").value = ce.hor_duct;
+        if (ce.enz_transport && document.getElementById("comp_enz_transport")) document.getElementById("comp_enz_transport").value = ce.enz_transport;
+        if (ce.hor_transport && document.getElementById("comp_hor_transport")) document.getElementById("comp_hor_transport").value = ce.hor_transport;
+        if (ce.enz_func && document.getElementById("comp_enz_func")) document.getElementById("comp_enz_func").value = ce.enz_func;
+        if (ce.hor_func && document.getElementById("comp_hor_func")) document.getElementById("comp_hor_func").value = ce.hor_func;
+      }
+
+      if (gData.movies) {
+        const m = gData.movies;
+        if (m.m1_assignee && document.getElementById("assigneeMovie1")) document.getElementById("assigneeMovie1").value = m.m1_assignee;
+        if (m.m1_disease && document.getElementById("m1_disease")) document.getElementById("m1_disease").value = m.m1_disease;
+        if (m.m1_cause && document.getElementById("m1_cause")) document.getElementById("m1_cause").value = m.m1_cause;
+        if (m.m1_reason && document.getElementById("m1_reason")) document.getElementById("m1_reason").value = m.m1_reason;
+
+        if (m.m2_assignee && document.getElementById("assigneeMovie2")) document.getElementById("assigneeMovie2").value = m.m2_assignee;
+        if (m.m2_symptoms && Array.isArray(m.m2_symptoms)) {
+          document.querySelectorAll('input[name="m2_sym"]').forEach(cb => {
+            cb.checked = m.m2_symptoms.includes(cb.value);
+          });
+        }
+        if (m.m2_diff && document.getElementById("m2_diff")) document.getElementById("m2_diff").value = m.m2_diff;
+
+        if (m.m3_assignee && document.getElementById("assigneeMovie3")) document.getElementById("assigneeMovie3").value = m.m3_assignee;
+        if (m.m3_symptom && document.getElementById("m3_symptom")) document.getElementById("m3_symptom").value = m.m3_symptom;
+        if (m.m3_calcium_reason && document.getElementById("m3_calcium_reason")) document.getElementById("m3_calcium_reason").value = m.m3_calcium_reason;
+
+        if (m.m4_assignee && document.getElementById("assigneeMovie4")) document.getElementById("assigneeMovie4").value = m.m4_assignee;
+        if (m.m4_hormone && document.getElementById("m4_hormone")) document.getElementById("m4_hormone").value = m.m4_hormone;
+        if (m.m4_location && document.getElementById("m4_location")) document.getElementById("m4_location").value = m.m4_location;
+        if (m.m4_responses && Array.isArray(m.m4_responses)) {
+          document.querySelectorAll('input[name="m4_resp"]').forEach(cb => {
+            cb.checked = m.m4_responses.includes(cb.value);
+          });
+        }
+
+        if (m.m5_assignee && document.getElementById("assigneeMovie5")) document.getElementById("assigneeMovie5").value = m.m5_assignee;
+        if (m.m5_disease && document.getElementById("m5_disease")) document.getElementById("m5_disease").value = m.m5_disease;
+        if (m.m5_reason && document.getElementById("m5_reason")) document.getElementById("m5_reason").value = m.m5_reason;
+
+        if (m.m6_assignee && document.getElementById("assigneeMovie6")) document.getElementById("assigneeMovie6").value = m.m6_assignee;
+        if (m.m6_reason_select && document.getElementById("m6_reason_select")) document.getElementById("m6_reason_select").value = m.m6_reason_select;
+        if (m.m6_drug && document.getElementById("m6_drug")) document.getElementById("m6_drug").value = m.m6_drug;
+
+        if (m.group_empathy_essay && document.getElementById("group_empathy_essay")) {
+          document.getElementById("group_empathy_essay").value = m.group_empathy_essay;
+        }
       }
     } catch (e) {
       console.warn("還原小組暫存失敗", e);
@@ -850,15 +976,17 @@ function handleSubmitGroup() {
   // 關鍵防呆：驗證每位到齊組員皆至少認領並作答了 1 題
   const claimedAssignees = [];
   ["A", "B", "C", "D", "E", "F"].forEach(g => {
-    const val = document.getElementById(`assignee${g}`).value;
-    if (val && !claimedAssignees.includes(val)) claimedAssignees.push(val);
+    const el = document.getElementById(`assignee${g}`);
+    if (el && el.value && !claimedAssignees.includes(el.value)) claimedAssignees.push(el.value);
   });
-  const compAssignee = document.getElementById("assigneeCompare").value;
-  if (compAssignee && !claimedAssignees.includes(compAssignee)) claimedAssignees.push(compAssignee);
+  ["assigneeEnzymeCompare", "assigneeCompare", "assigneeMovie1", "assigneeMovie2", "assigneeMovie3", "assigneeMovie4", "assigneeMovie5", "assigneeMovie6"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.value && !claimedAssignees.includes(el.value)) claimedAssignees.push(el.value);
+  });
 
   const missingMembers = members.filter(m => !claimedAssignees.includes(m));
   if (missingMembers.length > 0) {
-    alert(`⚠️ 小組責任分工防呆：\n座號【 ${missingMembers.map(m => m + "號").join("、 ")} 】同學尚未認領任何題目！\n\n請讓每位組員都認領至少 1 個腺體任務或系統比較表，共同參與作答。`);
+    alert(`⚠️ 小組責任分工防呆：\n座號【 ${missingMembers.join("、 ")} 】同學尚未認領任何題目！\n\n請讓每位組員都認領至少 1 個腺體任務、比較表或電影探討題，共同參與作答。`);
     return;
   }
 
@@ -877,26 +1005,104 @@ function handleSubmitGroup() {
     } catch (e) {}
   }
 
-  // 小組客觀題計分（人體腺體 60分 + 比較表 40分 = 100分）
+  // 小組客觀題計分（任務一 30分 + 任務二 30分 + 任務三 40分 = 100分滿分）
   let score = 0;
-  // A: 腦垂腺, 生長激素, 巨人症/侏儒症 (10分)
-  if (document.getElementById("glandNameA").value === "腦垂腺" && document.getElementById("hormoneA").value === "生長激素" && document.getElementById("diseaseA").value === "巨人症/侏儒症") score += 10;
-  // B: 甲狀腺, 甲狀腺素, 甲狀腺亢進/呆小症 (10分)
-  if (document.getElementById("glandNameB").value === "甲狀腺" && document.getElementById("hormoneB").value === "甲狀腺素" && document.getElementById("diseaseB").value === "甲狀腺亢進/呆小症") score += 10;
-  // C: 副甲狀腺, 副甲狀腺素, 抽搐/骨質疏鬆 (10分)
-  if (document.getElementById("glandNameC").value === "副甲狀腺" && document.getElementById("hormoneC").value === "副甲狀腺素" && document.getElementById("diseaseC").value === "抽搐/骨質疏鬆") score += 10;
-  // D: 腎上腺, 腎上腺素, 心搏加快/血壓上升 (10分)
-  if (document.getElementById("glandNameD").value === "腎上腺" && document.getElementById("hormoneD").value === "腎上腺素" && document.getElementById("diseaseD").value === "心搏加快/血壓上升") score += 10;
-  // E: 胰島, 胰島素與升糖素, 糖尿病 (10分)
-  if (document.getElementById("glandNameE").value === "胰島" && document.getElementById("hormoneE").value === "胰島素與升糖素" && document.getElementById("diseaseE").value === "糖尿病") score += 10;
-  // F: 性腺, 雄性/雌性激素, 第二性徵表現 (10分)
-  if (document.getElementById("glandNameF").value === "性腺" && document.getElementById("hormoneF").value === "雄性/雌性激素" && document.getElementById("diseaseF").value === "第二性徵表現") score += 10;
+  const breakdownList = [];
 
-  // 比較表 4 題各 10 分
-  if (document.getElementById("comp_trans_endo").value === "血液" && document.getElementById("comp_trans_nerv").value === "神經元") score += 10;
-  if (document.getElementById("comp_speed_endo").value === "較慢" && document.getElementById("comp_speed_nerv").value === "迅速") score += 10;
-  if (document.getElementById("comp_scope_endo").value === "廣泛" && document.getElementById("comp_scope_nerv").value === "局部") score += 10;
-  if (document.getElementById("comp_time_endo").value === "持久" && document.getElementById("comp_time_nerv").value === "短暫") score += 10;
+  // 【任務一：腺體座標地圖 (共 30 分，6 題各 5 分)】
+  if (document.getElementById("glandNameA").value === "腦垂腺" && document.getElementById("hormoneA").value === "生長激素") {
+    score += 5; breakdownList.push("腺體A腦垂腺正確 (+5)");
+  }
+  if (document.getElementById("glandNameB").value === "甲狀腺" && document.getElementById("hormoneB").value === "甲狀腺素") {
+    score += 5; breakdownList.push("腺體B甲狀腺正確 (+5)");
+  }
+  if (document.getElementById("glandNameC").value === "副甲狀腺" && document.getElementById("hormoneC").value === "副甲狀腺素") {
+    score += 5; breakdownList.push("腺體C副甲狀腺正確 (+5)");
+  }
+  if (document.getElementById("glandNameD").value === "腎上腺" && document.getElementById("hormoneD").value === "腎上腺素") {
+    score += 5; breakdownList.push("腺體D腎上腺正確 (+5)");
+  }
+  if (document.getElementById("glandNameE").value === "胰島" && document.getElementById("hormoneE").value === "胰島素與升糖素") {
+    score += 5; breakdownList.push("腺體E胰島正確 (+5)");
+  }
+  if (document.getElementById("glandNameF").value === "性腺" && document.getElementById("hormoneF").value === "雄性/雌性激素") {
+    score += 5; breakdownList.push("腺體F性腺正確 (+5)");
+  }
+
+  // 【任務二：雙重生理機制比較模型 (共 30 分)】
+  // 1. 酵素 vs 激素 (15分)
+  if (document.getElementById("comp_enz_same") && document.getElementById("comp_enz_same").value === "生物體製造") score += 3;
+  if (document.getElementById("comp_enz_duct") && document.getElementById("comp_enz_duct").value === "有導管" && document.getElementById("comp_hor_duct").value === "無導管") score += 4;
+  if (document.getElementById("comp_enz_transport") && document.getElementById("comp_enz_transport").value === "導管排至體腔或體外" && document.getElementById("comp_hor_transport").value === "血液循環") score += 4;
+  if (document.getElementById("comp_enz_func") && document.getElementById("comp_enz_func").value === "生物催化劑" && document.getElementById("comp_hor_func").value === "化學調節") score += 4;
+  breakdownList.push("任務二酵素激素比較模型完成");
+
+  // 2. 內分泌 vs 神經系統 (15分)
+  if (document.getElementById("comp_trans_endo").value === "血液" && document.getElementById("comp_trans_nerv").value === "神經元") score += 4;
+  if (document.getElementById("comp_speed_endo").value === "較慢" && document.getElementById("comp_speed_nerv").value === "迅速") score += 4;
+  if (document.getElementById("comp_scope_endo").value === "廣泛" && document.getElementById("comp_scope_nerv").value === "局部") score += 4;
+  if (document.getElementById("comp_time_endo").value === "持久" && document.getElementById("comp_time_nerv").value === "短暫") score += 3;
+  breakdownList.push("任務二神經內分泌比較模型完成");
+
+  // 【任務三：電影深度實測與社會同理素養 (共 40 分)】
+  // M1: 侏儒症與生長激素不足 (5分)
+  if (document.getElementById("m1_disease") && document.getElementById("m1_disease").value === "侏儒症" && document.getElementById("m1_cause").value === "腦垂腺生長激素不足") {
+    score += 5; breakdownList.push("M1侏儒症辨析正確 (+5)");
+  }
+  // M1 依據簡答評分
+  const m1Reason = document.getElementById("m1_reason") ? document.getElementById("m1_reason").value.trim() : "";
+  if (m1Reason.includes("智力") || m1Reason.includes("心智") || m1Reason.includes("腦") || m1Reason.includes("聰明") || m1Reason.includes("正常")) {
+    score += 3; breakdownList.push("M1侏儒呆小依據精準 (+3)");
+  }
+
+  // M2: 甲狀腺低下與亢進區分 (5分)
+  const m2Syms = Array.from(document.querySelectorAll('input[name="m2_sym"]:checked')).map(cb => cb.value);
+  if (m2Syms.includes("嗜睡疲倦") && m2Syms.includes("體重難下降") && !m2Syms.includes("眼球凸出吃不胖")) {
+    score += 3;
+  }
+  if (document.getElementById("m2_diff") && document.getElementById("m2_diff").value === "亢進消瘦低下肥胖") {
+    score += 2; breakdownList.push("M2甲狀腺低下亢進區分正確 (+5)");
+  }
+
+  // M3: 誤割副甲狀腺與血鈣平衡 (5分)
+  if (document.getElementById("m3_symptom") && document.getElementById("m3_symptom").value === "血鈣過低抽搐痙攣") score += 2;
+  const m3Reason = document.getElementById("m3_calcium_reason") ? document.getElementById("m3_calcium_reason").value.trim() : "";
+  if (m3Reason.includes("鈣") || m3Reason.includes("抽搐") || m3Reason.includes("平衡") || m3Reason.includes("副甲狀腺") || m3Reason.includes("補充")) {
+    score += 3; breakdownList.push("M3血鈣失衡與補鈣依據精準 (+5)");
+  }
+
+  // M4: 腎上腺應急 (5分)
+  if (document.getElementById("m4_hormone") && document.getElementById("m4_hormone").value === "腎上腺素" && document.getElementById("m4_location").value === "腎臟上方") {
+    score += 3;
+  }
+  const m4Resps = Array.from(document.querySelectorAll('input[name="m4_resp"]:checked')).map(cb => cb.value);
+  if (m4Resps.includes("心搏加快呼吸急促") && m4Resps.includes("腸胃蠕動減慢") && !m4Resps.includes("胃液大量分泌幫助消化")) {
+    score += 2; breakdownList.push("M4腎上腺緊急反應全對 (+5)");
+  }
+
+  // M5: 循利寧與糖尿病末梢循環 (5分)
+  if (document.getElementById("m5_disease") && document.getElementById("m5_disease").value === "糖尿病") score += 2;
+  const m5Reason = document.getElementById("m5_reason") ? document.getElementById("m5_reason").value.trim() : "";
+  if (m5Reason.includes("感覺") || m5Reason.includes("麻") || m5Reason.includes("燙") || m5Reason.includes("知覺") || m5Reason.includes("循環") || m5Reason.includes("神經")) {
+    score += 3; breakdownList.push("M5糖尿病末梢病變判斷正確 (+5)");
+  }
+
+  // M6: 帶針筒上學與胰島素 (4分)
+  if (document.getElementById("m6_reason_select") && document.getElementById("m6_reason_select").value === "第一型糖尿病需補充胰島素" && document.getElementById("m6_drug").value === "胰島素") {
+    score += 4; breakdownList.push("M6胰島素治療正確 (+4)");
+  }
+
+  // M7: 情意素養宣言 (8分)
+  const groupEmpathy = document.getElementById("group_empathy_essay") ? document.getElementById("group_empathy_essay").value.trim() : "";
+  const empathyWords = ["陪伴", "尊重", "包容", "勇敢", "支持", "幫助", "同理", "不要嘲笑", "不排斥", "愛心", "關懷"];
+  const hasGroupEmpathy = empathyWords.some(w => groupEmpathy.includes(w));
+  if (groupEmpathy.length >= 20 && hasGroupEmpathy) {
+    score += 8; breakdownList.push("M7小組情意素養宣言深刻真誠 (+8)");
+  } else if (groupEmpathy.length >= 8) {
+    score += 5; breakdownList.push("M7情意素養基本填寫 (+5)");
+  }
+
+  score = Math.min(100, score);
 
   const payload = {
     sheetId: "4-2",
@@ -906,9 +1112,10 @@ function handleSubmitGroup() {
     seatOrGroup: groupNum,
     studentSeat: groupNum,
     nameOrMembers: members.join(", "),
-    studentName: members.map(m => m + "號").join("、"),
+    studentName: members.join("、"),
     score: score,
-    essay: "小組統整模型完成",
+    scoreBreakdown: breakdownList,
+    essay: groupEmpathy || "小組統整模型完成",
     detailData: JSON.parse(localStorage.getItem(STORAGE_KEY_GROUP) || "{}"),
     timestamp: new Date().toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })
   };
