@@ -55,13 +55,13 @@ function initDropdowns() {
     }
   }
 
-  // 小組組別 1~8 組
+  // 小組組別 1~8（純數字，嚴禁「第」與「組」字樣）
   const groupNum = document.getElementById("groupNum");
   if (groupNum) {
     for (let g = 1; g <= 8; g++) {
       const opt = document.createElement("option");
-      opt.value = `第${g}組`;
-      opt.textContent = `第 ${g} 組`;
+      opt.value = String(g);
+      opt.textContent = String(g);
       groupNum.appendChild(opt);
     }
   }
