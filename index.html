@@ -51,7 +51,7 @@
       <div class="dispatch-controls">
         <select id="selectDispatchSheet" class="form-control" style="font-weight: 700; font-size: 1.05rem;">
           <option value="4-2-endocrine.html" data-title="【單元 4-2】內分泌系統 數位互動學習單" selected>【單元 4-2】內分泌系統 數位互動學習單 (個人學習單 + 小組學習單)</option>
-          <option value="4-1-nervous.html" data-title="【單元 4-1】神經系統 數位互動學習單" disabled>【單元 4-1】神經系統 數位互動學習單 (即將上線)</option>
+          <option value="4-1-nervous.html" data-title="【單元 4-1】神經系統 ✕ 交通安全 數位互動學習單">【單元 4-1】神經系統 ✕ 交通安全 數位互動學習單 (個人學習單 + 小組學習單)</option>
           <option value="4-3-homeostasis.html" data-title="【單元 4-3】恆定性與體溫 數位互動學習單" disabled>【單元 4-3】恆定性與體溫 數位互動學習單 (即將上線)</option>
           <option value="5-1-reproduction.html" data-title="【單元 5-1】生物的生殖 數位互動學習單" disabled>【單元 5-1】生物的生殖 數位互動學習單 (即將上線)</option>
         </select>
@@ -91,19 +91,23 @@
     </div>
 
     <div class="sheet-grid">
-      <!-- 4-1 神經系統 (預告卡) -->
-      <div class="sheet-card upcoming">
+      <!-- 4-1 神經系統 (正式上線) -->
+      <div class="sheet-card">
         <div>
-          <span class="sheet-badge">單元 4-1</span>
-          <h3 class="sheet-card-title">神經系統 ｜ 感覺受器與神經傳導</h3>
-          <p class="sheet-card-desc">探索大腦、小腦、腦幹與脊髓反射中樞，實測紅綠燈反應時間與瞳孔對光反射機制。</p>
+          <span class="sheet-badge">單元 4-1（已上線）</span>
+          <h3 class="sheet-card-title">4-1 神經系統 ✕ 交通安全 數位互動學習單</h3>
+          <p class="sheet-card-desc">整合安全車距秘密、中樞解剖座標認領、意識行為與反射雙軌模型、接尺反應實驗與國道煞車防禦素養。</p>
           <div class="sheet-meta-tags">
-            <span class="meta-pill">🧠 中樞與周圍神經</span>
-            <span class="meta-pill">⚡ 反射弧路徑</span>
+            <span class="meta-pill">🧠 腦部解剖分區認領</span>
+            <span class="meta-pill">⚡ 意識 vs 反射雙軌</span>
+            <span class="meta-pill">🚗 交通安全素養</span>
           </div>
         </div>
         <div class="sheet-card-footer">
-          <button type="button" class="btn-card-disabled">即將推出</button>
+          <button type="button" class="btn-card-qr" onclick="showQrModal(getAbsoluteSheetUrl('4-1-nervous.html'), '【單元 4-1】神經系統 ✕ 交通安全 數位互動學習單')">
+            📱 投螢幕 QR
+          </button>
+          <a href="4-1-nervous.html" class="btn-card-action">進入作答 ➔</a>
         </div>
       </div>
 

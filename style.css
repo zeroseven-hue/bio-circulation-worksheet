@@ -1518,3 +1518,65 @@ body {
     width: 100%;
   }
 }
+
+/* ==================== 4-1 神經傳導鏈動態構建器 ==================== */
+.pathway-flow-builder {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  background: #f8fafc;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--card-border);
+  margin-top: 10px;
+}
+
+.flow-step {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #ffffff;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid #cbd5e1;
+  min-width: 140px;
+  flex: 1;
+}
+
+.flow-step .step-tag {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #0284c7;
+  text-transform: uppercase;
+}
+
+.flow-step .flow-fixed {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.flow-step .path-select {
+  padding: 6px 10px;
+  font-size: 0.88rem;
+  border-color: #94a3b8;
+}
+
+.flow-arrow {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: #38bdf8;
+  padding: 0 4px;
+}
+
+@media (max-width: 768px) {
+  .pathway-flow-builder {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .flow-arrow {
+    text-align: center;
+    transform: rotate(90deg);
+  }
+}
