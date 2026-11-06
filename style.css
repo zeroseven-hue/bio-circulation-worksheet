@@ -1023,7 +1023,12 @@ body {
   animation: fadeIn 0.3s ease;
 }
 
-.group-tab-pane.hidden {
+.group-tab-pane/* 確保所有隱藏元素徹底隱藏，不留下黑色佔位底色 */
+.hidden {
+  display: none !important;
+}
+
+[hidden] {
   display: none !important;
 }
 
@@ -1177,7 +1182,42 @@ body {
 }
 
 .gland-task-card {
+  background: #ffffff !important;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
   padding: 24px 28px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+/* 確保小組三大任務面板為純淨高對比白底卡片 */
+.group-tab-pane {
+  animation: fadeIn 0.3s ease;
+  width: 100%;
+}
+
+.group-tab-pane/* 確保所有隱藏元素徹底隱藏，不留下黑色佔位底色 */
+.hidden {
+  display: none !important;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.system-compare-card {
+  background: #ffffff !important;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: 24px 28px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.movie-task-card {
+  background: #ffffff !important;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: 24px 28px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
 }
 
 .task-card-header {
@@ -1444,7 +1484,12 @@ body {
   transform: translateY(0);
 }
 
+/* 確保所有隱藏元素徹底隱藏，不留下黑色佔位底色 */
 .hidden {
+  display: none !important;
+}
+
+[hidden] {
   display: none !important;
 }
 
