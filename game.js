@@ -9,6 +9,8 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycby2-Pj2Nz1NFonB11rtsHXM
 // 本地存儲鍵名
 const STORAGE_KEY_INDIV = "BIO_4_2_INDIVIDUAL_DATA";
 const STORAGE_KEY_GROUP = "BIO_4_2_GROUP_DATA";
+const STORAGE_KEY_SUBMIT_INDIV = "BIO_4_2_SUBMITTED_INDIV";
+const STORAGE_KEY_SUBMIT_GROUP = "BIO_4_2_SUBMITTED_GROUP";
 
 // 當前狀態管理
 let currentMode = "individual"; // "individual" | "group"
@@ -648,6 +650,22 @@ function handleSubmitIndividual() {
     return;
   }
 
+  // 1.5 🔍 重複繳交防呆確認 (純前端本地檢查，0 延遲、0 網路伺服器負擔)
+  const existingSubmission = localStorage.getItem(STORAGE_KEY_SUBMIT_INDIV);
+  if (existingSubmission) {
+    try {
+      const prev = JSON.parse(existingSubmission);
+      const prevTime = prev.timestamp || "先前";
+      const prevScore = (prev.score !== undefined) ? `${prev.score} 分` : "已計分";
+      const confirmResubmit = confirm(
+        `⚠️ 系統提示：\n\n您先前已於【${prevTime}】送出過本學習單（初評成績：${prevScore}）。\n\n您確定要再次送出，並以「最新的作答內容與分數」覆蓋雲端試算表嗎？`
+      );
+      if (!confirmResubmit) {
+        return; // 學生點選取消，立即終止，原成績毫髮無傷
+      }
+    } catch (e) {}
+  }
+
   // 2. 未完成題目防呆檢查
   const uncompleted = [];
   for (let s = 1; s <= 7; s++) {
@@ -755,6 +773,22 @@ function handleSubmitGroup() {
     return;
   }
 
+  // 1.5 🔍 小組重複繳交防呆確認 (純前端本地檢查，0 延遲、0 伺服器負擔)
+  const existingGroupSubmission = localStorage.getItem(STORAGE_KEY_SUBMIT_GROUP);
+  if (existingGroupSubmission) {
+    try {
+      const prev = JSON.parse(existingGroupSubmission);
+      const prevTime = prev.timestamp || "先前";
+      const prevScore = (prev.score !== undefined) ? `${prev.score} 分` : "已計分";
+      const confirmResubmit = confirm(
+        `⚠️ 系統提示：\n\n本組先前已於【${prevTime}】送出過小組統整學習單（初評成績：${prevScore}）。\n\n全組確定要再次送出，並以「最新的統整結果與分數」覆蓋雲端試算表嗎？`
+      );
+      if (!confirmResubmit) {
+        return; // 小組取消送出，終止後續動作
+      }
+    } catch (e) {}
+  }
+
   // 小組客觀題計分（人體腺體 60分 + 比較表 40分 = 100分）
   let score = 0;
   // A: 腦垂腺, 生長激素, 巨人症/侏儒症 (10分)
@@ -852,6 +886,17 @@ function sendToGAS(payload, score) {
       clearTimeout(timeoutId);
       if (isHandled) return;
       isHandled = true;
+
+      // 紀錄送出快照以防重複點擊覆蓋（個人與小組雙模式）
+      try {
+        const key = payload.mode === "individual" ? STORAGE_KEY_SUBMIT_INDIV : STORAGE_KEY_SUBMIT_GROUP;
+        localStorage.setItem(key, JSON.stringify({
+          timestamp: payload.timestamp,
+          score: score,
+          target: `${payload.class}班 ${payload.seatOrGroup}`
+        }));
+      } catch (e) {}
+
       scoreStatus.textContent = "🎉 成績已成功登錄至任課教師雲端試算表！";
       detailsBox.innerHTML += `
         <div style="margin-top:8px; color:#059669;">
