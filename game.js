@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initExitGuard();
 });
 
-/** 初始化 701~710 與 01~35 純數字下拉選項 */
+/** 初始化 701~710 與 01~35 純數字下拉選項 (嚴禁出現「班」與「號」字樣) */
 function initDropdowns() {
   const classSelects = [document.getElementById("studentClass"), document.getElementById("groupClass")];
   classSelects.forEach(sel => {
@@ -39,7 +39,7 @@ function initDropdowns() {
     for (let c = 701; c <= 710; c++) {
       const opt = document.createElement("option");
       opt.value = String(c);
-      opt.textContent = `${c} 班`;
+      opt.textContent = String(c); // 純數字，無「班」字
       sel.appendChild(opt);
     }
   });
@@ -50,7 +50,7 @@ function initDropdowns() {
       const val = s < 10 ? `0${s}` : String(s);
       const opt = document.createElement("option");
       opt.value = val;
-      opt.textContent = `${val} 號`;
+      opt.textContent = val; // 純兩位數字，無「號」字
       studentSeat.appendChild(opt);
     }
   }
@@ -101,7 +101,7 @@ function renderGroupMemberSlots(count) {
       const val = s < 10 ? `0${s}` : String(s);
       const opt = document.createElement("option");
       opt.value = val;
-      opt.textContent = `${val} 號`;
+      opt.textContent = val; // 純數字，無「號」字
       sel.appendChild(opt);
     }
 
@@ -134,7 +134,7 @@ function syncAssigneeDropdowns() {
     members.forEach(m => {
       const opt = document.createElement("option");
       opt.value = m;
-      opt.textContent = `${m} 號同學`;
+      opt.textContent = `${m} 認領`; // 無「號同學」字樣
       sel.appendChild(opt);
     });
 

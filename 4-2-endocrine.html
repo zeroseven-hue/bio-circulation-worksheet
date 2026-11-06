@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>國中生物 4-2 內分泌系統數位互動學習單</title>
-  <link rel="stylesheet" href="style.css?v=2.2">
+  <link rel="stylesheet" href="style.css?v=2.3">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Orbitron:wght@600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -77,7 +77,7 @@
         </div>
 
         <div class="form-group flex-2">
-          <label for="studentName"><span class="req">*</span> 學生真實姓名</label>
+          <label for="studentName"><span class="req">*</span> 學生真實姓名 <span style="color: #ef4444; font-size: 0.82rem; font-weight: 700;">（⚠️ 嚴禁暱稱！非真實姓名本學習單直接扣 10 分）</span></label>
           <div class="input-wrapper">
             <input type="text" id="studentName" class="cyber-input" placeholder="請輸入 2~5 字中文全名（如：陳立、王小明）" maxlength="5" autocomplete="off">
             <span class="valid-feedback" id="nameFeedback"></span>
@@ -187,10 +187,10 @@
           <div class="q-block">
             <label class="q-label"><span class="q-seq">Q1.</span> 影片中的主角身高約為多少？</label>
             <div class="input-with-unit">
-              <input type="number" id="q1_height" class="cyber-input num-input" placeholder="請填數字 (例: 234)" min="100" max="300">
+              <input type="number" id="q1_height" class="cyber-input num-input" placeholder="請填寫數字" min="100" max="300">
               <span class="input-unit">公分 (cm)</span>
             </div>
-            <div class="hint-text">💡 提示：請根據影片中紀錄報導的主角身高填寫數字。</div>
+            <div class="hint-text">💡 提示：請根據影片中紀錄報導的主角身高填寫純數字。</div>
           </div>
 
           <div class="q-block">
@@ -253,6 +253,12 @@
                 <span class="pill-box"></span>
                 <span class="pill-text">新陳代謝飆高 / 身體消瘦吃不胖</span>
               </label>
+              <!-- 誘答項 1 隨機穿插 -->
+              <label class="checkbox-pill">
+                <input type="checkbox" name="q2_symptom" value="身材矮小智力受限">
+                <span class="pill-box"></span>
+                <span class="pill-text">身材矮小且智力發展受限</span>
+              </label>
               <label class="checkbox-pill">
                 <input type="checkbox" name="q2_symptom" value="眼凸">
                 <span class="pill-box"></span>
@@ -263,6 +269,12 @@
                 <span class="pill-box"></span>
                 <span class="pill-text">雙手不自主發抖</span>
               </label>
+              <!-- 誘答項 2 隨機穿插 -->
+              <label class="checkbox-pill">
+                <input type="checkbox" name="q2_symptom" value="血糖過高尿液排出">
+                <span class="pill-box"></span>
+                <span class="pill-text">血糖過高由尿液排出</span>
+              </label>
               <label class="checkbox-pill">
                 <input type="checkbox" name="q2_symptom" value="肌肉萎縮">
                 <span class="pill-box"></span>
@@ -272,6 +284,12 @@
                 <input type="checkbox" name="q2_symptom" value="皮膚粗糙">
                 <span class="pill-box"></span>
                 <span class="pill-text">皮膚乾燥粗糙</span>
+              </label>
+              <!-- 誘答項 3 隨機穿插 -->
+              <label class="checkbox-pill">
+                <input type="checkbox" name="q2_symptom" value="血鈣過低抽搐">
+                <span class="pill-box"></span>
+                <span class="pill-text">血鈣過低引發肌肉抽搐</span>
               </label>
               <label class="checkbox-pill">
                 <input type="checkbox" name="q2_symptom" value="緊張頭痛">
@@ -287,22 +305,6 @@
                 <input type="checkbox" name="q2_symptom" value="骨質疏鬆">
                 <span class="pill-box"></span>
                 <span class="pill-text">鈣質加速流失 / 骨質疏鬆</span>
-              </label>
-              <!-- 3 個經典誘答陷阱項 -->
-              <label class="checkbox-pill trap-pill">
-                <input type="checkbox" name="q2_symptom" value="身材矮小智力受限">
-                <span class="pill-box"></span>
-                <span class="pill-text">身材矮小且智力發展受限</span>
-              </label>
-              <label class="checkbox-pill trap-pill">
-                <input type="checkbox" name="q2_symptom" value="血糖過高尿液排出">
-                <span class="pill-box"></span>
-                <span class="pill-text">血糖過高由尿液排出</span>
-              </label>
-              <label class="checkbox-pill trap-pill">
-                <input type="checkbox" name="q2_symptom" value="血鈣過低抽搐">
-                <span class="pill-box"></span>
-                <span class="pill-text">血鈣過低引發肌肉抽搐</span>
               </label>
             </div>
             <div class="hint-text">💡 聽力大挑戰：仔細看影片紀錄！選項中有穿插其他內分泌疾病的「誘答陷阱項」，勾錯會扣分喔！</div>
@@ -325,9 +327,9 @@
           </div>
 
           <div class="q-block">
-            <label class="q-label"><span class="q-seq">Q1.</span> 影片採訪與記錄當時，瑪麗亞的年齡大約幾歲？</label>
+            <label class="q-label"><span class="q-seq">Q1.</span> 影片採訪與記錄當時，瑪麗亞的實際年齡大約幾歲？</label>
             <div class="input-with-unit">
-              <input type="number" id="q3_age" class="cyber-input num-input" placeholder="請填數字 (例: 30)" min="0" max="100">
+              <input type="number" id="q3_age" class="cyber-input num-input" placeholder="請填寫數字" min="0" max="100">
               <span class="input-unit">歲</span>
             </div>
             <div class="hint-text">💡 提示：請填寫影片紀錄報導當時的實際年齡（不用自己拿今年去扣算喔！）。</div>
@@ -1181,6 +1183,6 @@
   <div class="cyber-toast" id="cyberToast"></div>
 
   <!-- 引入主腳本 (附帶版本號強制作廢舊快取) -->
-  <script src="game.js?v=2.2"></script>
+  <script src="game.js?v=2.3"></script>
 </body>
 </html>
