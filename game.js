@@ -655,10 +655,9 @@ function handleSubmitIndividual() {
   if (existingSubmission) {
     try {
       const prev = JSON.parse(existingSubmission);
-      const prevTime = prev.timestamp || "先前";
       const prevScore = (prev.score !== undefined) ? `${prev.score} 分` : "已計分";
       const confirmResubmit = confirm(
-        `⚠️ 系統提示：\n\n您先前已於【${prevTime}】送出過本學習單（初評成績：${prevScore}）。\n\n您確定要再次送出，並以「最新的作答內容與分數」覆蓋雲端試算表嗎？`
+        `⚠️ 系統提示：\n\n你先前已經繳交過學習單囉！（成績：${prevScore}）\n\n確定要重新送出，並以「最新的作答與分數」覆蓋原本的成績嗎？`
       );
       if (!confirmResubmit) {
         return; // 學生點選取消，立即終止，原成績毫髮無傷
@@ -778,10 +777,9 @@ function handleSubmitGroup() {
   if (existingGroupSubmission) {
     try {
       const prev = JSON.parse(existingGroupSubmission);
-      const prevTime = prev.timestamp || "先前";
       const prevScore = (prev.score !== undefined) ? `${prev.score} 分` : "已計分";
       const confirmResubmit = confirm(
-        `⚠️ 系統提示：\n\n本組先前已於【${prevTime}】送出過小組統整學習單（初評成績：${prevScore}）。\n\n全組確定要再次送出，並以「最新的統整結果與分數」覆蓋雲端試算表嗎？`
+        `⚠️ 系統提示：\n\n本組先前已經繳交過囉！（成績：${prevScore}）\n\n全組確定要重新送出，並以「最新的統整結果與分數」覆蓋原本的紀錄嗎？`
       );
       if (!confirmResubmit) {
         return; // 小組取消送出，終止後續動作
