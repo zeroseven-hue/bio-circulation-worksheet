@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
   bindStepperEvents();
   bindHumanViewerEvents();
   bindInputListeners();
+  initReactionChart();
   loadSavedData();
   updateStepperCheckmarks();
   updateCenterNodeStatus();
@@ -739,10 +740,10 @@ function handleSubmitIndividual() {
     score += 7; breakdownList.push("Q4接尺波動大且時間大於反射 (+7)");
   }
   const q4Rs = Array.from(document.querySelectorAll('input[name="q4_rs"]:checked')).map(cb => cb.value);
-  if (q4Rs.includes("接尺路徑長需經大腦分析") && q4Rs.includes("瞳孔反射路徑短不經大腦") && q4Rs.includes("意識行為易受疲勞分心影響") && !q4Rs.includes("接尺神經傳導速度慢百倍")) {
-    score += 8; breakdownList.push("Q4機制原因多選精準全對 (+8)");
+  if (q4Rs.includes("接尺屬意識大腦具學習經驗記憶") && q4Rs.includes("瞳孔反射中樞為腦幹不具意志學習") && q4Rs.includes("反射路徑極短穩定爭取生機") && !q4Rs.includes("接尺神經傳導速度慢百倍")) {
+    score += 8; breakdownList.push("Q4圖表學習推理全對 (+8)");
   } else if (!q4Rs.includes("接尺神經傳導速度慢百倍") && q4Rs.length >= 2) {
-    score += 4; breakdownList.push("Q4機制原因部分正確 (+4)");
+    score += 4; breakdownList.push("Q4圖表推理部分正確 (+4)");
   }
 
   // 【關卡 5：交通安全跨領域素養】(20分)
@@ -1020,4 +1021,108 @@ function showToast(msg) {
   setTimeout(() => {
     toast.classList.remove("show");
   }, 2200);
+}
+
+
+// ==================== 9. 接尺 vs 瞳孔反應時間圖表動態渲染 ====================
+function initReactionChart() {
+  const inputs = [
+    document.getElementById("rulerVal1"),
+    document.getElementById("rulerVal2"),
+    document.getElementById("rulerVal3"),
+    document.getElementById("rulerVal4"),
+    document.getElementById("rulerVal5")
+  ];
+
+  inputs.forEach((input) => {
+    if (input) {
+      input.addEventListener("input", renderReactionChart);
+      input.addEventListener("change", renderReactionChart);
+    }
+  });
+
+  renderReactionChart();
+}
+
+function renderReactionChart() {
+  const r1 = parseFloat(document.getElementById("rulerVal1")?.value) || 0.32;
+  const r2 = parseFloat(document.getElementById("rulerVal2")?.value) || 0.27;
+  const r3 = parseFloat(document.getElementById("rulerVal3")?.value) || 0.23;
+  const r4 = parseFloat(document.getElementById("rulerVal4")?.value) || 0.20;
+  const r5 = parseFloat(document.getElementById("rulerVal5")?.value) || 0.18;
+
+  const rulerData = [r1, r2, r3, r4, r5];
+  // 瞳孔反射天生固定且短暫，5 次皆約為 0.08 秒
+  const pupilData = [0.08, 0.08, 0.08, 0.08, 0.08];
+
+  const xCoords = [100, 195, 290, 385, 480];
+  // Y 軸 0.00s 處在 y=195, 0.40s 處在 y=35 (高度 160px，即每 0.1s 佔 40px)
+  const getY = (val) => {
+    const clamped = Math.max(0, Math.min(0.42, val));
+    return 195 - (clamped / 0.40) * 160;
+  };
+
+  // 1. 構建接尺折線與漸層區域
+  let lineD = "";
+  let areaD = `M ${xCoords[0]} 195 `;
+  rulerData.forEach((val, idx) => {
+    const x = xCoords[idx];
+    const y = getY(val);
+    if (idx === 0) {
+      lineD += `M ${x} ${y} `;
+    } else {
+      lineD += `L ${x} ${y} `;
+    }
+    areaD += `L ${x} ${y} `;
+  });
+  areaD += `L ${xCoords[xCoords.length - 1]} 195 Z`;
+
+  const rulerLine = document.getElementById("chartRulerLine");
+  const rulerArea = document.getElementById("chartRulerArea");
+  if (rulerLine) rulerLine.setAttribute("d", lineD);
+  if (rulerArea) rulerArea.setAttribute("d", areaD);
+
+  // 2. 構建瞳孔反射水平線 (恆定 0.08s)
+  let pupilD = "";
+  pupilData.forEach((val, idx) => {
+    const x = xCoords[idx];
+    const y = getY(val);
+    if (idx === 0) {
+      pupilD += `M ${x} ${y} `;
+    } else {
+      pupilD += `L ${x} ${y} `;
+    }
+  });
+  const pupilLine = document.getElementById("chartPupilLine");
+  if (pupilLine) pupilLine.setAttribute("d", pupilD);
+
+  // 3. 渲染圓點與數值標籤
+  const rulerDotsG = document.getElementById("chartRulerDots");
+  const pupilDotsG = document.getElementById("chartPupilDots");
+
+  if (rulerDotsG) {
+    let dotsHtml = "";
+    rulerData.forEach((val, idx) => {
+      const x = xCoords[idx];
+      const y = getY(val);
+      dotsHtml += `
+        <circle cx="${x}" cy="${y}" r="5" fill="#0284c7" stroke="#ffffff" stroke-width="2"/>
+        <text x="${x}" y="${y - 9}" font-size="10" font-weight="700" fill="#0369a1" text-anchor="middle">${val.toFixed(2)}s</text>
+      `;
+    });
+    rulerDotsG.innerHTML = dotsHtml;
+  }
+
+  if (pupilDotsG) {
+    let dotsHtml = "";
+    pupilData.forEach((val, idx) => {
+      const x = xCoords[idx];
+      const y = getY(val);
+      dotsHtml += `
+        <circle cx="${x}" cy="${y}" r="4" fill="#ea580c" stroke="#ffffff" stroke-width="1.5"/>
+        <text x="${x}" y="${y + 16}" font-size="9" font-weight="700" fill="#c2410c" text-anchor="middle">${val.toFixed(2)}s</text>
+      `;
+    });
+    pupilDotsG.innerHTML = dotsHtml;
+  }
 }

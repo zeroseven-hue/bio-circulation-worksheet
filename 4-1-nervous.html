@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>國中生物 4-1 神經系統 ✕ 交通安全 數位互動學習單</title>
-  <link rel="stylesheet" href="style.css?v=3.0">
+  <link rel="stylesheet" href="style.css?v=3.1">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Orbitron:wght@600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -404,14 +404,99 @@
           </div>
         </article>
 
-        <!-- 關卡 4: 反應時間測定與實驗比對 (接尺 vs 瞳孔收縮) -->
+        <!-- 關卡 4: 反應時間測定與實驗數據折線圖 (接尺 vs 瞳孔收縮) -->
         <article class="question-card glass-panel hidden" id="stepCard4">
           <div class="card-title-bar">
-            <span class="card-badge">實驗探究</span>
-            <h2>反應時間的測定 ｜ 意識行為 vs 反射行為</h2>
+            <span class="card-badge">實驗探究與圖表繪製</span>
+            <h2>反應時間的測定 ｜ 接尺實驗 vs 瞳孔反射數據趨勢</h2>
           </div>
           <div class="card-prompt">
-            <p class="intro-desc">在課堂實驗中，我們利用「接尺實驗」測量反應時間，並與「強光照射瞳孔收縮」進行生理機制比對：</p>
+            <p class="intro-desc">在課堂實驗中，我們進行了 5 次「接尺實驗（有意識行為）」與「瞳孔對光收縮（反射作用）」，請輸入實驗數據或使用預設測量值，觀察雙曲線趨勢圖：</p>
+          </div>
+
+          <!-- 互動圖表與實驗數據輸入區 -->
+          <div class="experiment-chart-container" style="background: #ffffff; border: 1.5px solid var(--card-border); border-radius: var(--radius-lg); padding: 18px; margin-bottom: 20px;">
+            <div class="chart-header-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+              <div style="font-weight: 700; color: #0f172a; font-size: 1.05rem;">
+                📈 實驗連續 5 次反應時間折線對比圖（次數 1~5）
+              </div>
+              <div style="display: flex; gap: 14px; font-size: 0.85rem; font-weight: 700;">
+                <span style="color: #0284c7; display: flex; align-items: center; gap: 4px;"><span style="display:inline-block; width:12px; height:3px; background:#0284c7; border-radius:2px;"></span> 接尺反應 (有意識行為)</span>
+                <span style="color: #ea580c; display: flex; align-items: center; gap: 4px;"><span style="display:inline-block; width:12px; height:3px; background:#ea580c; border-radius:2px;"></span> 瞳孔反射 (反射作用)</span>
+              </div>
+            </div>
+
+            <!-- SVG 雙折線座標圖 -->
+            <div class="chart-canvas-wrap" style="position: relative; width: 100%; height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
+              <svg id="reactionChartSvg" viewBox="0 0 540 240" style="width: 100%; height: 100%; display: block;">
+                <!-- 網格與座標軸 -->
+                <defs>
+                  <linearGradient id="rulerAreaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.25"/>
+                    <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.0"/>
+                  </linearGradient>
+                </defs>
+                <!-- 橫向網格輔助線 -->
+                <line x1="55" y1="35" x2="510" y2="35" stroke="#e2e8f0" stroke-dasharray="3,3"/>
+                <line x1="55" y1="75" x2="510" y2="75" stroke="#e2e8f0" stroke-dasharray="3,3"/>
+                <line x1="55" y1="115" x2="510" y2="115" stroke="#e2e8f0" stroke-dasharray="3,3"/>
+                <line x1="55" y1="155" x2="510" y2="155" stroke="#e2e8f0" stroke-dasharray="3,3"/>
+                <line x1="55" y1="195" x2="510" y2="195" stroke="#cbd5e1" stroke-width="1.5"/>
+
+                <!-- Y 軸文字 (反應時間 秒) -->
+                <text x="48" y="38" font-size="10" fill="#64748b" text-anchor="end">0.40s</text>
+                <text x="48" y="78" font-size="10" fill="#64748b" text-anchor="end">0.30s</text>
+                <text x="48" y="118" font-size="10" fill="#64748b" text-anchor="end">0.20s</text>
+                <text x="48" y="158" font-size="10" fill="#64748b" text-anchor="end">0.10s</text>
+                <text x="48" y="198" font-size="10" fill="#64748b" text-anchor="end">0.00s</text>
+                <text x="18" y="115" font-size="11" font-weight="700" fill="#475569" text-anchor="middle" transform="rotate(-90 18 115)">反應時間 (秒)</text>
+
+                <!-- X 軸文字 (次數 1~5) -->
+                <text x="100" y="215" font-size="11" font-weight="700" fill="#475569" text-anchor="middle">第 1 次</text>
+                <text x="195" y="215" font-size="11" font-weight="700" fill="#475569" text-anchor="middle">第 2 次</text>
+                <text x="290" y="215" font-size="11" font-weight="700" fill="#475569" text-anchor="middle">第 3 次</text>
+                <text x="385" y="215" font-size="11" font-weight="700" fill="#475569" text-anchor="middle">第 4 次</text>
+                <text x="480" y="215" font-size="11" font-weight="700" fill="#475569" text-anchor="middle">第 5 次</text>
+
+                <!-- 動態折線由 JS 即時渲染 -->
+                <path id="chartRulerArea" d="" fill="url(#rulerAreaGrad)"/>
+                <path id="chartRulerLine" d="" fill="none" stroke="#0284c7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                <path id="chartPupilLine" d="" fill="none" stroke="#ea580c" stroke-width="2.5" stroke-dasharray="5,4" stroke-linecap="round" stroke-linejoin="round"/>
+
+                <!-- 點標記容器 -->
+                <g id="chartRulerDots"></g>
+                <g id="chartPupilDots"></g>
+              </svg>
+            </div>
+
+            <!-- 5 次實驗數據輸入面板 -->
+            <div style="margin-top: 14px; padding: 12px; background: #f1f5f9; border-radius: 8px;">
+              <div style="font-size: 0.88rem; font-weight: 700; color: #334155; margin-bottom: 8px;">
+                📝 輸入 5 次實驗紀錄值（可微調數字，上方折線圖將即時重繪）：
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 8px;">
+                <div style="text-align: center;">
+                  <span style="font-size: 0.78rem; font-weight: 700; color: #0284c7;">第 1 次 (秒)</span>
+                  <input type="number" step="0.01" min="0.05" max="0.5" class="cyber-input chart-num-input" id="rulerVal1" value="0.32" style="padding: 4px 6px; font-size: 0.88rem; text-align: center;">
+                </div>
+                <div style="text-align: center;">
+                  <span style="font-size: 0.78rem; font-weight: 700; color: #0284c7;">第 2 次 (秒)</span>
+                  <input type="number" step="0.01" min="0.05" max="0.5" class="cyber-input chart-num-input" id="rulerVal2" value="0.27" style="padding: 4px 6px; font-size: 0.88rem; text-align: center;">
+                </div>
+                <div style="text-align: center;">
+                  <span style="font-size: 0.78rem; font-weight: 700; color: #0284c7;">第 3 次 (秒)</span>
+                  <input type="number" step="0.01" min="0.05" max="0.5" class="cyber-input chart-num-input" id="rulerVal3" value="0.23" style="padding: 4px 6px; font-size: 0.88rem; text-align: center;">
+                </div>
+                <div style="text-align: center;">
+                  <span style="font-size: 0.78rem; font-weight: 700; color: #0284c7;">第 4 次 (秒)</span>
+                  <input type="number" step="0.01" min="0.05" max="0.5" class="cyber-input chart-num-input" id="rulerVal4" value="0.20" style="padding: 4px 6px; font-size: 0.88rem; text-align: center;">
+                </div>
+                <div style="text-align: center;">
+                  <span style="font-size: 0.78rem; font-weight: 700; color: #0284c7;">第 5 次 (秒)</span>
+                  <input type="number" step="0.01" min="0.05" max="0.5" class="cyber-input chart-num-input" id="rulerVal5" value="0.18" style="padding: 4px 6px; font-size: 0.88rem; text-align: center;">
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="q-block">
@@ -427,7 +512,7 @@
           </div>
 
           <div class="q-block">
-            <label class="q-label"><span class="q-seq">Q2.</span> 在實驗測量中，比較兩者所需時間與數值穩定性：</label>
+            <label class="q-label"><span class="q-seq">Q2.</span> 觀察上方圖表數據趨勢，比較接尺反應與瞳孔反射之差異：</label>
             <div class="form-grid-2">
               <div class="form-group">
                 <label>數值區間變化較大（易受專注力干擾）：</label>
@@ -450,12 +535,12 @@
           </div>
 
           <div class="q-block">
-            <label class="q-label"><span class="q-seq">Q3.</span> 造成「接尺反應時間顯著長於瞳孔反射」的神經生理學原因為何？<span class="multi-tag">多選題</span></label>
+            <label class="q-label"><span class="q-seq">Q3.</span> 【關鍵圖表推理】接尺反應可以「經由多次練習使反應時間越來越短」，但瞳孔反射「無論練習幾次時間都一樣短且固定」，主要原因為何？<span class="multi-tag">多選題</span></label>
             <div class="cyber-checkbox-grid" id="q4_reason_checks">
               <label class="checkbox-pill">
-                <input type="checkbox" name="q4_rs" value="接尺路徑長需經大腦分析">
+                <input type="checkbox" name="q4_rs" value="接尺屬意識大腦具學習經驗記憶">
                 <span class="pill-box"></span>
-                <span class="pill-text">接尺屬於意識行為：路徑長，必須傳至大腦思考、判斷並發出命令</span>
+                <span class="pill-text">接尺屬於意識行為：中樞為大腦，具有學習、經驗累積與注意力強化的能力，故可越練越快</span>
               </label>
               <!-- 混淆誘答項隨機穿插 -->
               <label class="checkbox-pill">
@@ -464,14 +549,14 @@
                 <span class="pill-text">接尺時神經元本身的電訊號傳遞速度比反射神經元慢百倍</span>
               </label>
               <label class="checkbox-pill">
-                <input type="checkbox" name="q4_rs" value="瞳孔反射路徑短不經大腦">
+                <input type="checkbox" name="q4_rs" value="瞳孔反射中樞為腦幹不具意志學習">
                 <span class="pill-box"></span>
-                <span class="pill-text">瞳孔縮小為反射作用：中樞為腦幹，路徑極短且不經大腦判斷，快速穩定</span>
+                <span class="pill-text">瞳孔縮小為反射作用：中樞為腦幹，屬於先天固定的保護機制，不經大腦意識也不具學習調整性</span>
               </label>
               <label class="checkbox-pill">
-                <input type="checkbox" name="q4_rs" value="意識行為易受疲勞分心影響">
+                <input type="checkbox" name="q4_rs" value="反射路徑極短穩定爭取生機">
                 <span class="pill-box"></span>
-                <span class="pill-text">意識行為受大腦專注力、疲勞、情緒與外在干擾影響，故數據波動區間大</span>
+                <span class="pill-text">反射路徑極短，天生已特化為最高效率傳導，不需也不會因反覆刺激而改變反應時間</span>
               </label>
             </div>
           </div>
@@ -1200,6 +1285,6 @@
   <div class="cyber-toast" id="cyberToast"></div>
 
   <!-- 引入主腳本 (附帶版本號強制作廢舊快取) -->
-  <script src="nervous.js?v=3.0"></script>
+  <script src="nervous.js?v=3.1"></script>
 </body>
 </html>
