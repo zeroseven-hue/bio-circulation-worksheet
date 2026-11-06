@@ -29,6 +29,13 @@ document.addEventListener("DOMContentLoaded", () => {
   updateStepperCheckmarks();
   updateGlandNodeStatus();
   initExitGuard();
+
+  // 若記憶為小組模式，自動恢復上次開啟的任務子分頁
+  const savedGroupTab = localStorage.getItem("BIO_ACTIVE_GROUP_TAB");
+  if (savedGroupTab) {
+    const targetBtn = document.querySelector(`.group-tab-btn[data-gtab="${savedGroupTab}"]`);
+    if (targetBtn) targetBtn.click();
+  }
 });
 
 /** 初始化 701~710 與 01~35 純數字下拉選項 (嚴禁出現「班」與「號」字樣) */
@@ -167,30 +174,36 @@ function bindModeSwitching() {
   const identityTitle = document.getElementById("identityTitle");
 
   tabIndiv.addEventListener("click", () => {
-    if (currentMode === "individual") return;
     currentMode = "individual";
+    localStorage.setItem("BIO_ACTIVE_MODE", "individual");
     tabIndiv.classList.add("active");
     tabGroup.classList.remove("active");
     indivIdRow.classList.remove("hidden");
     groupIdRow.classList.add("hidden");
     indivContainer.classList.remove("hidden");
     groupContainer.classList.add("hidden");
-    identityTitle.textContent = "個人速記學習單 ｜ 基本資料設定";
-    showToast("已切換至【個人速記學習單】模式");
+    identityTitle.textContent = "個人學習單 ｜ 基本資料設定";
+    showToast("已切換至【個人學習單】模式");
   });
 
   tabGroup.addEventListener("click", () => {
-    if (currentMode === "group") return;
     currentMode = "group";
+    localStorage.setItem("BIO_ACTIVE_MODE", "group");
     tabGroup.classList.add("active");
     tabIndiv.classList.remove("active");
     groupIdRow.classList.remove("hidden");
     indivIdRow.classList.add("hidden");
     groupContainer.classList.remove("hidden");
     indivContainer.classList.add("hidden");
-    identityTitle.textContent = "小組統整學習單 ｜ 彈性分組與組員設定";
-    showToast("已切換至【小組統整學習單】模式");
+    identityTitle.textContent = "小組學習單 ｜ 彈性分組與組員設定";
+    showToast("已切換至【小組學習單】模式");
   });
+
+  // 記憶 F5 重新載入前的模式狀態
+  const savedMode = localStorage.getItem("BIO_ACTIVE_MODE");
+  if (savedMode === "group") {
+    tabGroup.click();
+  }
 
   // 小組人數下拉選單切換
   const groupSize = document.getElementById("groupSize");
@@ -336,6 +349,7 @@ function bindHumanViewerEvents() {
         pane.classList.add("hidden");
       });
 
+      localStorage.setItem("BIO_ACTIVE_GROUP_TAB", targetTab);
       if (targetTab === "tabGlands") {
         document.getElementById("paneGlands").classList.remove("hidden");
       } else if (targetTab === "tabCompare") {
@@ -1136,7 +1150,7 @@ function sendToGAS(payload, score) {
 
   scoreStatus.textContent = "📡 正在向課堂伺服器同步成績，請稍候...";
   detailsBox.innerHTML = `
-    <div><strong>作答模式：</strong>${payload.mode === "individual" ? "個人速記學習單" : "小組統整學習單"}</div>
+    <div><strong>作答模式：</strong>${payload.mode === "individual" ? "個人學習單" : "小組學習單"}</div>
     <div><strong>身分：</strong>${payload.class} 班 ${payload.seatOrGroup} ｜ ${payload.nameOrMembers}</div>
     <div style="margin-top:6px; color:#0284c7;">正在建立加密通道送出作答數據...</div>
   `;
