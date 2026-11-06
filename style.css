@@ -537,6 +537,10 @@ body {
   gap: 12px;
 }
 
+.checkbox-pill.trap-pill {
+  border-style: dashed;
+}
+
 .checkbox-pill {
   display: flex;
   align-items: center;

@@ -679,47 +679,136 @@ function handleSubmitIndividual() {
     if (!confirmSubmit) return;
   }
 
-  // 3. 前端客觀題計分計算（總分 100 分，素養題不扣分列待閱）
+  // 3. 前端客觀題與情意素養計分（總分 100 分，對齊 Rubric 評分規準）
   let score = 0;
-  // 關卡 1 (15分)
-  if (document.getElementById("q1_hormone").value === "生長激素") score += 8;
-  if (document.getElementById("q1_gland").value === "腦垂腺") score += 7;
+  const breakdownList = [];
 
-  // 關卡 2 (15分): 體溫升高, 消瘦緊張, 眼球凸出, 心跳加快
-  const q2Checked = Array.from(document.querySelectorAll('input[name="q2_symptom"]:checked')).map(cb => cb.value);
-  const q2Correct = ["體溫升高", "消瘦緊張", "眼球凸出", "心跳加快"];
-  const q2IsPerfect = q2Checked.length === 4 && q2Correct.every(s => q2Checked.includes(s));
-  if (q2IsPerfect) score += 15;
-  else if (q2Checked.filter(s => q2Correct.includes(s)).length >= 3 && !q2Checked.includes("抽搐") && !q2Checked.includes("呆小症")) score += 10;
-
-  // 關卡 3 (15分): 甲狀腺素; 影響生長發育, 智力發展受限
-  if (document.getElementById("q3_hormone").value === "甲狀腺素") score += 7;
-  const q3Checked = Array.from(document.querySelectorAll('input[name="q3_symptom"]:checked')).map(cb => cb.value);
-  if (q3Checked.includes("影響生長發育") && q3Checked.includes("智力發展受限") && !q3Checked.includes("骨質疏鬆") && !q3Checked.includes("血糖過高")) {
-    score += 8;
+  // 【影片一：巨人的眼淚】(15分)
+  const q1Height = parseInt(document.getElementById("q1_height").value, 10);
+  if (q1Height >= 230 && q1Height <= 236) {
+    score += 5;
+    breakdownList.push("Q1巨人身高正確 (+5)");
+  }
+  if (document.getElementById("q1_hormone").value === "生長激素") {
+    score += 5;
+    breakdownList.push("Q1生長激素正確 (+5)");
+  }
+  if (document.getElementById("q1_gland").value === "腦垂腺") {
+    score += 5;
+    breakdownList.push("Q1腦垂腺正確 (+5)");
   }
 
-  // 關卡 4 (15分): 包埋於甲狀腺背側, 調節血鈣與磷的濃度
-  if (document.getElementById("q4_location").value === "包埋於甲狀腺背側") score += 7;
-  if (document.getElementById("q4_function").value === "調節血鈣與磷的濃度") score += 8;
+  // 【影片二：甲狀腺機能亢進】(15分)
+  // 正確項 (共8項)：新陳代謝過高/消瘦, 眼凸, 手抖, 肌肉萎縮, 皮膚粗糙, 緊張頭痛, 血壓飆高/心臟負擔大, 骨質疏鬆
+  // 誘答項 (共3項)：身材矮小智力受限(呆小症), 血糖過高尿液排出(糖尿病), 血鈣過低抽搐(副甲狀腺)
+  const q2Checked = Array.from(document.querySelectorAll('input[name="q2_symptom"]:checked')).map(cb => cb.value);
+  const q2Traps = ["身材矮小智力受限", "血糖過高尿液排出", "血鈣過低抽搐"];
+  const hasTraps = q2Checked.some(item => q2Traps.includes(item));
+  const correctCount = q2Checked.filter(item => !q2Traps.includes(item)).length;
 
-  // 關卡 5 (15分): 腎上腺素, 腎臟上方; 4 個反應皆有
-  if (document.getElementById("q5_hormone").value === "腎上腺素") score += 5;
-  if (document.getElementById("q5_location").value === "腎臟上方") score += 5;
+  if (!hasTraps && correctCount >= 6) {
+    score += 15;
+    breakdownList.push(`Q2甲亢特徵精準全對 (+15)`);
+  } else if (!hasTraps && correctCount >= 4) {
+    score += 10;
+    breakdownList.push(`Q2甲亢特徵辨識良好 (+10)`);
+  } else if (!hasTraps && correctCount >= 2) {
+    score += 6;
+    breakdownList.push(`Q2甲亢特徵部分正確 (+6)`);
+  } else if (hasTraps) {
+    score += Math.max(3, correctCount * 2 - 4);
+    breakdownList.push(`Q2勾選含誘答項，部分得分`);
+  }
+
+  // 【影片三：不老女嬰】(15分)
+  // 年齡標準答案 30 歲
+  const q3Age = parseInt(document.getElementById("q3_age").value, 10);
+  if (q3Age === 30) {
+    score += 5;
+    breakdownList.push("Q3當時年齡30歲正確 (+5)");
+  } else if (q3Age >= 28 && q3Age <= 32) {
+    score += 3;
+    breakdownList.push("Q3年齡相近採計 (+3)");
+  }
+  if (document.getElementById("q3_hormone").value === "甲狀腺素") {
+    score += 5;
+    breakdownList.push("Q3缺乏甲狀腺素正確 (+5)");
+  }
+  const q3Checked = Array.from(document.querySelectorAll('input[name="q3_symptom"]:checked')).map(cb => cb.value);
+  const q3HasTraps = q3Checked.includes("骨質疏鬆") || q3Checked.includes("血糖過高");
+  const q3CorrectCount = q3Checked.filter(item => ["影響生長發育", "智力發展受限", "心智年齡與行為能力受限"].includes(item)).length;
+  if (!q3HasTraps && q3CorrectCount >= 2) {
+    score += 5;
+    breakdownList.push("Q3呆小症特徵精準 (+5)");
+  }
+
+  // 【影片四：骨折與副甲狀腺】(15分)
+  if (document.getElementById("q4_location").value === "包埋於甲狀腺背側") {
+    score += 7;
+    breakdownList.push("Q4副甲位置正確 (+7)");
+  }
+  if (document.getElementById("q4_function").value === "調節血鈣與磷的濃度") {
+    score += 8;
+    breakdownList.push("Q4副甲功能正確 (+8)");
+  }
+
+  // 【影片五：超越極限？】(15分，雙重機制評分)
+  if (document.getElementById("q5_hormone").value === "腎上腺素") {
+    score += 4;
+    breakdownList.push("Q5腎上腺素正確 (+4)");
+  }
+  if (document.getElementById("q5_location").value === "腎臟上方") {
+    score += 3;
+    breakdownList.push("Q5腎臟上方位置正確 (+3)");
+  }
   const q5Checked = Array.from(document.querySelectorAll('input[name="q5_func"]:checked')).map(cb => cb.value);
-  if (q5Checked.length === 4) score += 5;
+  const q5HasTrap = q5Checked.includes("腸胃消化吸收加速");
+  const q5CorrectList = ["心搏加快呼吸急促", "血壓上升", "腸胃蠕動減慢", "血糖升高", "提供更多氧氣與養分"];
+  const q5HitCount = q5Checked.filter(k => q5CorrectList.includes(k)).length;
+  if (!q5HasTrap && q5HitCount >= 4) {
+    score += 8;
+    breakdownList.push("Q5雙重應急機制精準全對 (+8)");
+  } else if (!q5HasTrap && q5HitCount >= 2) {
+    score += 5;
+    breakdownList.push("Q5應急機制部分正確 (+5)");
+  }
 
-  // 關卡 6 (15分): 胰島素; 配對 2 組; 照護
-  if (document.getElementById("q6_abnormal_hormone").value === "胰島素") score += 3;
-  if (document.getElementById("q6_lower_hormone").value === "胰島素" && document.getElementById("q6_lower_convert").value === "血糖→肝糖") score += 4;
-  if (document.getElementById("q6_raise_hormone").value === "升糖素" && document.getElementById("q6_raise_convert").value === "肝糖→血糖") score += 4;
+  // 【影片六：糖尿病原理】(15分)
+  if (document.getElementById("q6_abnormal_hormone").value === "胰島素") {
+    score += 3;
+  }
+  if (document.getElementById("q6_lower_hormone").value === "胰島素" && document.getElementById("q6_lower_convert").value === "血糖→肝糖") {
+    score += 4;
+    breakdownList.push("Q6降血糖機制正確 (+4)");
+  }
+  if (document.getElementById("q6_raise_hormone").value === "升糖素" && document.getElementById("q6_raise_convert").value === "肝糖→血糖") {
+    score += 4;
+    breakdownList.push("Q6升血糖機制正確 (+4)");
+  }
   const q6Care = Array.from(document.querySelectorAll('input[name="q6_care"]:checked')).map(cb => cb.value);
   if (q6Care.includes("定時服藥/注射") && q6Care.includes("控制飲食") && q6Care.includes("規律運動") && !q6Care.includes("多吃高糖食物")) {
     score += 4;
+    breakdownList.push("Q6照護原則全對 (+4)");
   }
 
-  // 關卡 7 (10分): 雄性激素減少、雌性激素增加
-  if (document.getElementById("q7_hormone_change").value === "雄性激素減少、雌性激素增加") score += 10;
+  // 【影片七：蜜蜂變性人與素養探討】(10分)
+  if (document.getElementById("q7_hormone_change").value === "雄性激素減少、雌性激素增加") {
+    score += 5;
+    breakdownList.push("Q7性激素消長正確 (+5)");
+  }
+  // 情意素養簡答（依據 Rubric：展現尊重、包容、友善、平常心等正面態度給分）
+  const essayText = document.getElementById("q7_literacy_essay").value.trim();
+  const empathyKeywords = ["尊重", "包容", "友善", "平常心", "同理", "支持", "傾聽", "陪伴", "正常", "平等"];
+  const hasEmpathy = empathyKeywords.some(kw => essayText.includes(kw));
+  if (essayText.length >= 10 && hasEmpathy) {
+    score += 5;
+    breakdownList.push("Q7情意素養充分展現 (+5)");
+  } else if (essayText.length >= 5) {
+    score += 3;
+    breakdownList.push("Q7素養簡答基本填寫 (+3)");
+  }
+
+  score = Math.min(100, score);
 
   // 打包 Payload 送出
   const payload = {
@@ -732,6 +821,7 @@ function handleSubmitIndividual() {
     nameOrMembers: name,
     studentName: name,
     score: score,
+    scoreBreakdown: breakdownList,
     essay: document.getElementById("q7_literacy_essay").value.trim(),
     detailData: JSON.parse(localStorage.getItem(STORAGE_KEY_INDIV) || "{}"),
     timestamp: new Date().toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })

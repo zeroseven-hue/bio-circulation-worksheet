@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>國中生物 4-2 內分泌系統數位互動學習單</title>
-  <link rel="stylesheet" href="style.css?v=2.1">
+  <link rel="stylesheet" href="style.css?v=2.2">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Orbitron:wght@600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -187,23 +187,28 @@
           <div class="q-block">
             <label class="q-label"><span class="q-seq">Q1.</span> 影片中的主角身高約為多少？</label>
             <div class="input-with-unit">
-              <input type="number" id="q1_height" class="cyber-input num-input" placeholder="請填數字 (例: 236)" min="100" max="300">
+              <input type="number" id="q1_height" class="cyber-input num-input" placeholder="請填數字 (例: 234)" min="100" max="300">
               <span class="input-unit">公分 (cm)</span>
             </div>
-            <div class="hint-text">💡 提示：根據影片紀錄，請填寫公分數。</div>
+            <div class="hint-text">💡 提示：請根據影片中紀錄報導的主角身高填寫數字。</div>
           </div>
 
           <div class="q-block">
-            <label class="q-label"><span class="q-seq">Q2.</span> 造成身高異常不斷長高的關鍵原因是什麼？</label>
+            <label class="q-label"><span class="q-seq">Q2.</span> 造成主角身高異常不斷長高的關鍵原因是什麼？</label>
             <div class="form-grid-2">
               <div class="form-group">
                 <label for="q1_hormone">分泌過多的【激素】：</label>
                 <div class="select-wrapper">
                   <select id="q1_hormone" class="cyber-select">
                     <option value="" disabled selected>請選擇激素</option>
-                    <option value="生長激素">生長激素</option>
-                    <option value="甲狀腺素">甲狀腺素</option>
-                    <option value="腎上腺素">腎上腺素</option>
+                    <option value="生長激素">生長激素 (Growth Hormone)</option>
+                    <option value="甲狀腺素">甲狀腺素 (Thyroxine)</option>
+                    <option value="副甲狀腺素">副甲狀腺素 (PTH)</option>
+                    <option value="腎上腺素">腎上腺素 (Epinephrine)</option>
+                    <option value="胰島素">胰島素 (Insulin)</option>
+                    <option value="升糖素">升糖素 (Glucagon)</option>
+                    <option value="雌性激素">雌性激素 (Estrogen)</option>
+                    <option value="雄性激素">雄性激素 (Androgen)</option>
                   </select>
                 </div>
               </div>
@@ -212,9 +217,12 @@
                 <div class="select-wrapper">
                   <select id="q1_gland" class="cyber-select">
                     <option value="" disabled selected>請選擇腺體</option>
-                    <option value="腦垂腺">腦垂腺</option>
-                    <option value="甲狀腺">甲狀腺</option>
-                    <option value="腎上腺">腎上腺</option>
+                    <option value="腦垂腺">🧠 腦垂腺 (腦下垂體)</option>
+                    <option value="甲狀腺">🦋 甲狀腺</option>
+                    <option value="副甲狀腺">🔘 副甲狀腺</option>
+                    <option value="腎上腺">⚡ 腎上腺</option>
+                    <option value="胰島">🥖 胰島</option>
+                    <option value="性腺">🧬 性腺 (卵巢/睪丸)</option>
                   </select>
                 </div>
               </div>
@@ -238,40 +246,66 @@
           </div>
 
           <div class="q-block">
-            <label class="q-label"><span class="q-seq">Q1.</span> 請勾選出屬於「甲狀腺機能亢進」的特徵症狀？<span class="multi-tag">多選題（請勾選所有正確項）</span></label>
+            <label class="q-label"><span class="q-seq">Q1.</span> 請勾選出影片中提到的「甲狀腺機能亢進」特徵與疾病反應？<span class="multi-tag">多選題（含誘答陷阱項，請仔細分辨）</span></label>
             <div class="cyber-checkbox-grid" id="q2_symptoms">
               <label class="checkbox-pill">
-                <input type="checkbox" name="q2_symptom" value="體溫升高">
+                <input type="checkbox" name="q2_symptom" value="新陳代謝過高/消瘦">
                 <span class="pill-box"></span>
-                <span class="pill-text">體溫升高 / 怕熱多汗</span>
+                <span class="pill-text">新陳代謝飆高 / 身體消瘦吃不胖</span>
               </label>
               <label class="checkbox-pill">
-                <input type="checkbox" name="q2_symptom" value="消瘦緊張">
-                <span class="pill-box"></span>
-                <span class="pill-text">身體消瘦 / 情緒緊張</span>
-              </label>
-              <label class="checkbox-pill">
-                <input type="checkbox" name="q2_symptom" value="眼球凸出">
+                <input type="checkbox" name="q2_symptom" value="眼凸">
                 <span class="pill-box"></span>
                 <span class="pill-text">眼球明顯凸出</span>
               </label>
               <label class="checkbox-pill">
-                <input type="checkbox" name="q2_symptom" value="心跳加快">
+                <input type="checkbox" name="q2_symptom" value="手抖">
                 <span class="pill-box"></span>
-                <span class="pill-text">心跳搏動加快</span>
+                <span class="pill-text">雙手不自主發抖</span>
               </label>
               <label class="checkbox-pill">
-                <input type="checkbox" name="q2_symptom" value="抽搐">
+                <input type="checkbox" name="q2_symptom" value="肌肉萎縮">
                 <span class="pill-box"></span>
-                <span class="pill-text">肌肉抽搐痙攣</span>
+                <span class="pill-text">肌肉萎縮無力</span>
               </label>
               <label class="checkbox-pill">
-                <input type="checkbox" name="q2_symptom" value="呆小症">
+                <input type="checkbox" name="q2_symptom" value="皮膚粗糙">
                 <span class="pill-box"></span>
-                <span class="pill-text">罹患呆小症</span>
+                <span class="pill-text">皮膚乾燥粗糙</span>
+              </label>
+              <label class="checkbox-pill">
+                <input type="checkbox" name="q2_symptom" value="緊張頭痛">
+                <span class="pill-box"></span>
+                <span class="pill-text">情緒高度緊張 / 常伴隨頭痛</span>
+              </label>
+              <label class="checkbox-pill">
+                <input type="checkbox" name="q2_symptom" value="血壓飆高/心臟負擔大">
+                <span class="pill-box"></span>
+                <span class="pill-text">血壓飆高 / 心臟衰竭衰弱</span>
+              </label>
+              <label class="checkbox-pill">
+                <input type="checkbox" name="q2_symptom" value="骨質疏鬆">
+                <span class="pill-box"></span>
+                <span class="pill-text">鈣質加速流失 / 骨質疏鬆</span>
+              </label>
+              <!-- 3 個經典誘答陷阱項 -->
+              <label class="checkbox-pill trap-pill">
+                <input type="checkbox" name="q2_symptom" value="身材矮小智力受限">
+                <span class="pill-box"></span>
+                <span class="pill-text">身材矮小且智力發展受限</span>
+              </label>
+              <label class="checkbox-pill trap-pill">
+                <input type="checkbox" name="q2_symptom" value="血糖過高尿液排出">
+                <span class="pill-box"></span>
+                <span class="pill-text">血糖過高由尿液排出</span>
+              </label>
+              <label class="checkbox-pill trap-pill">
+                <input type="checkbox" name="q2_symptom" value="血鈣過低抽搐">
+                <span class="pill-box"></span>
+                <span class="pill-text">血鈣過低引發肌肉抽搐</span>
               </label>
             </div>
-            <div class="hint-text">💡 提示：仔細分辨哪些是「代謝過旺」，哪些是副甲狀腺或幼年分泌不足所引起。</div>
+            <div class="hint-text">💡 聽力大挑戰：仔細看影片紀錄！選項中有穿插其他內分泌疾病的「誘答陷阱項」，勾錯會扣分喔！</div>
           </div>
 
           <div class="card-footer-nav">
@@ -291,11 +325,12 @@
           </div>
 
           <div class="q-block">
-            <label class="q-label"><span class="q-seq">Q1.</span> 影片中的瑪麗亞，當時的實際年齡大約幾歲？</label>
+            <label class="q-label"><span class="q-seq">Q1.</span> 影片採訪與記錄當時，瑪麗亞的年齡大約幾歲？</label>
             <div class="input-with-unit">
-              <input type="number" id="q3_age" class="cyber-input num-input" placeholder="請填寫歲數" min="0" max="100">
+              <input type="number" id="q3_age" class="cyber-input num-input" placeholder="請填數字 (例: 30)" min="0" max="100">
               <span class="input-unit">歲</span>
             </div>
+            <div class="hint-text">💡 提示：請填寫影片紀錄報導當時的實際年齡（不用自己拿今年去扣算喔！）。</div>
           </div>
 
           <div class="q-block">
@@ -303,15 +338,17 @@
             <div class="select-wrapper">
               <select id="q3_hormone" class="cyber-select">
                 <option value="" disabled selected>請選擇缺乏激素</option>
-                <option value="甲狀腺素">甲狀腺素</option>
                 <option value="生長激素">生長激素</option>
+                <option value="甲狀腺素">甲狀腺素</option>
                 <option value="副甲狀腺素">副甲狀腺素</option>
+                <option value="腎上腺素">腎上腺素</option>
+                <option value="胰島素">胰島素</option>
               </select>
             </div>
           </div>
 
           <div class="q-block">
-            <label class="q-label"><span class="q-seq">Q3.</span> 呆小症有哪些典型特徵？<span class="multi-tag">多選題</span></label>
+            <label class="q-label"><span class="q-seq">Q3.</span> 呆小症有哪些典型特徵與反應？<span class="multi-tag">多選題（含誘答項）</span></label>
             <div class="cyber-checkbox-grid" id="q3_symptoms">
               <label class="checkbox-pill">
                 <input type="checkbox" name="q3_symptom" value="影響生長發育">
@@ -321,20 +358,26 @@
               <label class="checkbox-pill">
                 <input type="checkbox" name="q3_symptom" value="智力發展受限">
                 <span class="pill-box"></span>
-                <span class="pill-text">智力發展顯著受限</span>
+                <span class="pill-text">智力發展顯著受限 / 智力不足</span>
               </label>
               <label class="checkbox-pill">
+                <input type="checkbox" name="q3_symptom" value="心智年齡與行為能力受限">
+                <span class="pill-box"></span>
+                <span class="pill-text">心智年齡幼小 / 語言與行為能力受限</span>
+              </label>
+              <!-- 誘答項 -->
+              <label class="checkbox-pill trap-pill">
                 <input type="checkbox" name="q3_symptom" value="骨質疏鬆">
                 <span class="pill-box"></span>
-                <span class="pill-text">骨質嚴重疏鬆</span>
+                <span class="pill-text">骨質嚴重疏鬆容易骨折</span>
               </label>
-              <label class="checkbox-pill">
+              <label class="checkbox-pill trap-pill">
                 <input type="checkbox" name="q3_symptom" value="血糖過高">
                 <span class="pill-box"></span>
-                <span class="pill-text">血糖濃度持續過高</span>
+                <span class="pill-text">血糖濃度持續過高有糖尿</span>
               </label>
             </div>
-            <div class="hint-text">💡 生物小補帖：侏儒症僅身材矮小但智力正常；呆小症則同時影響身材與智力。</div>
+            <div class="hint-text">💡 生物小補帖：侏儒症僅身材矮小但智力正常；呆小症則身材與智力皆受到顯著影響！</div>
           </div>
 
           <div class="card-footer-nav">
@@ -396,14 +439,16 @@
           </div>
 
           <div class="q-block">
-            <label class="q-label"><span class="q-seq">Q1.</span> 處於運動、情緒激動、壓力或緊急危難時，人體會大量分泌哪種激素？</label>
+            <label class="q-label"><span class="q-seq">Q1.</span> 處於運動、情緒激動、壓力或面臨生死交關的緊急危難時，人體會大量分泌哪種激素？</label>
             <div class="select-wrapper">
               <select id="q5_hormone" class="cyber-select">
                 <option value="" disabled selected>請選擇緊急激素</option>
-                <option value="腎上腺素">腎上腺素</option>
                 <option value="生長激素">生長激素</option>
                 <option value="甲狀腺素">甲狀腺素</option>
+                <option value="副甲狀腺素">副甲狀腺素</option>
+                <option value="腎上腺素">腎上腺素</option>
                 <option value="胰島素">胰島素</option>
+                <option value="升糖素">升糖素</option>
               </select>
             </div>
           </div>
@@ -413,18 +458,20 @@
             <div class="select-wrapper">
               <select id="q5_location" class="cyber-select">
                 <option value="" disabled selected>請選擇腺體位置</option>
-                <option value="腎臟上方">位於左右腎臟上方（像一頂小帽子）</option>
-                <option value="甲狀腺背面">甲狀腺背面組織中</option>
+                <option value="腎臟上方">位於左右兩側腎臟的上方（如頂端的小帽子）</option>
+                <option value="甲狀腺背側">包埋於甲狀腺背側組織中</option>
+                <option value="氣管兩側前方">脖子氣管兩側前方</option>
                 <option value="胰臟內部">胰臟內部的細胞團</option>
               </select>
             </div>
           </div>
 
           <div class="q-block">
-            <label class="q-label"><span class="q-seq">Q3.</span> 腎上腺素大量分泌時，會引發哪些生理反應以應對危機？<span class="multi-tag">多選題</span></label>
+            <label class="q-label"><span class="q-seq">Q3.</span> 腎上腺素大量分泌時，會引發哪些雙重生理機制以應付危機？<span class="multi-tag">多選題（含循環消化與能量雙機制）</span></label>
             <div class="cyber-checkbox-grid" id="q5_functions">
+              <!-- 機制一：循環與消化 -->
               <label class="checkbox-pill">
-                <input type="checkbox" name="q5_func" value="心搏加快">
+                <input type="checkbox" name="q5_func" value="心搏加快呼吸急促">
                 <span class="pill-box"></span>
                 <span class="pill-text">心搏加快 / 呼吸急促</span>
               </label>
@@ -436,15 +483,27 @@
               <label class="checkbox-pill">
                 <input type="checkbox" name="q5_func" value="腸胃蠕動減慢">
                 <span class="pill-box"></span>
-                <span class="pill-text">消化道腸胃蠕動減慢</span>
+                <span class="pill-text">消化道腸胃蠕動顯著減慢</span>
               </label>
+              <!-- 機制二：能量與血糖 -->
               <label class="checkbox-pill">
                 <input type="checkbox" name="q5_func" value="血糖升高">
                 <span class="pill-box"></span>
-                <span class="pill-text">分解肝糖 / 血糖迅速升高</span>
+                <span class="pill-text">促使肝糖分解 / 提高血糖濃度</span>
+              </label>
+              <label class="checkbox-pill">
+                <input type="checkbox" name="q5_func" value="提供更多氧氣與養分">
+                <span class="pill-box"></span>
+                <span class="pill-text">提供骨骼肌更多氧氣與養分應急</span>
+              </label>
+              <!-- 誘答項 -->
+              <label class="checkbox-pill trap-pill">
+                <input type="checkbox" name="q5_func" value="腸胃消化吸收加速">
+                <span class="pill-box"></span>
+                <span class="pill-text">促進胃腸消化吸收儲存養分</span>
               </label>
             </div>
-            <div class="hint-text">💡 概念驗證：緊急逃命時，消化吸收暫時不重要，因此腸胃蠕動會「減慢」以節約血液供給肌肉！</div>
+            <div class="hint-text">💡 概念驗證：緊急逃命時，血液優先供應心臟與骨骼肌，因此腸胃蠕動會「減慢」！</div>
           </div>
 
           <div class="card-footer-nav">
@@ -1122,6 +1181,6 @@
   <div class="cyber-toast" id="cyberToast"></div>
 
   <!-- 引入主腳本 (附帶版本號強制作廢舊快取) -->
-  <script src="game.js?v=2.1"></script>
+  <script src="game.js?v=2.2"></script>
 </body>
 </html>
