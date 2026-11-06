@@ -2,20 +2,9 @@
  * ==========================================================================
  * 國中生物 數位互動學習單平台 (Bio Learning Sheets Hub)
  * 全站共用後端 API (GAS) - 支援多單元共用、雙向讀寫、出缺席同步、手動補登、防洗板就地更新
+ * 
+ * 🌟 包含自訂選單：【🧬 生物學習單工具】➜【✨ 一鍵美化所有工作表 (高雅科技藍調)】
  * ==========================================================================
- * 
- * 核心機制：
- * 1. 【通用性 (Multi-Sheet Universal)】：
- *    - 支援依 sheetId / unitId (例如 "4-2", "4-1", "4-3", "1", "2" 等) 自動分頁建立與存取！
- *    - 未來任何新生物學習單上線，完全共用同一個試算表與同一組 GAS 部署，無需每次重建！
- * 
- * 2. 【doGet 雙向讀取】：
- *    - action="getRecords": 儀表板查詢指定班級、指定單元之已繳交紀錄與即時成績。
- *    - 讀取對應出缺席紀錄（請假座號名單、應到人數）。
- * 
- * 3. 【doPost 雙向寫入與防洗板】：
- *    - action="saveAttendance": 教師儀表板一鍵同步出缺席紀錄至【出缺席紀錄】分頁。
- *    - 學生作答提交 / 教師手動補登：比對「班級 + 座號」，若已存在則自動【就地覆蓋更新】，杜絕重複洗板。
  */
 
 function doGet(e) {
@@ -119,8 +108,7 @@ function doPost(e) {
       if (!attSheet) {
         attSheet = ss.insertSheet("出缺席紀錄");
         attSheet.appendRow(["時間戳記", "班級", "單元編號", "實到應交人數", "請假座號名單", "未交座號名單", "備註"]);
-        attSheet.getRange(1, 1, 1, 7).setFontWeight("bold").setBackground("#0284c7").setFontColor("#FFFFFF");
-        attSheet.setFrozenRows(1);
+        formatAttendanceSheet(attSheet);
       }
 
       attSheet.appendRow([
@@ -155,8 +143,7 @@ function doPost(e) {
         "評分明細", 
         "作答詳情 (JSON 原始紀錄)"
       ]);
-      sheet.getRange(1, 1, 1, 8).setFontWeight("bold").setBackground("#1e3a8a").setFontColor("#FFFFFF");
-      sheet.setFrozenRows(1);
+      formatBioSheet(sheet);
     }
 
     var targetSeat = String(data.studentSeat || data.seatOrGroup || "").padStart(2, '0');
@@ -165,7 +152,7 @@ function doPost(e) {
 
     // 🔍 查重比對：相同班級、相同座號
     if (sheet.getLastRow() > 1) {
-      var existingData = sheet.getRange(2, 2, sheet.getLastRow() - 1, 2).getValues(); // 班級(欄2), 座號(欄3)
+      var existingData = sheet.getRange(2, 2, sheet.getLastRow() - 1, 2).getValues();
       for (var r = 0; r < existingData.length; r++) {
         if (String(existingData[r][0]).trim() === targetClass && String(existingData[r][1]).padStart(2, '0') === targetSeat) {
           existingRowIndex = r + 2;
@@ -186,17 +173,19 @@ function doPost(e) {
     ];
 
     if (existingRowIndex > 0) {
-      // 重複繳交：原地更新覆蓋該行，維持乾淨整齊
+      // 原地覆蓋更新，杜絕重複洗板
       sheet.getRange(existingRowIndex, 1, 1, 8).setValues([rowValues]);
     } else {
-      // 全新繳交：新增一列
       sheet.appendRow(rowValues);
     }
 
-    // 自然排序（依座號升冪排序）
+    // 自然排序（依班級、座號升冪排序）
     var lastRow = sheet.getLastRow();
     if (lastRow > 2) {
-      sheet.getRange(2, 1, lastRow - 1, sheet.getLastColumn()).sort({ column: 3, ascending: true });
+      sheet.getRange(2, 1, lastRow - 1, sheet.getLastColumn()).sort([
+        { column: 2, ascending: true },
+        { column: 3, ascending: true }
+      ]);
     }
 
     return ContentService.createTextOutput(JSON.stringify({
@@ -211,4 +200,135 @@ function doPost(e) {
       message: error.toString()
     })).setMimeType(ContentService.MimeType.JSON);
   }
+}
+
+/**
+ * ==========================================================================
+ * 🎨 試算表美化核心邏輯 (科技藍調 / 斑馬交替色彩 / 精準欄寬 / 凍結置中)
+ * ==========================================================================
+ */
+function formatBioSheet(sheet) {
+  if (!sheet) return;
+
+  var lastRow = Math.max(sheet.getLastRow(), 2);
+  var lastCol = 8;
+
+  // 1. 凍結首列與表頭高度
+  sheet.setFrozenRows(1);
+  sheet.setRowHeight(1, 38);
+
+  // 2. 表頭文字與顏色 (科技深海藍 #1E3A8A)
+  var headerRange = sheet.getRange(1, 1, 1, lastCol);
+  headerRange
+    .setBackground("#1E3A8A")
+    .setFontColor("#FFFFFF")
+    .setFontWeight("bold")
+    .setFontSize(11)
+    .setVerticalAlignment("middle")
+    .setHorizontalAlignment("center");
+
+  // 3. 欄位最佳化寬度
+  sheet.setColumnWidth(1, 165); // 時間戳記
+  sheet.setColumnWidth(2, 75);  // 班級
+  sheet.setColumnWidth(3, 65);  // 座號
+  sheet.setColumnWidth(4, 95);  // 姓名
+  sheet.setColumnWidth(5, 115); // 組別/模式
+  sheet.setColumnWidth(6, 115); // 初評分數
+  sheet.setColumnWidth(7, 360); // 評分明細
+  sheet.setColumnWidth(8, 160); // 作答詳情 (JSON)
+
+  // 4. 資料列排版與垂直置中
+  if (lastRow > 1) {
+    var dataRange = sheet.getRange(2, 1, lastRow - 1, lastCol);
+    dataRange.setVerticalAlignment("middle").setFontSize(10);
+
+    sheet.getRange(2, 1, lastRow - 1, 1).setHorizontalAlignment("center"); // 時間
+    sheet.getRange(2, 2, lastRow - 1, 1).setHorizontalAlignment("center"); // 班級
+    sheet.getRange(2, 3, lastRow - 1, 1).setHorizontalAlignment("center").setNumberFormat("@"); // 座號補零純文字
+    sheet.getRange(2, 4, lastRow - 1, 1).setHorizontalAlignment("center").setFontWeight("bold"); // 姓名
+    sheet.getRange(2, 5, lastRow - 1, 1).setHorizontalAlignment("center"); // 組別
+    sheet.getRange(2, 6, lastRow - 1, 1).setHorizontalAlignment("center").setFontWeight("bold"); // 分數
+    sheet.getRange(2, 7, lastRow - 1, 1).setHorizontalAlignment("left");   // 明細
+    sheet.getRange(2, 8, lastRow - 1, 1).setHorizontalAlignment("left");   // 作答詳情
+
+    // 資料列高
+    for (var r = 2; r <= Math.min(lastRow, 50); r++) {
+      sheet.setRowHeight(r, 30);
+    }
+  }
+
+  // 5. 套用斑馬條紋交替色彩 (白底 / 冰川淺藍 #F0F9FF)
+  try {
+    var bandings = sheet.getBandings();
+    for (var b = 0; b < bandings.length; b++) {
+      bandings[b].remove();
+    }
+    var fullRange = sheet.getRange(1, 1, Math.max(lastRow, 50), lastCol);
+    fullRange.applyRowBanding()
+      .setHeaderRowColor("#1E3A8A")
+      .setFirstRowColor("#FFFFFF")
+      .setSecondRowColor("#F0F9FF");
+  } catch (bandErr) {}
+}
+
+/**
+ * 美化出缺席紀錄表
+ */
+function formatAttendanceSheet(sheet) {
+  if (!sheet) return;
+  sheet.setFrozenRows(1);
+  sheet.setRowHeight(1, 38);
+  var header = sheet.getRange(1, 1, 1, 7);
+  header.setBackground("#0284C7").setFontColor("#FFFFFF").setFontWeight("bold").setVerticalAlignment("middle").setHorizontalAlignment("center");
+  sheet.setColumnWidth(1, 165);
+  sheet.setColumnWidth(2, 75);
+  sheet.setColumnWidth(3, 85);
+  sheet.setColumnWidth(4, 110);
+  sheet.setColumnWidth(5, 180);
+  sheet.setColumnWidth(6, 220);
+  sheet.setColumnWidth(7, 150);
+}
+
+/**
+ * ==========================================================================
+ * 🚀 一鍵美化全試算表所有單元工作表 (點擊上方選單即可自動執行！)
+ * ==========================================================================
+ */
+function formatAllSheets() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheets = ss.getSheets();
+  var count = 0;
+
+  for (var i = 0; i < sheets.length; i++) {
+    var s = sheets[i];
+    var name = s.getName();
+    if (name.indexOf("作答紀錄") !== -1) {
+      if (s.getLastRow() > 2) {
+        try {
+          s.getRange(2, 1, s.getLastRow() - 1, 8).sort([
+            { column: 2, ascending: true },
+            { column: 3, ascending: true }
+          ]);
+        } catch(e) {}
+      }
+      formatBioSheet(s);
+      count++;
+    } else if (name === "出缺席紀錄") {
+      formatAttendanceSheet(s);
+    }
+  }
+
+  try {
+    SpreadsheetApp.getActiveSpreadsheet().toast("已成功套用生物科技藍調美化 " + count + " 個作答紀錄表！", "✨ 美化完成", 5);
+  } catch(e) {}
+}
+
+/**
+ * 試算表開啟時自動掛載自訂選單（就像行動方程式工具一樣！）
+ */
+function onOpen() {
+  SpreadsheetApp.getUi()
+    .createMenu('🧬 生物學習單工具')
+    .addItem('✨ 一鍵美化所有工作表 (套用科技藍調樣式)', 'formatAllSheets')
+    .addToUi();
 }
