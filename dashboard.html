@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>國中生物 數位學習單 即時繳交儀表板</title>
-  <link rel="stylesheet" href="assets/css/hub.css?v=2.1">
+  <link rel="stylesheet" href="assets/css/hub.css?v=4.0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@600;800&family=Orbitron:wght@700&display=swap" rel="stylesheet">
@@ -12,7 +12,7 @@
     /* ========================================================
        儀表板專屬主題配色變數 (支援翡翠綠、星空紫、科技藍、琥珀金動態切換)
        ======================================================== */
-    :root, [data-theme="ocean"] {
+    [data-theme="ocean"] {
       --dash-primary: #0284c7;
       --dash-accent: #0369a1;
       --dash-light: #f0f9ff;
@@ -34,13 +34,13 @@
       --dash-text-dark: #064e3b;
     }
 
-    [data-theme="purple"] {
+    :root, [data-theme="purple"] {
       --dash-primary: #7c3aed;
       --dash-accent: #6d28d9;
       --dash-light: #faf5ff;
       --dash-border: #c4b5fd;
       --dash-card-bg: #ffffff;
-      --dash-header-bg: linear-gradient(135deg, #3b0764 0%, #581c87 100%);
+      --dash-header-bg: linear-gradient(135deg, #2e1065 0%, #4c1d95 50%, #7c3aed 100%);
       --dash-progress-fill: linear-gradient(90deg, #a855f7, #7c3aed);
       --dash-text-dark: #3b0764;
     }
@@ -508,7 +508,7 @@
 }
 .pin-modal-card {
   background: #1e293b !important;
-  border: 2px solid #38bdf8 !important;
+  border: 2px solid #c084fc !important;
   border-radius: 24px !important;
   padding: 36px 28px !important;
   text-align: center !important;
@@ -548,14 +548,14 @@
   background: #0f172a !important;
   border: 2px solid #334155 !important;
   border-radius: 12px !important;
-  color: #38bdf8 !important;
+  color: #c084fc !important;
   margin-bottom: 12px !important;
   outline: none !important;
   box-sizing: border-box !important;
 }
 .pin-modal-card input:focus {
-  border-color: #38bdf8 !important;
-  box-shadow: 0 0 12px rgba(56, 189, 248, 0.4) !important;
+  border-color: #c084fc !important;
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.4) !important;
 }
 .pin-error-text {
   color: #f87171 !important;
@@ -567,7 +567,7 @@
 .btn-pin-submit {
   width: 100% !important;
   padding: 13px !important;
-  background: linear-gradient(135deg, #0284c7, #0369a1) !important;
+  background: linear-gradient(135deg, #7c3aed, #5b21b6) !important;
   color: white !important;
   border: none !important;
   border-radius: 12px !important;
@@ -584,7 +584,7 @@
 </style>
 
 </head>
-<body data-theme="ocean">
+<body data-theme="purple">
 
   <!-- 頂部導覽列 -->
   <header class="navbar">
@@ -638,9 +638,9 @@
 
         <!-- 4 色主題切換 (行動方程式同款：藍/綠/紫/琥珀) -->
         <select id="selectTheme" class="tool-select" style="font-size: 0.88rem;" onchange="changeDashboardTheme(this.value)">
+          <option value="purple" selected>🔮 典雅薰衣草紫 (全平台統一)</option>
           <option value="ocean">🌊 極光科技藍</option>
           <option value="emerald">🌿 翡翠森林綠</option>
-          <option value="purple">🔮 星幻星空紫</option>
           <option value="amber">🍯 經典琥珀金</option>
         </select>
 
@@ -777,7 +777,7 @@
 
     // 1. 初始化
     document.addEventListener('DOMContentLoaded', () => {
-      const savedTheme = localStorage.getItem('bio_dash_theme') || 'ocean';
+      const savedTheme = localStorage.getItem('bio_dash_theme') || 'purple';
       document.getElementById('selectTheme').value = savedTheme;
       changeDashboardTheme(savedTheme);
 
