@@ -1107,7 +1107,7 @@ function renderReactionChart() {
       const y = getY(val);
       dotsHtml += `
         <circle cx="${x}" cy="${y}" r="5" fill="#7c3aed" stroke="#ffffff" stroke-width="2"/>
-        <text x="${x}" y="${y - 9}" font-size="10" font-weight="700" fill="#0369a1" text-anchor="middle">${val.toFixed(2)}s</text>
+        <text x="${x}" y="${y - 9}" font-size="10" font-weight="700" fill="#6d28d9" text-anchor="middle">${val.toFixed(2)}s</text>
       `;
     });
     rulerDotsG.innerHTML = dotsHtml;

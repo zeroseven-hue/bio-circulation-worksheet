@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>國中生物 4-1 神經系統 ✕ 交通安全 數位互動學習單</title>
-  <link rel="stylesheet" href="style.css?v=3.2">
+  <link rel="stylesheet" href="style.css?v=4.0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Orbitron:wght@600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -26,7 +26,7 @@
 }
 .pin-modal-card {
   background: #1e293b !important;
-  border: 2px solid #38bdf8 !important;
+  border: 2px solid #c084fc !important;
   border-radius: 24px !important;
   padding: 36px 28px !important;
   text-align: center !important;
@@ -66,13 +66,13 @@
   background: #0f172a !important;
   border: 2px solid #334155 !important;
   border-radius: 12px !important;
-  color: #38bdf8 !important;
+  color: #c084fc !important;
   margin-bottom: 12px !important;
   outline: none !important;
   box-sizing: border-box !important;
 }
 .pin-modal-card input:focus {
-  border-color: #38bdf8 !important;
+  border-color: #c084fc !important;
   box-shadow: 0 0 12px rgba(56, 189, 248, 0.4) !important;
 }
 .pin-error-text {
@@ -85,7 +85,7 @@
 .btn-pin-submit {
   width: 100% !important;
   padding: 13px !important;
-  background: linear-gradient(135deg, #0284c7, #0369a1) !important;
+  background: linear-gradient(135deg, #7c3aed, #6d28d9) !important;
   color: white !important;
   border: none !important;
   border-radius: 12px !important;
@@ -102,7 +102,7 @@
 </style>
 
 </head>
-<body class="theme-neuro-purple">
+<body>
   <!-- 頁首 Header 導航 -->
   <header class="app-header">
     <div class="header-container">
@@ -514,7 +514,7 @@
                 📈 實驗連續 5 次反應時間折線對比圖（次數 1~5）
               </div>
               <div style="display: flex; gap: 14px; font-size: 0.85rem; font-weight: 700;">
-                <span style="color: #0284c7; display: flex; align-items: center; gap: 4px;"><span style="display:inline-block; width:12px; height:3px; background:#0284c7; border-radius:2px;"></span> 接尺反應 (有意識行為)</span>
+                <span style="color: #7c3aed; display: flex; align-items: center; gap: 4px;"><span style="display:inline-block; width:12px; height:3px; background:#7c3aed; border-radius:2px;"></span> 接尺反應 (有意識行為)</span>
                 <span style="color: #ea580c; display: flex; align-items: center; gap: 4px;"><span style="display:inline-block; width:12px; height:3px; background:#ea580c; border-radius:2px;"></span> 瞳孔反射 (反射作用)</span>
               </div>
             </div>
@@ -525,8 +525,8 @@
                 <!-- 網格與座標軸 -->
                 <defs>
                   <linearGradient id="rulerAreaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.25"/>
-                    <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.0"/>
+                    <stop offset="0%" stop-color="#c084fc" stop-opacity="0.25"/>
+                    <stop offset="100%" stop-color="#c084fc" stop-opacity="0.0"/>
                   </linearGradient>
                 </defs>
                 <!-- 橫向網格輔助線 -->
@@ -553,7 +553,7 @@
 
                 <!-- 動態折線由 JS 即時渲染 -->
                 <path id="chartRulerArea" d="" fill="url(#rulerAreaGrad)"/>
-                <path id="chartRulerLine" d="" fill="none" stroke="#0284c7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                <path id="chartRulerLine" d="" fill="none" stroke="#7c3aed" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
                 <path id="chartPupilLine" d="" fill="none" stroke="#ea580c" stroke-width="2.5" stroke-dasharray="5,4" stroke-linecap="round" stroke-linejoin="round"/>
 
                 <!-- 點標記容器 -->
@@ -569,23 +569,23 @@
               </div>
               <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 8px;">
                 <div style="text-align: center;">
-                  <span style="font-size: 0.78rem; font-weight: 700; color: #0284c7;">第 1 次 (秒)</span>
+                  <span style="font-size: 0.78rem; font-weight: 700; color: #7c3aed;">第 1 次 (秒)</span>
                   <input type="number" step="0.01" min="0.05" max="0.5" class="cyber-input chart-num-input" id="rulerVal1" value="0.32" style="padding: 4px 6px; font-size: 0.88rem; text-align: center;">
                 </div>
                 <div style="text-align: center;">
-                  <span style="font-size: 0.78rem; font-weight: 700; color: #0284c7;">第 2 次 (秒)</span>
+                  <span style="font-size: 0.78rem; font-weight: 700; color: #7c3aed;">第 2 次 (秒)</span>
                   <input type="number" step="0.01" min="0.05" max="0.5" class="cyber-input chart-num-input" id="rulerVal2" value="0.27" style="padding: 4px 6px; font-size: 0.88rem; text-align: center;">
                 </div>
                 <div style="text-align: center;">
-                  <span style="font-size: 0.78rem; font-weight: 700; color: #0284c7;">第 3 次 (秒)</span>
+                  <span style="font-size: 0.78rem; font-weight: 700; color: #7c3aed;">第 3 次 (秒)</span>
                   <input type="number" step="0.01" min="0.05" max="0.5" class="cyber-input chart-num-input" id="rulerVal3" value="0.23" style="padding: 4px 6px; font-size: 0.88rem; text-align: center;">
                 </div>
                 <div style="text-align: center;">
-                  <span style="font-size: 0.78rem; font-weight: 700; color: #0284c7;">第 4 次 (秒)</span>
+                  <span style="font-size: 0.78rem; font-weight: 700; color: #7c3aed;">第 4 次 (秒)</span>
                   <input type="number" step="0.01" min="0.05" max="0.5" class="cyber-input chart-num-input" id="rulerVal4" value="0.20" style="padding: 4px 6px; font-size: 0.88rem; text-align: center;">
                 </div>
                 <div style="text-align: center;">
-                  <span style="font-size: 0.78rem; font-weight: 700; color: #0284c7;">第 5 次 (秒)</span>
+                  <span style="font-size: 0.78rem; font-weight: 700; color: #7c3aed;">第 5 次 (秒)</span>
                   <input type="number" step="0.01" min="0.05" max="0.5" class="cyber-input chart-num-input" id="rulerVal5" value="0.18" style="padding: 4px 6px; font-size: 0.88rem; text-align: center;">
                 </div>
               </div>
@@ -787,8 +787,8 @@
               <svg viewBox="0 0 400 480" class="nerve-svg-map" style="width: 100%; height: 100%; max-height: 420px; display: block; margin: 0 auto;">
                 <defs>
                   <linearGradient id="cerebrumGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#38bdf8"/>
-                    <stop offset="100%" stop-color="#0284c7"/>
+                    <stop offset="0%" stop-color="#c084fc"/>
+                    <stop offset="100%" stop-color="#7c3aed"/>
                   </linearGradient>
                   <linearGradient id="cerebellumGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stop-color="#a855f7"/>
@@ -813,7 +813,7 @@
                 <rect x="200" y="290" width="18" height="150" rx="8" fill="url(#cordGrad)" opacity="0.85" stroke="#a7f3d0" stroke-width="2"/>
                 
                 <!-- 裝飾導線 -->
-                <line x1="210" y1="120" x2="350" y2="110" stroke="#38bdf8" stroke-dasharray="3,3"/>
+                <line x1="210" y1="120" x2="350" y2="110" stroke="#c084fc" stroke-dasharray="3,3"/>
                 <line x1="280" y1="260" x2="350" y2="230" stroke="#c084fc" stroke-dasharray="3,3"/>
                 <line x1="210" y1="250" x2="110" y2="250" stroke="#fbbf24" stroke-dasharray="3,3"/>
                 <line x1="210" y1="360" x2="110" y2="360" stroke="#34d399" stroke-dasharray="3,3"/>
@@ -1302,10 +1302,10 @@
           </article>
 
           <!-- 任務三：全組友善交通與防禦性駕駛行動宣言 -->
-          <article class="movie-task-card glass-panel" style="border: 2px solid #38bdf8;">
+          <article class="movie-task-card glass-panel" style="border: 2px solid #c084fc;">
             <div class="movie-card-header">
               <div class="movie-title-wrap">
-                <span class="movie-badge" style="background: #0284c7;">社會公民素養</span>
+                <span class="movie-badge" style="background: #7c3aed;">社會公民素養</span>
                 <span class="movie-name">全組友善交通 ✕ 防禦性用路人行動承諾</span>
               </div>
               <div class="assignee-select-wrap">
@@ -1378,7 +1378,7 @@
   <div class="cyber-toast" id="cyberToast"></div>
 
   <!-- 引入主腳本 (附帶版本號強制作廢舊快取) -->
-<script src="nervous.js?v=3.2"></script>
+<script src="nervous.js?v=4.0"></script>
 
 <!-- 🔒 教師安全防護 PIN 密碼解鎖 Modal -->
 <div id="pinLockModal" class="pin-modal-overlay">

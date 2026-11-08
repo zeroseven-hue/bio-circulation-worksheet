@@ -1154,7 +1154,7 @@ function sendToGAS(payload, score) {
   detailsBox.innerHTML = `
     <div><strong>作答模式：</strong>${payload.mode === "individual" ? "個人學習單" : "小組學習單"}</div>
     <div><strong>身分：</strong>${payload.class} 班 ${payload.seatOrGroup} ｜ ${payload.nameOrMembers}</div>
-    <div style="margin-top:6px; color:#0284c7;">正在建立加密通道送出作答數據...</div>
+    <div style="margin-top:6px; color:#7c3aed;">正在建立加密通道送出作答數據...</div>
   `;
 
   // 8 秒逾時防塞車降級機制

@@ -10,14 +10,14 @@
   --bg-deep-space: #070d19;
   --bg-cyber-dark: #0f1c32;
   --card-glass-bg: #ffffff;
-  --card-border: #bfdbfe;
-  --card-border-glow: #38bdf8;
+  --card-border: #ddd6fe;
+  --card-border-glow: #c084fc;
   
-  --primary-blue: #0284c7;
-  --primary-indigo: #1d4ed8;
-  --ice-blue: #38bdf8;
-  --ice-blue-light: #e0f2fe;
-  --cyan-glow: #06b6d4;
+  --primary-blue: #7c3aed;
+  --primary-indigo: #5b21b6;
+  --ice-blue: #a855f7;
+  --ice-blue-light: #f3e8ff;
+  --cyan-glow: #c084fc;
   --accent-gold: #f59e0b;
   --accent-green: #10b981;
   --accent-red: #ef4444;
@@ -34,8 +34,8 @@
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 18px;
-  --shadow-hud: 0 4px 20px -2px rgba(2, 132, 199, 0.15), 0 2px 6px rgba(0, 0, 0, 0.05);
-  --shadow-glow: 0 0 20px rgba(56, 189, 248, 0.4);
+  --shadow-hud: 0 4px 20px -2px rgba(124, 58, 237, 0.15), 0 2px 6px rgba(0, 0, 0, 0.05);
+  --shadow-glow: 0 0 20px rgba(168, 85, 247, 0.4);
 }
 
 * {
@@ -103,8 +103,8 @@ body {
   font-family: var(--font-display);
   font-size: 0.85rem;
   font-weight: 800;
-  color: #0369a1;
-  background: #e0f2fe;
+  color: #6d28d9;
+  background: #f3e8ff;
   padding: 4px 10px;
   border-radius: 6px;
   border: 1px solid #7dd3fc;
@@ -154,7 +154,7 @@ body {
 }
 
 .mode-tab.active {
-  background: linear-gradient(135deg, #0284c7, #1d4ed8);
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
   color: #ffffff;
   box-shadow: 0 2px 12px rgba(2, 132, 199, 0.5);
 }
@@ -167,8 +167,8 @@ body {
 }
 
 .mode-tab.active .status-indicator {
-  background: #38bdf8;
-  box-shadow: 0 0 8px #38bdf8;
+  background: #c084fc;
+  box-shadow: 0 0 8px #c084fc;
 }
 
 /* ================= 核心排版與玻璃卡片 ================= */
@@ -196,7 +196,7 @@ body {
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, #0284c7, #38bdf8, #1d4ed8);
+  background: linear-gradient(90deg, #7c3aed, #c084fc, #5b21b6);
 }
 
 /* 身分設定卡片 */
@@ -288,7 +288,7 @@ body {
 }
 
 .cyber-input:focus, .cyber-select:focus, .cyber-textarea:focus {
-  border-color: #0284c7;
+  border-color: #7c3aed;
   background: #ffffff;
   box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2);
 }
@@ -348,7 +348,7 @@ body {
 .slot-tag {
   font-size: 0.82rem;
   font-weight: 800;
-  color: #0284c7;
+  color: #7c3aed;
   white-space: nowrap;
 }
 
@@ -409,8 +409,8 @@ body {
 }
 
 .step-btn.active {
-  background: #0284c7;
-  border-color: #0284c7;
+  background: #7c3aed;
+  border-color: #7c3aed;
   color: #ffffff;
   box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
 }
@@ -438,7 +438,7 @@ body {
   font-family: var(--font-display);
   font-size: 0.8rem;
   font-weight: 800;
-  background: #0284c7;
+  background: #7c3aed;
   color: #ffffff;
   padding: 3px 10px;
   border-radius: 6px;
@@ -455,7 +455,7 @@ body {
   margin-bottom: 22px;
   padding: 10px 14px;
   background: #f8fafc;
-  border-left: 4px solid #0284c7;
+  border-left: 4px solid #7c3aed;
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
 
@@ -483,7 +483,7 @@ body {
 }
 
 .q-seq {
-  color: #0284c7;
+  color: #7c3aed;
   font-family: var(--font-code);
   font-weight: 900;
   margin-right: 4px;
@@ -574,8 +574,8 @@ body {
 }
 
 .checkbox-pill input[type="checkbox"]:checked + .pill-box {
-  background: #0284c7;
-  border-color: #0284c7;
+  background: #7c3aed;
+  border-color: #7c3aed;
 }
 
 .checkbox-pill input[type="checkbox"]:checked + .pill-box::after {
@@ -586,12 +586,12 @@ body {
 }
 
 .checkbox-pill:hover {
-  border-color: #0284c7;
+  border-color: #7c3aed;
   background: #f0f9ff;
 }
 
 .checkbox-pill input[type="checkbox"]:checked ~ .pill-text {
-  color: #0369a1;
+  color: #6d28d9;
   font-weight: 700;
 }
 
@@ -609,7 +609,7 @@ body {
 
 .match-card {
   background: #f8fafc;
-  border: 1px solid #bfdbfe;
+  border: 1px solid #ddd6fe;
   border-radius: var(--radius-md);
   padding: 16px;
 }
@@ -617,7 +617,7 @@ body {
 .match-header {
   font-size: 0.95rem;
   font-weight: 800;
-  color: #0369a1;
+  color: #6d28d9;
   margin-bottom: 12px;
   border-bottom: 1px solid #e2e8f0;
   padding-bottom: 6px;
@@ -678,7 +678,7 @@ body {
 .text-hint-btn {
   background: none;
   border: none;
-  color: #0284c7;
+  color: #7c3aed;
   font-size: 0.85rem;
   font-weight: 700;
   cursor: pointer;
@@ -743,7 +743,7 @@ body {
 }
 
 .primary-btn {
-  background: linear-gradient(135deg, #0284c7, #1d4ed8);
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
   color: #ffffff;
   box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
 }
@@ -783,7 +783,7 @@ body {
 .submit-warning {
   font-size: 0.9rem;
   font-weight: 700;
-  color: #0369a1;
+  color: #6d28d9;
   margin-bottom: 14px;
 }
 
@@ -864,8 +864,8 @@ body {
 }
 
 .dot.pulse {
-  background: #38bdf8;
-  box-shadow: 0 0 8px #38bdf8;
+  background: #c084fc;
+  box-shadow: 0 0 8px #c084fc;
 }
 
 .dot.done {
@@ -929,7 +929,7 @@ body {
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  background: #0284c7;
+  background: #7c3aed;
   color: #ffffff;
   font-family: var(--font-display);
   font-weight: 900;
@@ -945,7 +945,7 @@ body {
 
 .img-hotspot:hover .hotspot-badge {
   transform: scale(1.15);
-  background: #0369a1;
+  background: #6d28d9;
 }
 
 .img-hotspot.active-target .hotspot-badge {
@@ -1008,7 +1008,7 @@ body {
 
 .group-tab-btn.active {
   background: #ffffff;
-  color: #0284c7;
+  color: #7c3aed;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
@@ -1016,8 +1016,8 @@ body {
   font-size: 0.75rem;
   padding: 2px 6px;
   border-radius: 4px;
-  background: #e0f2fe;
-  color: #0369a1;
+  background: #f3e8ff;
+  color: #6d28d9;
 }
 
 .group-tab-pane {
@@ -1105,7 +1105,7 @@ body {
 }
 
 .hud-target-line {
-  stroke: rgba(56, 189, 248, 0.4);
+  stroke: rgba(168, 85, 247, 0.4);
   stroke-width: 1.5;
   stroke-dasharray: 4 3;
 }
@@ -1123,7 +1123,7 @@ body {
 }
 
 .node-core {
-  fill: #0284c7;
+  fill: #7c3aed;
   stroke: #ffffff;
   stroke-width: 2;
   transition: all 0.25s ease;
@@ -1146,8 +1146,8 @@ body {
 
 /* 活躍點擊目標 */
 .gland-target-node.active-target .node-core {
-  fill: #1d4ed8;
-  stroke: #38bdf8;
+  fill: #5b21b6;
+  stroke: #c084fc;
   stroke-width: 3;
 }
 
@@ -1235,7 +1235,7 @@ body {
 .task-badge {
   font-size: 1.1rem;
   font-weight: 800;
-  color: #0369a1;
+  color: #6d28d9;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -1315,7 +1315,7 @@ body {
 
 .dim-label {
   font-weight: 700;
-  color: #0369a1;
+  color: #6d28d9;
   width: 25%;
   background: #f8fafc !important;
 }
@@ -1470,7 +1470,7 @@ body {
   color: #ffffff;
   padding: 12px 20px;
   border-radius: var(--radius-md);
-  border-left: 4px solid #38bdf8;
+  border-left: 4px solid #c084fc;
   box-shadow: 0 8px 24px rgba(0,0,0,0.3);
   font-size: 0.95rem;
   font-weight: 600;
@@ -1547,7 +1547,7 @@ body {
 .flow-step .step-tag {
   font-size: 0.75rem;
   font-weight: 700;
-  color: #0284c7;
+  color: #7c3aed;
   text-transform: uppercase;
 }
 
@@ -1566,7 +1566,7 @@ body {
 .flow-arrow {
   font-size: 1.3rem;
   font-weight: 900;
-  color: #38bdf8;
+  color: #c084fc;
   padding: 0 4px;
 }
 
