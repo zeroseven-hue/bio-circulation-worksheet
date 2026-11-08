@@ -412,11 +412,17 @@
     }
 
     .seat-card.missing {
-      background: #fffbeb;
-      border-color: #fde68a;
+      background: #faf5ff;
+      border-color: #ddd6fe;
     }
-    .seat-card.missing .seat-name { color: #b45309; }
-    .seat-card.missing .seat-status-text { color: #d97706; }
+    .seat-card.missing .seat-num { color: #8b5cf6; }
+    .seat-card.missing .seat-name { color: #6d28d9; }
+    .seat-card.missing .seat-status-text { color: #7c3aed; }
+    .seat-card.missing:hover {
+      border-color: #a855f7;
+      background: #f3e8ff;
+      box-shadow: 0 4px 12px rgba(124, 58, 237, 0.15);
+    }
 
     .seat-card.absent {
       background: #f1f5f9;
