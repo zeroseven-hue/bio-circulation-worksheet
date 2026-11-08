@@ -1580,3 +1580,118 @@ body {
     transform: rotate(90deg);
   }
 }
+
+/* ==========================================================================
+   4-1 神經系統 專屬主題：夢幻電光紫 / 薰衣草紫 (Electric Purple & Lavender)
+   依據使用者的視覺調色盤量身打造，與 4-2 科技藍做出清晰視覺區隔
+   ========================================================================== */
+
+body.theme-neuro-purple {
+  --primary-blue: #7c3aed;
+  --primary-indigo: #5b21b6;
+  --ice-blue: #a855f7;
+  --ice-blue-light: #f3e8ff;
+  --cyan-glow: #c084fc;
+  --card-border: #ddd6fe;
+  --card-border-glow: #c084fc;
+  --shadow-hud: 0 4px 20px -2px rgba(124, 58, 237, 0.2), 0 2px 6px rgba(0, 0, 0, 0.05);
+  --shadow-glow: 0 0 20px rgba(168, 85, 247, 0.45);
+}
+
+/* Header & Brand Badge */
+body.theme-neuro-purple .brand-badge {
+  background: linear-gradient(135deg, #f3e8ff 0%, #ede9fe 100%) !important;
+  color: #5b21b6 !important;
+  border: 1px solid #c4b5fd !important;
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.3) !important;
+}
+
+/* Mode Switcher */
+body.theme-neuro-purple .mode-tab.active {
+  background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4) !important;
+}
+body.theme-neuro-purple .mode-tab.active .status-indicator {
+  background: #f0abfc !important;
+  box-shadow: 0 0 8px #f0abfc !important;
+}
+
+/* Stepper Navigation */
+body.theme-neuro-purple .step-btn.active {
+  background: #7c3aed !important;
+  border-color: #6d28d9 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.35) !important;
+}
+body.theme-neuro-purple .step-btn.completed {
+  background: #f5f3ff !important;
+  border-color: #c4b5fd !important;
+  color: #6d28d9 !important;
+}
+body.theme-neuro-purple .step-btn.completed .step-num {
+  background: #7c3aed !important;
+  color: #ffffff !important;
+}
+
+/* Panel Header & Glow Dot */
+body.theme-neuro-purple .glow-dot {
+  background: #a855f7 !important;
+  box-shadow: 0 0 10px #c084fc !important;
+}
+
+/* Card Badge */
+body.theme-neuro-purple .card-badge {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3) !important;
+}
+
+/* Form Controls Focus */
+body.theme-neuro-purple .hud-input:focus,
+body.theme-neuro-purple .hud-select:focus,
+body.theme-neuro-purple .hud-textarea:focus {
+  border-color: #7c3aed !important;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2) !important;
+}
+
+/* Buttons */
+body.theme-neuro-purple .primary-btn,
+body.theme-neuro-purple .glow-submit-btn {
+  background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%) !important;
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4) !important;
+}
+body.theme-neuro-purple .primary-btn:hover,
+body.theme-neuro-purple .glow-submit-btn:hover {
+  background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%) !important;
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.55) !important;
+}
+
+/* Group Tabs */
+body.theme-neuro-purple .group-tab-btn.active {
+  color: #6d28d9 !important;
+  border-bottom: 3px solid #7c3aed !important;
+}
+
+/* Interactive Hotspots & Flow Steps */
+body.theme-neuro-purple .hotspot.active .hotspot-circle {
+  stroke: #7c3aed !important;
+  fill: #f3e8ff !important;
+}
+body.theme-neuro-purple .flow-step .step-tag {
+  background: #ede9fe !important;
+  color: #6d28d9 !important;
+  border: 1px solid #c4b5fd !important;
+}
+body.theme-neuro-purple .flow-arrow {
+  color: #7c3aed !important;
+}
+
+/* Interactive SVG Hotspots */
+body.theme-neuro-purple .brain-dot.active circle {
+  fill: #7c3aed !important;
+  stroke: #c084fc !important;
+}
+body.theme-neuro-purple .brain-dot:hover circle {
+  fill: #a855f7 !important;
+}

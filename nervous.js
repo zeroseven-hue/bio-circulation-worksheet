@@ -938,7 +938,7 @@ function sendToGAS(payload, score) {
     <div><strong>單元：</strong>【單元 4-1】神經系統 ✕ 交通安全</div>
     <div><strong>作答模式：</strong>${payload.mode === "individual" ? "個人學習單" : "小組學習單"}</div>
     <div><strong>身分：</strong>${payload.class} 班 ${payload.seatOrGroup} ｜ ${payload.nameOrMembers}</div>
-    <div style="margin-top:6px; color:#0284c7;">正在建立加密通道送出作答數據...</div>
+    <div style="margin-top:6px; color:#7c3aed;">正在建立加密通道送出作答數據...</div>
   `;
 
   let isHandled = false;
@@ -1106,7 +1106,7 @@ function renderReactionChart() {
       const x = xCoords[idx];
       const y = getY(val);
       dotsHtml += `
-        <circle cx="${x}" cy="${y}" r="5" fill="#0284c7" stroke="#ffffff" stroke-width="2"/>
+        <circle cx="${x}" cy="${y}" r="5" fill="#7c3aed" stroke="#ffffff" stroke-width="2"/>
         <text x="${x}" y="${y - 9}" font-size="10" font-weight="700" fill="#0369a1" text-anchor="middle">${val.toFixed(2)}s</text>
       `;
     });

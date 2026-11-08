@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>國中生物 4-1 神經系統 ✕ 交通安全 數位互動學習單</title>
-  <link rel="stylesheet" href="style.css?v=3.1">
+  <link rel="stylesheet" href="style.css?v=3.2">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Orbitron:wght@600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -102,7 +102,7 @@
 </style>
 
 </head>
-<body class="theme-tech-blue">
+<body class="theme-neuro-purple">
   <!-- 頁首 Header 導航 -->
   <header class="app-header">
     <div class="header-container">
@@ -1378,7 +1378,7 @@
   <div class="cyber-toast" id="cyberToast"></div>
 
   <!-- 引入主腳本 (附帶版本號強制作廢舊快取) -->
-  <script src="nervous.js?v=3.1"></script>
+<script src="nervous.js?v=3.2"></script>
 
 <!-- 🔒 教師安全防護 PIN 密碼解鎖 Modal -->
 <div id="pinLockModal" class="pin-modal-overlay">
@@ -1394,72 +1394,6 @@
 
 
 <script>
-// ==================== 🔒 教師安全驗證門禁系統 (預設8088，無洩漏) ====================
-(function initGlobalHallGatekeeper() {
-  const SESSION_AUTH_KEY = 'bio_teacher_auth_passed';
-  const PIN_KEY = 'teacher_global_pin';
-  const DEFAULT_PIN = '8088';
-
-  function isAuthed() {
-    return sessionStorage.getItem(SESSION_AUTH_KEY) === 'true';
-  }
-
-  function setAuthed() {
-    sessionStorage.setItem(SESSION_AUTH_KEY, 'true');
-  }
-
-  function setup() {
-    const modal = document.getElementById('pinLockModal');
-    const pinInput = document.getElementById('pinInput');
-    const btnSubmit = document.getElementById('btnSubmitPin');
-    const errMsg = document.getElementById('pinErrorMsg');
-
-    if (!modal) return;
-
-    if (isAuthed()) {
-      modal.classList.add('hidden');
-      document.body.style.overflow = 'auto';
-      return;
-    }
-
-    // 未驗證：強制鎖定畫面
-    modal.classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-    if (pinInput) setTimeout(() => pinInput.focus(), 200);
-
-    function verifyPin() {
-      const entered = (pinInput ? pinInput.value.trim() : '');
-      const validPin = localStorage.getItem(PIN_KEY) || DEFAULT_PIN;
-      if (entered === validPin) {
-        setAuthed();
-        modal.classList.add('hidden');
-        document.body.style.overflow = 'auto';
-        if (pinInput) pinInput.value = '';
-        if (errMsg) errMsg.textContent = '';
-      } else {
-        if (errMsg) errMsg.textContent = '❌ 密碼不正確，請重新輸入！';
-        if (pinInput) {
-          pinInput.value = '';
-          pinInput.focus();
-        }
-      }
-    }
-
-    if (btnSubmit) btnSubmit.onclick = verifyPin;
-    if (pinInput) {
-      pinInput.onkeydown = (e) => {
-        if (e.key === 'Enter') verifyPin();
-      };
-    }
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', setup);
-  } else {
-    setup();
-  }
-})();
-</script>
-
+//
 </body>
 </html>
