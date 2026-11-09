@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    國中生物 數位互動學習單平台 (Bio Learning Sheets Hub)
    全站共用設定與工具函式庫
    ========================================================================== */
@@ -123,7 +123,7 @@ function showQrModal(targetUrl, titleText) {
   if (!modal) {
     modal = document.createElement('div');
     modal.id = 'qrModal';
-    modal.className = 'modal-overlay';
+    modal.className = 'wb-modal-overlay';
     document.body.appendChild(modal);
 
     modal.addEventListener('click', (e) => {
@@ -132,22 +132,23 @@ function showQrModal(targetUrl, titleText) {
   }
 
   modal.innerHTML = `
-    <div class="modal-content">
-      <button type="button" class="modal-close-btn" onclick="closeQrModal()">&times;</button>
-      <div style="font-size: 0.95rem; font-weight: 700; color: #0284c7; margin-bottom: 0.3rem;">📡 電子白板派卷投影模式</div>
-      <h2 style="font-size: 1.45rem; color: #0f172a; font-weight: 800; margin-bottom: 0.4rem;">${titleText}</h2>
-      <p style="color: #64748b; font-size: 0.95rem;">請全班學生持平板/手機開啟相機，對準 QR Code 即可直接進入作答：</p>
-
-      <div class="modal-qr-frame">
+    <div class="wb-modal-card">
+      <button type="button" class="wb-close-btn" onclick="closeQrModal()">&times;</button>
+      <div class="wb-modal-header">
+        <span class="wb-badge">📡 智慧教室 ‧ 電子白板全螢幕投影</span>
+        <h2 class="wb-title">${titleText}</h2>
+      </div>
+      <div class="wb-instruction">
+        <div class="wb-tip-main">請全班同學開啟平板/手機相機，對準 QR Code 即可直接進入作答：</div>
+      </div>
+      <div class="wb-qr-frame">
         <div id="modalQrCode"></div>
       </div>
-
-      <div class="modal-qr-url-box">${targetUrl}</div>
-
-      <div class="modal-actions">
+      <div class="wb-url-box">${targetUrl}</div>
+      <div class="wb-modal-footer" style="margin-top: 20px;">
         <button type="button" class="btn-dispatch" onclick="copyToClipboard('${targetUrl}', this)">📋 複製派發連結</button>
-        <a href="${targetUrl}" target="_blank" class="btn-secondary">🚀 在新分頁開啟</a>
-        <button type="button" class="btn-secondary" onclick="closeQrModal()">關閉投影</button>
+        <a href="${targetUrl}" target="_blank" class="btn-dispatch btn-dispatch-secondary" style="text-decoration:none; display:inline-flex; align-items:center;">🚀 在新分頁開啟</a>
+        <button type="button" class="btn-wb-close" onclick="closeQrModal()">關閉投影</button>
       </div>
     </div>
   `;
@@ -164,13 +165,13 @@ function showQrModal(targetUrl, titleText) {
         text: targetUrl,
         width: 260,
         height: 260,
-        colorDark: "#0369a1",
+        colorDark: "#6d28d9",
         colorLight: "#FFFFFF",
         correctLevel: QRCode.CorrectLevel.M
       });
     } else {
       const img = document.createElement('img');
-      img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=260x260&color=0369a1&data=' + encodeURIComponent(targetUrl);
+      img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=260x260&color=6d28d9&data=' + encodeURIComponent(targetUrl);
       img.alt = 'QR Code';
       container.appendChild(img);
     }
