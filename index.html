@@ -1,120 +1,26 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>國中生物 數位互動學習單 派發與總覽大廳</title>
-  <link rel="stylesheet" href="assets/css/hub.css?v=2.1">
+  <title>國中生物 3-2 人體的循環 數位互動學習單 派發與總覽大廳</title>
+  <link rel="stylesheet" href="assets/css/hub.css?v=3.2">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
   <!-- 離線純 JS QR Code 函式庫 -->
   <script src="assets/js/qrcode.min.js"></script>
-
-<style id="pinGatekeeperStyle">
-/* 🔒 教師安全防護 PIN 密碼鎖樣式 */
-.pin-modal-overlay {
-  position: fixed !important;
-  top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
-  background: rgba(15, 23, 42, 0.96) !important;
-  backdrop-filter: blur(16px) !important;
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  z-index: 9999999 !important;
-}
-.pin-modal-overlay.hidden {
-  display: none !important;
-}
-.pin-modal-card {
-  background: #1e293b !important;
-  border: 2px solid #c084fc !important;
-  border-radius: 24px !important;
-  padding: 36px 28px !important;
-  text-align: center !important;
-  max-width: 420px !important;
-  width: 90% !important;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7) !important;
-  animation: pinPopIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif !important;
-}
-@keyframes pinPopIn {
-  from { opacity: 0; transform: scale(0.92); }
-  to { opacity: 1; transform: scale(1); }
-}
-.pin-icon {
-  font-size: 3.2rem !important;
-  margin-bottom: 12px !important;
-  line-height: 1 !important;
-}
-.pin-modal-card h2 {
-  font-size: 1.45rem !important;
-  color: #f8fafc !important;
-  margin: 0 0 10px 0 !important;
-  font-weight: 800 !important;
-}
-.pin-modal-card p {
-  color: #94a3b8 !important;
-  font-size: 0.92rem !important;
-  margin-bottom: 20px !important;
-  line-height: 1.5 !important;
-}
-.pin-modal-card input {
-  width: 82% !important;
-  padding: 12px !important;
-  font-size: 1.6rem !important;
-  text-align: center !important;
-  letter-spacing: 6px !important;
-  background: #0f172a !important;
-  border: 2px solid #334155 !important;
-  border-radius: 12px !important;
-  color: #c084fc !important;
-  margin-bottom: 12px !important;
-  outline: none !important;
-  box-sizing: border-box !important;
-}
-.pin-modal-card input:focus {
-  border-color: #c084fc !important;
-  box-shadow: 0 0 12px rgba(56, 189, 248, 0.4) !important;
-}
-.pin-error-text {
-  color: #f87171 !important;
-  font-size: 0.88rem !important;
-  font-weight: 700 !important;
-  min-height: 22px !important;
-  margin-bottom: 14px !important;
-}
-.btn-pin-submit {
-  width: 100% !important;
-  padding: 13px !important;
-  background: linear-gradient(135deg, #7c3aed, #6d28d9) !important;
-  color: white !important;
-  border: none !important;
-  border-radius: 12px !important;
-  font-weight: 800 !important;
-  font-size: 1.05rem !important;
-  cursor: pointer !important;
-  transition: opacity 0.2s, transform 0.1s !important;
-  box-sizing: border-box !important;
-}
-.btn-pin-submit:hover {
-  opacity: 0.95 !important;
-  transform: translateY(-1px) !important;
-}
-</style>
-
 </head>
 <body>
 
-  <!-- 頂部導覽列 (整合教師即時儀表板一鍵入口) -->
+  <!-- 頂部導覽列 -->
   <header class="navbar">
     <a href="index.html" class="navbar-brand">
-      <span>🧬 國中生物數位學習單平台</span>
+      <span>🩸 國中生物數位學習單平台</span>
       <span class="navbar-badge">7年級自然領域</span>
     </a>
     <div class="nav-actions">
-      <a href="dashboard.html" class="btn-nav" style="background: #10b981; border-color: #34d399; color: #ffffff;">📊 教師即時繳交儀表板</a>
-      <span style="font-size: 0.9rem; color: #cbd5e1;">智慧白板派卷系統</span>
+      <span style="font-size: 0.95rem; color: #cbd5e1; font-weight:700;">智慧白板派卷系統</span>
     </div>
   </header>
 
@@ -122,10 +28,10 @@
     
     <!-- Hero Banner -->
     <div class="hero-banner">
-      <h1>【國中生物】數位學習單互動平台</h1>
+      <h1>【單元 3-2】人體的循環 ✕《工作細胞》第08話</h1>
       <p>
-        生物課堂數位化：結合單元影片導引、平板個人互動、人體腺體器官座標互動、雙向雲端防洗板評量！<br>
-        教師可在白板一鍵投影派卷 QR Code，全班 iPad / 手機直接掃碼作答；亦可切換至【即時儀表板】即時監看 35 人繳交進度。
+        生物課堂數位化：結合動畫影片情境導引、平板個人互動作答、四重平板車防呆守門！<br>
+        教師可在白板一鍵投影派卷 QR Code，全班 iPad / 手機直接掃碼作答；亦可秒速跳轉時間軸連動播放。
       </p>
     </div>
 
@@ -138,15 +44,12 @@
         <span class="dispatch-badge">智慧教室 & 電子白板專用</span>
       </div>
       <p style="color: #475569; font-size: 0.95rem; margin-bottom: 0.8rem;">
-        請選擇本節課要派發的生物章節學習單，點擊「投影大螢幕 QR Code」即可全螢幕放大展示，供全班學生持平板快速掃描！
+        點擊下方「📱 投影大螢幕 QR Code」全螢幕展示，學生掃描後自動帶入 <code>?reset=1</code> 乾淨開卷，防上一生覆蓋誤交！
       </p>
 
       <div class="dispatch-controls">
         <select id="selectDispatchSheet" class="form-control" style="font-weight: 700; font-size: 1.05rem;">
-          <option value="4-2-endocrine.html" data-title="【單元 4-2】內分泌系統 數位互動學習單" selected>【單元 4-2】內分泌系統 數位互動學習單 (個人學習單 + 小組學習單)</option>
-          <option value="4-1-nervous.html" data-title="【單元 4-1】神經系統 ✕ 交通安全 數位互動學習單">【單元 4-1】神經系統 ✕ 交通安全 數位互動學習單 (個人學習單 + 小組學習單)</option>
-          <option value="4-3-homeostasis.html" data-title="【單元 4-3】恆定性與體溫 數位互動學習單" disabled>【單元 4-3】恆定性與體溫 數位互動學習單 (即將上線)</option>
-          <option value="5-1-reproduction.html" data-title="【單元 5-1】生物的生殖 數位互動學習單" disabled>【單元 5-1】生物的生殖 數位互動學習單 (即將上線)</option>
+          <option value="3-2-circulation.html" data-title="【單元 3-2】人體的循環 ✕ 工作細胞 數位互動學習單" selected>【單元 3-2】人體的循環 ✕《工作細胞》第08話 數位互動學習單 (平板車防呆個人版)</option>
         </select>
 
         <button type="button" class="btn-dispatch" onclick="handleGenerateDispatchQR()">
@@ -158,261 +61,72 @@
         </button>
       </div>
 
-      <!-- 頁面內建預覽區 -->
-      <div id="dispatchPreviewArea" class="dispatch-preview-area active">
-        <div class="qr-box-whiteboard">
+      <!-- 即時派發預覽區塊 -->
+      <div class="dispatch-preview-box">
+        <div class="dispatch-qr-wrap">
           <div id="dispatchQrcode"></div>
           <small style="color: var(--text-muted); font-size: 0.8rem; margin-top: 6px; display: block;">📷 平板相機掃碼直接進入</small>
         </div>
         <div class="dispatch-info">
-          <div id="dispatchInfoTitle" class="dispatch-info-title">【單元 4-2】內分泌系統 數位互動學習單</div>
+          <div id="dispatchInfoTitle" class="dispatch-info-title">【單元 3-2】人體的循環 ✕ 工作細胞 數位互動學習單</div>
           <p style="font-size: 0.9rem; color: var(--text-muted);">學生派發填答專屬網址：</p>
           <div id="dispatchInfoUrl" class="dispatch-info-url">...</div>
           <div style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
             <button type="button" class="btn-dispatch" onclick="openDispatchModalDirect()">🔍 全螢幕大投影視窗</button>
-            <a id="dispatchDirectLink" href="4-2-endocrine.html" target="_blank" class="btn-dispatch btn-dispatch-secondary">🚀 直接開啟學習單</a>
+            <a id="dispatchDirectLink" href="3-2-circulation.html?reset=1" target="_blank" class="btn-dispatch btn-dispatch-secondary">🚀 直接開啟學習單</a>
           </div>
         </div>
       </div>
     </section>
 
     <!-- 章節分類清單 -->
-    <!-- 第 4 章：生物體的協調與恆定 -->
     <div class="chapter-heading">
-      <span>第 4 章：生物體的協調作用與恆定性</span>
-      <span class="chapter-tag">上學期重點</span>
+      <span>第 3 章：生物體的運輸與循環</span>
+      <span class="chapter-tag">核心單元</span>
     </div>
 
     <div class="sheet-grid">
-      <!-- 4-1 神經系統 (正式上線) -->
+      <!-- 3-2 人體的循環 (正式上線) -->
       <div class="sheet-card">
         <div>
-          <span class="sheet-badge">單元 4-1（已上線）</span>
-          <h3 class="sheet-card-title">4-1 神經系統 ✕ 交通安全 數位互動學習單</h3>
-          <p class="sheet-card-desc">整合安全車距秘密、中樞解剖座標認領、意識行為與反射雙軌模型、接尺反應實驗與國道煞車防禦素養。</p>
+          <span class="sheet-badge" style="background:#ef4444; color:#fff;">單元 3-2（正式上線）</span>
+          <h3 class="sheet-card-title">3-2 人體的循環 ✕《工作細胞》第08話 數位互動學習單</h3>
+          <p class="sheet-card-desc">結合新人紅血球 AE3803 送氧氣迷路冒險、血球身分對照、微觀變形運動、動脈微血管靜脈特性矩陣、心臟中央車站雙循環（口訣：靜房，心動出室）、淋巴三部曲與 10 題素養檢核測驗。</p>
           <div class="sheet-meta-tags">
-            <span class="meta-pill">🧠 腦部解剖分區認領</span>
-            <span class="meta-pill">⚡ 意識 vs 反射雙軌</span>
-            <span class="meta-pill">🚗 交通安全素養</span>
+            <span class="meta-pill">🎬 內嵌工作細胞影片</span>
+            <span class="meta-pill">🛡️ 平板車四重防護門禁</span>
+            <span class="meta-pill">🩸 靜房心動出室口訣</span>
+            <span class="meta-pill">💯 100% 點選免打字</span>
           </div>
         </div>
         <div class="sheet-card-footer">
-          <button type="button" class="btn-card-qr" onclick="showQrModal(getAbsoluteSheetUrl('4-1-nervous.html'), '【單元 4-1】神經系統 ✕ 交通安全 數位互動學習單')">
-            📱 投螢幕 QR
-          </button>
-          <a href="4-1-nervous.html" class="btn-card-action">進入作答 ➔</a>
-        </div>
-      </div>
-
-      <!-- 4-2 內分泌系統 (正式上線) -->
-      <div class="sheet-card">
-        <div>
-          <span class="sheet-badge">單元 4-2（已上線）</span>
-          <h3 class="sheet-card-title">4-2 內分泌系統 數位互動學習單</h3>
-          <p class="sheet-card-desc">結合 7 部教學影片、巨人症/呆小症/甲亢症狀多選、糖尿病拮抗配對、SVG 人體腺體圖小組責任認領與同理心素養簡答。</p>
-          <div class="sheet-meta-tags">
-            <span class="meta-pill">👤 個人學習單 Stepper</span>
-            <span class="meta-pill">👥 小組 SVG 互動卡</span>
-            <span class="meta-pill">💾 本機自動暫存</span>
-            <span class="meta-pill">📊 GAS 雙軌防呆</span>
-          </div>
-        </div>
-        <div class="sheet-card-footer">
-          <button type="button" class="btn-card-qr" onclick="showQrModal(getAbsoluteSheetUrl('4-2-endocrine.html'), '【單元 4-2】內分泌系統 數位互動學習單')">
+          <button type="button" class="btn-card-qr" onclick="showQrModal(getAbsoluteSheetUrl('3-2-circulation.html'), '【單元 3-2】人體的循環 ✕ 工作細胞 數位互動學習單')">
             📱 派卷 QR Code
           </button>
-          <a href="4-2-endocrine.html" class="btn-card-action">進入作答 ➔</a>
-        </div>
-      </div>
-
-      <!-- 4-3 恆定性與體溫 (預告卡) -->
-      <div class="sheet-card upcoming">
-        <div>
-          <span class="sheet-badge">單元 4-3</span>
-          <h3 class="sheet-card-title">體溫與水分調節 ｜ 生物維持恆定的秘密</h3>
-          <p class="sheet-card-desc">內溫動物 vs 外溫動物的體溫調節策略、人體排汗與皮膚微血管收縮舒張、呼吸作用散失水分。</p>
-          <div class="sheet-meta-tags">
-            <span class="meta-pill">🌡️ 體溫恆定</span>
-            <span class="meta-pill">💧 水分排泄</span>
-          </div>
-        </div>
-        <div class="sheet-card-footer">
-          <button type="button" class="btn-card-disabled">即將推出</button>
+          <a href="3-2-circulation.html?reset=1" class="btn-card-action">進入作答 ➔</a>
         </div>
       </div>
     </div>
 
-    <!-- 第 5 章：生物的生殖與遺傳 (預告擴充) -->
-    <div class="chapter-heading">
-      <span>第 5 章：生物的生殖與生命延續</span>
-      <span class="chapter-tag">未來單元預留</span>
-    </div>
-
-    <div class="sheet-grid">
-      <div class="sheet-card upcoming">
-        <div>
-          <span class="sheet-badge">單元 5-1</span>
-          <h3 class="sheet-card-title">無性生殖與有性生殖 ｜ 基因多樣性</h3>
-          <p class="sheet-card-desc">分裂生殖、出芽生殖、營養器官繁殖與減數分裂受精過程之全彩圖解互動。</p>
-          <div class="sheet-meta-tags">
-            <span class="meta-pill">🌱 營養繁殖</span>
-            <span class="meta-pill">🧬 染色體配對</span>
-          </div>
-        </div>
-        <div class="sheet-card-footer">
-          <button type="button" class="btn-card-disabled">即將推出</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- 底部版權說明 -->
-    <div style="text-align: center; margin-top: 3.5rem; color: var(--text-muted); font-size: 0.9rem;">
-      <p>國中自然領域 生物教學團隊 設計製作 ｜ 數位互動學習單派發與雲端評量系統</p>
-    </div>
+    <!-- 頁尾 -->
+    <footer class="footer">
+      <p>國中七年級生物領域教學 ｜ 智慧課堂平板車教學專用 ｜ Antigravity Bio-Engine v3.2</p>
+    </footer>
 
   </div>
 
-  <!-- 引入共用設定與工具函式 (附帶版本號強制作廢舊快取) -->
-  <script src="assets/js/common.js?v=2.2"></script>
-  <script>
-    let currentDispatchTargetUrl = "";
-    let currentDispatchTitle = "";
-
-    function updateDispatchInfo() {
-      const select = document.getElementById('selectDispatchSheet');
-      const selectedOption = select.options[select.selectedIndex];
-      const sheetFile = selectedOption.value;
-      currentDispatchTitle = selectedOption.getAttribute('data-title');
-      currentDispatchTargetUrl = getAbsoluteSheetUrl(sheetFile);
-
-      document.getElementById('dispatchInfoTitle').textContent = currentDispatchTitle;
-      document.getElementById('dispatchInfoUrl').textContent = currentDispatchTargetUrl;
-      document.getElementById('dispatchDirectLink').href = sheetFile;
-
-      // 生成 inline 預覽 QR Code
-      const qrContainer = document.getElementById('dispatchQrcode');
-      qrContainer.innerHTML = '';
-      if (typeof QRCode !== 'undefined') {
-        new QRCode(qrContainer, {
-          text: currentDispatchTargetUrl,
-          width: 200,
-          height: 200,
-          colorDark: "#7c3aed",
-          colorLight: "#FFFFFF",
-          correctLevel: QRCode.CorrectLevel.M
-        });
-      } else {
-        const img = document.createElement('img');
-        img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&color=0284c7&data=' + encodeURIComponent(currentDispatchTargetUrl);
-        img.alt = 'QR Code';
-        qrContainer.appendChild(img);
-      }
-    }
-
-    function handleGenerateDispatchQR() {
-      updateDispatchInfo();
-      openDispatchModalDirect();
-    }
-
-    function openDispatchModalDirect() {
-      updateDispatchInfo();
-      showQrModal(currentDispatchTargetUrl, currentDispatchTitle);
-    }
-
-    function handleCopyDispatchUrl(btn) {
-      updateDispatchInfo();
-      copyToClipboard(currentDispatchTargetUrl, btn);
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('selectDispatchSheet').addEventListener('change', () => {
-        updateDispatchInfo();
-      });
-      // 預設準備好 4-2 學習單
-      updateDispatchInfo();
-    });
-  </script>
-
-<!-- 🔒 教師安全防護 PIN 密碼解鎖 Modal -->
-<div id="pinLockModal" class="pin-modal-overlay">
-  <div class="pin-modal-card">
-    <div class="pin-icon">🔒</div>
-    <h2>生物正課 數位學習單平台 安全鎖</h2>
-    <p>本平台為國中生物正課數位互動學習單系統，請輸入教師管理密碼解鎖進入：</p>
-    <input type="password" id="pinInput" placeholder="請輸入密碼" maxlength="10" autocomplete="off">
-    <div id="pinErrorMsg" class="pin-error-text"></div>
-    <button id="btnSubmitPin" class="btn-pin-submit">🔓 解鎖進入系統</button>
+  <!-- QR Code 全螢幕放大投影彈窗 -->
+  <div id="qrModal" class="modal-overlay">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeQrModal()">&times;</button>
+      <div id="modalTitle" class="modal-title">學習單派發 QR Code</div>
+      <div id="modalSubtitle" class="modal-subtitle">請全班同學持 iPad 或手機打開相機掃描，立即進入作答！</div>
+      <div id="modalQrcode"></div>
+      <div id="modalUrl" class="modal-url"></div>
+      <div class="modal-tip">💡 提示：掃描進入會自動套用全新作答，防止上一節同學暫存覆蓋！</div>
+    </div>
   </div>
-</div>
 
-
-<script>
-// ==================== 🔒 教師安全驗證門禁系統 (預設8088，無洩漏) ====================
-(function initGlobalHallGatekeeper() {
-  const SESSION_AUTH_KEY = 'bio_teacher_auth_passed';
-  const PIN_KEY = 'teacher_global_pin';
-  const DEFAULT_PIN = '8088';
-
-  function isAuthed() {
-    return sessionStorage.getItem(SESSION_AUTH_KEY) === 'true';
-  }
-
-  function setAuthed() {
-    sessionStorage.setItem(SESSION_AUTH_KEY, 'true');
-  }
-
-  function setup() {
-    const modal = document.getElementById('pinLockModal');
-    const pinInput = document.getElementById('pinInput');
-    const btnSubmit = document.getElementById('btnSubmitPin');
-    const errMsg = document.getElementById('pinErrorMsg');
-
-    if (!modal) return;
-
-    if (isAuthed()) {
-      modal.classList.add('hidden');
-      document.body.style.overflow = 'auto';
-      return;
-    }
-
-      // 未驗證：強制鎖定大廳首頁
-      modal.classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
-      if (pinInput) setTimeout(() => pinInput.focus(), 200);
-
-    function verifyPin() {
-      const entered = (pinInput ? pinInput.value.trim() : '');
-      const validPin = localStorage.getItem(PIN_KEY) || DEFAULT_PIN;
-      if (entered === validPin) {
-        setAuthed();
-        modal.classList.add('hidden');
-        document.body.style.overflow = 'auto';
-        if (pinInput) pinInput.value = '';
-        if (errMsg) errMsg.textContent = '';
-      } else {
-        if (errMsg) errMsg.textContent = '❌ 密碼不正確，請重新輸入！';
-        if (pinInput) {
-          pinInput.value = '';
-          pinInput.focus();
-        }
-      }
-    }
-
-    if (btnSubmit) btnSubmit.onclick = verifyPin;
-    if (pinInput) {
-      pinInput.onkeydown = (e) => {
-        if (e.key === 'Enter') verifyPin();
-      };
-    }
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', setup);
-  } else {
-    setup();
-  }
-})();
-</script>
-
+  <script src="assets/js/common.js?v=3.2"></script>
 </body>
 </html>
